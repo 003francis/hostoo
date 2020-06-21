@@ -1,4 +1,0 @@
-services:
-#    hostoo_pharmacie.example:
-#        class: hostoo\PharmacieBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]

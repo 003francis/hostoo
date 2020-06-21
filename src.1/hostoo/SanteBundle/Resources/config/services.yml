@@ -1,4 +1,0 @@
-services:
-#    hostoo_sante.example:
-#        class: hostoo\SanteBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]

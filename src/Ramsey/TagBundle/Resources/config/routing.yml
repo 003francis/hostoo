@@ -1,3 +1,0 @@
-ramsey_tag_homepage:
-    path:     /
-    defaults: { _controller: RamseyTagBundle:Default:index }

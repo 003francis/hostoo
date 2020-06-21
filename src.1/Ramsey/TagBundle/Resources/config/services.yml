@@ -1,9 +1,0 @@
-services:
-    tag.form.type.tags:
-        class : Ramsey\TagBundle\Form\Type\TagType
-        arguments : ['@doctrine.orm.entity_manager']
-        tags :
-            - { name : form.type}
-#    ramsey_tag.example:
-#        class: Ramsey\TagBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]

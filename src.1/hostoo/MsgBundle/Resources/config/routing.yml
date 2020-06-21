@@ -1,7 +1,0 @@
-hostoo_msg_message:
-    resource: "@hostooMsgBundle/Resources/config/routing/message.yml"
-    prefix:   /message
-
-hostoo_msg_homepage:
-    path:     /
-    defaults: { _controller: hostooMsgBundle:Default:index }
