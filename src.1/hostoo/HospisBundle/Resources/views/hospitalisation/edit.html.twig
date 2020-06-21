@@ -1,0 +1,29 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% if is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% elseif  is_granted('ROLE_INFIRMIER') %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <h1>Modification Hospitalisation</h1>
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input type="submit" value="Modifier" class="btn btn-warning" />
+    {{ form_end(edit_form) }}
+    <br>
+    <br>
+    <ul class="list-unstyled list-inline">
+        <li>
+            <a href="{{ path('hospitalisation_index') }}" class="btn btn-info">Liste des hospitalisations</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

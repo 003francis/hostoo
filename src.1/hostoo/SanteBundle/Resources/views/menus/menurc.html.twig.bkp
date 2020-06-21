@@ -1,0 +1,159 @@
+
+    <li class="text-muted menu-title">Navigation</li>
+
+    <li class="has_sub">
+        <a href="{{ path('reception_t_b') }}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span>Tableau de bord</span> </a>
+    </li>
+    {% if is_granted('ROLE_RECEPTION') %}
+    <li class="has_sub">
+        <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-nature-people"></i> <span>Reception</span> <span class="menu-arrow"></span> </a>
+        <ul class="list-unstyled">
+            <li class="">
+                <a href="{{ path('hostoo_sante_listepatients') }}" class="waves-effect"><i class="zmdi zmdi-accounts-list"></i> <span>Liste des patients</span> <span class="menu-arrow"></span> </a>
+
+            </li>
+           {#<li>#}
+               {#<a href="{{ path('hostoo_sante_savepatient') }}" class="waves-effect"><i class="zmdi zmdi-account-add"></i> <span>Ajouter patient </span> <span class="menu-arrow"></span> </a>#}
+
+           {#</li>#}
+
+            {#<li class="">#}
+                {#<a href="{{ path('les_episodes') }}" class="waves-effect"><i class="fa fa-dollar"></i> <span>Les Frequentations</span> <span class="menu-arrow"></span> </a>#}
+            {#</li>#}
+            <li class="">
+                <a href="{{ path('rapport_de_frequentation') }}" class="waves-effect"><i class="fa fa-dollar"></i> <span>Rapport des Frequentations</span> <span class="menu-arrow"></span> </a>
+            </li>
+            <li class="">
+                <a href="{{ path('tarifs_med') }}" class="waves-effect"><i class="zmdi zmdi-nature-people"></i> <span>Tarifs</span> <span class="menu-arrow"></span> </a>
+            </li>
+            {#<li class="">#}
+                {#<a href="{{ path('hostoo_sante_creerdv') }}" class="waves-effect"><i class="zmdi zmdi-traffic"></i> <span>Fil d'Attente </span> <span class="menu-arrow"></span> </a>#}
+            {#</li>#}
+            <li>
+                <a href="{{ path('rdvmed_show_today') }}" class="waves-effect"><i class="zmdi zmdi-case"></i> <span>Rendez-vous </span> <span class="menu-arrow"></span> </a>
+            </li>
+
+            {#<li class="has_sub">#}
+                {#<a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Approvisionnement</span> </a>#}
+                {#<ul>#}
+                    {#<li>#}
+                        {#<a href="{{ path('req_article_new') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Nouvel Article</span> </a>#}
+                    {#</li>#}
+
+                    {#<li>#}
+                        {#<a href="{{ path('req_article_index') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Mes Articles</span> </a>#}
+                    {#</li>#}
+                    {#<li>#}
+                        {#<a href="{{ path('requisition_index') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Requisitions</span> </a>#}
+                    {#</li>#}
+                {#</ul>#}
+            {#</li>#}
+        </ul>
+    </li>
+    {% endif %}
+    <li><hr /></li>
+
+    {#{% if is_granted('ROLE_CAISSIER') %}#}
+    {#<li class="has_sub">#}
+        {#<a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-item"></i><span class="label label-default pull-right">8</span><span> Caisse </span></a>#}
+        {#<ul class="list-unstyled">#}
+                {#<li class="">#}
+                    {#<a href="{{ path('hostoo_sante_listeactes') }}" class="waves-effect"><i class="fa fa-dollar"></i> <span>Caisse</span> <span class="menu-arrow"></span> </a>#}
+                {#</li>#}
+                {#<li class="">#}
+                    {#<a href="{{ path('hostoo_sante_listeactest') }}" class="waves-effect"><i class="fa fa-dollar"></i> <span>Toutes les factures</span> <span class="menu-arrow"></span> </a>#}
+                {#</li>#}
+            {#<li class="">#}
+                {#<a href="{{ path('caisse_medecins') }}" class="waves-effect"><i class="zmdi zmdi-nature-people"></i><span>Les Medecins</span> </a>#}
+            {#</li>#}
+            {#<li class="has_sub">#}
+                {#<a href="javascript:void(0);" class="waves-effect"><i class="fa fa-files-o"></i><span class="label label-default pull-right">6</span><span>Rapport Caisse</span> </a>#}
+                {#<ul>#}
+                    {#<li class="">#}
+                        {#<a href="{{ path('rapportcaissejr_index') }}" class="waves-effect"><i class="zmdi zmdi-file-text"></i><span class="label label-default pull-right">6</span><span>Rapport du Jour</span> </a>#}
+
+                    {#</li>#}
+                    {#<li class="">#}
+                        {#<a href="{{ path('rapport_du_mois') }}" class="waves-effect"><i class="zmdi zmdi-file-text"></i><span class="label label-default pull-right">6</span><span>Rapport des mois</span> </a>#}
+
+                    {#</li>#}
+                {#</ul>#}
+            {#</li>#}
+        {#</ul>#}
+    {#</li>#}
+    {#{% endif %}#}
+    <li><hr /></li>
+    {% if is_granted('ROLE_INFIRMIER') %}
+    <li class="has_sud">
+        <a href="#" >Salle des soins</a>
+    <ul>
+    <li class="">
+        <a href="{{ path('hostoo_sante_listprelevE') }}" class="waves-effect"><i class="zmdi zmdi-nature-people"></i> <span>Tous les dates</span> <span class="menu-arrow"></span> </a>
+    </li>
+
+    <li class="">
+        <a href="{{ path('hostoo_sante_listprelev') }}" class="waves-effect"><i class="zmdi zmdi-time-interval"></i> <span>Aujourd'hui</span> <span class="menu-arrow"></span> </a>
+
+    </li>
+    <li class="">
+        <a href="{{ path('rapport_de_frequentation') }}" class="waves-effect"><i class="fa fa-dollar"></i> <span>Rapport des Frequentations</span> <span class="menu-arrow"></span> </a>
+    </li>
+    <li class="has_sub">
+        <a href="{{ path('actes_listes') }}" class="waves-effect"><i class="fa fa-money"></i> <span>Caisse</span> </a>
+    </li> <li class="has_sub">
+        <a href="{{ path('hospitalisation_index') }}" class="waves-effect"><i class="fa fa-hospital-o"></i> <span>Hospitalisation</span> </a>
+    </li>
+    <li class="has_sub">
+        <a href="{{ path('hostoo_sante_creerdvd') }}" class="waves-effect"><i class="zmdi zmdi-case"></i> <span>Affecter au médécin </span> <span class="menu-arrow"></span> </a>
+    </li>
+    <li class="has_sub">
+        <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Approvisionnement</span> </a>
+        <ul>
+            <li>
+                <a href="{{ path('req_article_new') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Nouvel Article</span> </a>
+            </li>
+
+            <li>
+                <a href="{{ path('req_article_index') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Mes Articles</span> </a>
+            </li>
+            <li>
+                <a href="{{ path('requisition_index') }}" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span>Requisitions</span> </a>
+            </li>
+        </ul>
+    </li>
+    </ul>
+    </li>
+    {% endif %}
+{#
+    <li class="text-muted menu-title">More</li>
+
+    <li class="has_sub">
+        <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-item"></i><span class="label label-default pull-right">8</span><span> Pages </span></a>
+        <ul class="list-unstyled">
+            <li><a href="page-starter.html">Starter Page</a></li>
+            <li><a href="page-timeline.html">Timeline</a></li>
+            <li><a href="page-login.html">Login</a></li>
+            <li><a href="page-register.html">Register</a></li>
+            <li><a href="page-recoverpw.html">Recover Password</a></li>
+            <li><a href="page-lock-screen.html">Lock Screen</a></li>
+            <li><a href="page-confirm-mail.html">Confirm Mail</a></li>
+            <li><a href="page-404.html">Error 404</a></li>
+        </ul>
+    </li>
+
+    <li class="has_sub">
+        <a href="javascript:void(0);" class="waves-effect"><i class="ti-share"></i><span> Multi Level </span> <span class="menu-arrow"></span></a>
+        <ul>
+            <li class="has_sub">
+                <a href="javascript:void(0);" class="waves-effect"><span>Menu Level 1.1</span> <span class="menu-arrow"></span></a>
+                <ul style="">
+                    <li><a href="javascript:void(0);"><span>Menu Level 2.1</span></a></li>
+                    <li><a href="javascript:void(0);"><span>Menu Level 2.2</span></a></li>
+                    <li><a href="javascript:void(0);"><span>Menu Level 2.3</span></a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);"><span>Menu Level 1.2</span></a>
+            </li>
+        </ul>
+    </li>#}

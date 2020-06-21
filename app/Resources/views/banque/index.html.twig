@@ -1,0 +1,87 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% if is_granted('ROLE_CAISSIER') %}
+        {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+    {% elseif is_granted('ROLE_RECEPTION') %}
+        {% include 'hostooSanteBundle:menus:menurc.html.twig' %}
+    {% elseif is_granted('ROLE_LABORATOIRE')%}
+        {% include 'hostooSanteBundle:menus:menulabo.html.twig' %}
+    {% elseif is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% else %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block titrepage %}{% endblock %}
+{% block options %}{% endblock %}
+{% block body %}
+    <h1>Transactions Bancaires</h1>
+<div class="card-box">
+    <table class="table table-striped" id="datatable-buttons">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Libelle</th>
+                <th>Montant</th>
+                <th>Dévise</th>
+                <th>Mouvement</th>
+                <th>Banque</th>
+                <th>Référence</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for banque in banques %}
+            <tr>
+                <td>{{ banque.dateops|date('d-m-Y') }}</td>
+                <td>{{ banque.libelle }}</td>
+                <td>{{ banque.montant }}</td>
+                <td>{%  if banque.devise==1 %}USD{% else %}CDF{% endif %}</td>
+                <td>{{ banque.mouvement }}</td>
+                <td>{{ banque.nombanque }}</td>
+                <td>{{ banque.reference }}</td>
+                <td>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{{ path('banque_show', { 'id': banque.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.scripts.html.twig' %}
+<script>
+    $(function () {
+        TableManageButtons.init();
+
+    });
+    var handleDataTableButtons = function () {
+        "use strict";
+        0 !== $("#datatable-buttons").length && $("#datatable-buttons").DataTable({
+            dom: "Bfrtip",
+            buttons: [{extend: "copy", className: "btn-sm"}, {extend: "csv", className: "btn-sm"}, {
+                extend: "excel",
+                className: "btn-sm"
+            }, {extend: "pdf", className: "btn-sm"}, {extend: "print", className: "btn-sm"}],
+            responsive: !0
+        })
+    }, TableManageButtons = function () {
+        "use strict";
+        return {
+            init: function () {
+                handleDataTableButtons()
+            }
+        }
+    }();
+</script>
+{% endblock %}

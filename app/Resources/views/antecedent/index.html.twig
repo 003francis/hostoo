@@ -1,0 +1,43 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+{% endblock %}
+{% block body %}
+    <h1>Antecedent list</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Antecedent</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for antecedent in antecedents %}
+            <tr>
+                <td><a href="{{ path('antecedent_show', { 'id': antecedent.id }) }}">{{ antecedent.id }}</a></td>
+                <td>{{ antecedent.antecedent }}</td>
+                <td>{{ antecedent.Type.nom }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('antecedent_show', { 'id': antecedent.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('antecedent_edit', { 'id': antecedent.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('antecedent_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

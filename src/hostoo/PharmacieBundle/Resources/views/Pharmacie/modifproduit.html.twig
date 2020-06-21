@@ -1,0 +1,41 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titre %}{{ parent() }}:: Ajouter un Produit{% endblock %}
+{% block titrepage %} Ajouter un Produit{% endblock %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuphar.html.twig' %}
+{% endblock %}
+{% block body %}
+<form action="{{ path('hp_modifproduit',{'id':produit.id}) }}" class="vertical col-lg-5" method="post">
+    {{ form_label(form.nom) }}
+    {{ form_errors(form.nom) }}
+    {{ form_widget(form.nom,{'attr':{'class':'form-control'}}) }}
+
+    {{ form_label(form.nature) }}
+    {{ form_errors(form.nature) }}
+    {{ form_widget(form.nature,{'attr':{'class':'form-control'}}) }}
+
+    {{ form_label(form.grammage) }}
+    {{ form_errors(form.grammage) }}
+    {{ form_widget(form.grammage,{'attr':{'class':'form-control'}}) }}
+
+    {{ form_label(form.plaquette,'Plaquette :') }}
+    {{ form_errors(form.plaquette) }}
+    {{ form_widget(form.plaquette,{'attr':{'class':'form-control'}}) }}
+
+
+    {{ form_label(form.unite,'Unité :') }}
+    {{ form_errors(form.unite) }}
+    {{ form_widget(form.unite,{'attr':{'class':'form-control'}}) }}
+
+
+    {{ form_label(form.prix, 'Prix de vente :') }}
+    {{ form_errors(form.prix) }}
+    {{ form_widget(form.prix,{'attr':{'class':'form-control'}}) }}
+
+    {{ form_label(form.dateexp, 'Date d\'expiration') }}
+    {{ form_errors(form.dateexp) }}
+    {{ form_widget(form.dateexp,{'attr':{'class':'form-control'}}) }}
+
+    {{ form_rest(form) }}
+</form>
+{% endblock %}

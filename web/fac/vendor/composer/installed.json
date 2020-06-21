@@ -1,0 +1,87 @@
+[
+    {
+        "name": "natshah/bootstrap-print",
+        "version": "3.1.2",
+        "version_normalized": "3.1.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Natshah/bootstrap-print.git",
+            "reference": "2957d5f2701af09a5c52b2b93c2e7e01ed486a32"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Natshah/bootstrap-print/zipball/2957d5f2701af09a5c52b2b93c2e7e01ed486a32",
+            "reference": "2957d5f2701af09a5c52b2b93c2e7e01ed486a32",
+            "shasum": ""
+        },
+        "time": "2017-01-28T01:53:02+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Rajab Natshah",
+                "homepage": "https://github.com/Natshah",
+                "role": "Maintainer"
+            }
+        ],
+        "description": "Bootstrap print for Bootstrap v3. Mange grids using Bootstrap v3 for printed media.",
+        "homepage": "https://github.com/Natshah/bootstrap-print"
+    },
+    {
+        "name": "twbs/bootstrap",
+        "version": "v3.3.7",
+        "version_normalized": "3.3.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twbs/bootstrap.git",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+            "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+            "shasum": ""
+        },
+        "replace": {
+            "twitter/bootstrap": "self.version"
+        },
+        "time": "2016-07-25T15:51:55+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jacob Thornton",
+                "email": "jacobthornton@gmail.com"
+            },
+            {
+                "name": "Mark Otto",
+                "email": "markdotto@gmail.com"
+            }
+        ],
+        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+        "homepage": "http://getbootstrap.com",
+        "keywords": [
+            "JS",
+            "css",
+            "framework",
+            "front-end",
+            "less",
+            "mobile-first",
+            "responsive",
+            "web"
+        ]
+    }
+]

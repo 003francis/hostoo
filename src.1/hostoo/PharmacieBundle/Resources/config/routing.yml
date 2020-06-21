@@ -1,0 +1,71 @@
+hostoo_pharmacie_homepage:
+    path:     /liste-produits-et-gestion
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:index }
+hostoo_pharmacie_tb:
+    path:     /tableau-de-bord
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:TBPharmacie }
+
+hp_ajouterproduit:
+    path:     /ajout-produit
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajouterProduit }
+
+hp_ajoutercatt:
+    path:     /ajout-catt
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajouterCatt }
+
+hp_listeproduits:
+    path:     /liste-produits
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:listeProduits }
+
+hp_produit:
+    path:     /produit/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:voirProduit }
+
+hp_modifproduit:
+    path:     /produit-modifier/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:modifierProduit }
+
+hp_ajouternature:
+    path:     /ajout-nature
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajouterNature }
+
+hp_ajouterstock:
+    path:     /ajout-stock/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajouterStock }
+
+hp_ajusterstock:
+    path:     /ajuste-stock/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajusterStock }
+
+hostoo_phar_dash:
+    path: /dash
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:index }
+
+hp_ajouteritem:
+    path:     /ajout-item/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:ajouterItem }
+
+hp_supprimeritem:
+    path:     /supp-item/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:supprimerItem }
+
+hp_annuleritems:
+    path:     /annuler-items
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:annulerItems }
+hp_rapports:
+    path:     /rapports
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:rapports }
+hp_rapports_conso:
+    path:     /rapports-des-conso
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:rapportsConso }
+
+hp_livreproduits:
+    path:     /livraison-produits/{id}
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:livrerProduits }
+
+hp_ordonnance:
+    path:     /ordonnance/{id}
+    defaults: { _controller: hostooPharmacieBundle:Default:ordonnance }
+hp_stocks:
+    path:     /stocks-stocks
+    defaults: { _controller: hostooPharmacieBundle:Pharmacie:stockEtaT }

@@ -1,0 +1,63 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block titrepage %}{% endblock %}
+{% block options %}<a href="{{ path('afficher_les_actes', {'id': episode.id }) }}" class="btn btn-info"><i class="fa fa-print"></i> Imprimer</a> {% endblock %}
+{% block body %}
+
+    <h3>Episode du Patient {{ episode.patient.nom }} - {{ episode.patient.postnom }}  / {{ episode.dateepisode|date('d-m-Y') }}</h3>
+    {% if episode.patient.formule %}<h4 class="text-info">Formule : {{ episode.patient.formule.nom }}</h4>{% endif %}
+    <h4 class="text-info">Type : {{ episode.patient.societe }}</h4>
+
+
+
+   <div class="row">
+       <div class="col-lg-4">
+           <div class="panel panel-default">
+               <div class="panel-heading">Caisse</div>
+               <div class="panel-body">
+                   {% for fac in episode.factures %}
+                       <ul class="list-unstyled">
+                       {% for cmd in fac.commandes %}
+                       {% for tar in cmd.tarifs %}
+                            <li>{{ tar.actes.designationacte }}</li>
+                       {% endfor %}
+                       {% endfor %}
+                       </ul>
+                        <button class="btn btn-danger"> {{ fac.prix }}</button>
+                   {% endfor %}
+
+               </div>
+           </div>
+       </div>
+
+       <div class="col-lg-4">
+           <div class="panel panel-default">
+               <div class="panel-heading">Medecin</div>
+               <div class="panel-body">
+                   {{ episode.utilisateur.nom }}
+                   {{ episode.utilisateur.postnom }}
+                   {{ episode.utilisateur.Prenom }}
+
+               </div>
+           </div>
+       </div>
+
+       <div class="col-lg-4">
+           <div class="panel panel-default">
+               <div class="panel-heading">Examen</div>
+               <div class="panel-body">
+                   <h4>Laboratoire</h4>
+                       <button class="btn btn-danger"> {{ episode.ordonnancelabos|length }}</button>
+
+                   <h4>Imagerie</h4>
+
+                   <button class="btn btn-danger"> {{ episode.ordonnanceimgs|length }}</button>
+
+               </div>
+           </div>
+       </div>
+   </div>
+       <!-- panel-->
+{% endblock %}

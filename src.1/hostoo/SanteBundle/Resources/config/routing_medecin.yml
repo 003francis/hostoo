@@ -1,0 +1,95 @@
+hostoo_sante_createrdv:
+    path:     /creerunrdv
+    defaults: { _controller: hostooSanteBundle:RDV:creerUnRDV }
+
+hostoo_sante_patientsattente:
+    path:     /patients-en-attente
+    defaults: { _controller: hostooSanteBundle:RDV:patientsEnAttente }
+
+hostoo_sante_sespatients:
+    path:     /ses-patients
+    defaults: { _controller: hostooSanteBundle:Medecin:listePatient }
+
+hostoo_med_patient:
+    path: /la-fiche-du-patient/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:fichePatient }
+
+hostoo_med_lireepisode:
+    path: /episode-son-patient/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:lireEpisode }
+
+hostoo_med_addanamnese:
+    path: /anamnese/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:addAnamnese }
+
+hostoo_med_adddiagnostic:
+    path: /diagnostic/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:addDiagnostic }
+
+hostoo_med_addrclinic:
+    path: /rclinic/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:addRClinic }
+
+hostoo_med_ajoutercte:
+    path: /ajoute_actem
+    defaults: { _controller: hostooSanteBundle:Medecin:ajouterActe }
+
+hostoo_med_suppcte:
+    path: /supprimer_actem/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:supprimerActe }
+    requirements:
+        id: \d+
+
+hostoo_med_ajouterimg:
+    path: /ajoute_img
+    defaults: { _controller: hostooSanteBundle:Medecin:ajouterImg }
+
+hostoo_med_suppimg:
+    path: /supprimer_img/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:supprimerImg }
+
+hostoo_med_ajoutermed:
+    path: /ajoute_phar/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:ajouterMed }
+
+hostoo_med_ajouterprod:
+    path: /ajoute_prod
+    defaults: { _controller: hostooSanteBundle:Medecin:ajouterProd }
+
+hostoo_med_suppmed:
+    path: /supprimer_phar/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:supprimerMed }
+
+hostoo_med_ajouterautre:
+    path: /ajoute_autre
+    defaults: { _controller: hostooSanteBundle:Medecin:ajouterAutres }
+
+hostoo_med_suppautre:
+    path: /supprimer_divers/{id}
+    defaults: { _controller: hostooSanteBundle:Medecin:supprimerAutres }
+
+hostoo_med_factureactes:
+    path: /facturer-actes-docteur
+    defaults: { _controller: hostooSanteBundle:Medecin:factureActes }
+
+hostoo_med_resetactes:
+    path: /annuler-toutes-prescriptions
+    defaults: { _controller: hostooSanteBundle:Medecin:reset }
+
+medecin_tb:
+    path: /tableau-de-bords-medecin
+    defaults: { _controller: hostooSanteBundle:Medecin:TB }
+
+liste_patients_med:
+    path: /liste-des-patients-med
+    defaults: { _controller: hostooSanteBundle:Medecin:lesPatients }
+afficher_dossier_patient:
+    path: /afficher_dossier/{patient}
+    defaults: { _controller: hostooSanteBundle:Medecin:dossierDuPatient }
+patients_du_medecin:
+    path: /patients-recus-par-le-medecins
+    defaults: { _controller: hostooSanteBundle:RDV:patientsRdvs }
+
+hostoo_med_ajoutersv:
+    path:     /faire-Prelevementsmed/{id} #liste des patients valides a la caisse pour consultation
+    defaults: { _controller: hostooSanteBundle:Prelevement:ajouterSVMed }

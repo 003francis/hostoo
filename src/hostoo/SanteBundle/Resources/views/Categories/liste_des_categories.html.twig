@@ -1,0 +1,18 @@
+
+{% if liste == null %}
+<div class="alert alert-dismissible alert-danger text-center"><strong class="">Aucune Catégorie</strong></div>
+    {% else %}
+        <h3>Les categories disponibles</h3>
+<ul class="list-unstyled list-group">
+
+    {% for cat in liste %}
+        <li class="list-group-item">
+            {{ cat.nom }}
+            <div class="pull-right">
+            <a href="{{ path('_modifie_une_categorie',{'id':cat.id}) }}" class="btn btn-default"><i class="fa fa-edit"></i> </a>
+            <a href="{{ path('_supprime_une_categorie',{'id':cat.id}) }}" class="btn btn-danger"><i class="fa fa-times"></i> </a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}

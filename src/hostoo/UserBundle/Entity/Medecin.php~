@@ -1,0 +1,64 @@
+<?php
+
+namespace hostoo\UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Medecin
+ *
+ * @ORM\Table(name="medecin")
+ * @ORM\Entity(repositoryClass="hostoo\UserBundle\Repository\MedecinRepository")
+ */
+class Medecin
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="typemmedecin", type="string", length=255)
+     */
+    private $typemmedecin;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set typemmedecin
+     *
+     * @param string $typemmedecin
+     * @return Medecin
+     */
+    public function setTypemmedecin($typemmedecin)
+    {
+        $this->typemmedecin = $typemmedecin;
+
+        return $this;
+    }
+
+    /**
+     * Get typemmedecin
+     *
+     * @return string 
+     */
+    public function getTypemmedecin()
+    {
+        return $this->typemmedecin;
+    }
+}

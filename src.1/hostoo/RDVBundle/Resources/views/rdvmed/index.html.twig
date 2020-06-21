@@ -1,0 +1,40 @@
+
+    <h3>Rendez-vous fixés</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Daterdv</th>
+                <th>Patient</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rDVMed in rDVMeds %}
+            <tr>
+                <td><a href="{{ path('rdvmed_show', { 'id': rDVMed.id }) }}">{{ rDVMed.id }}</a></td>
+
+                <td>{% if rDVMed.daterdv %}{{ rDVMed.daterdv|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    {% for patient in rDVMed.patients  %}
+                    {{ patient.nom }}
+                    {% endfor %}
+
+                </td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('rdvmed_show', { 'id': rDVMed.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('rdvmed_edit', { 'id': rDVMed.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+

@@ -1,0 +1,60 @@
+<form action="{{ path('antecedent_patient',{'pat':pat}) }}" method="post" id="antecedentform">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-4">
+        <table class="table">
+            {% for ant in ants %}
+                {% if loop.index <= 2 %}
+                    <tr class="bg-info">
+                        <th colspan="2" class=" text-white text-center">{{ ant.nom }}</th>
+                    </tr>
+                    {% for a in ant.antecedents %}
+                        <tr>
+                            <th>{{ a.antecedent }}</th>
+                            <td><input name="antpat[{{ a.id }}]" type="checkbox" {% for pat in patants  %}{% if pat.antecedent.id==a.id %} checked {% endif %} {% endfor %}/></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-md-4">
+    <table class="table">
+        {% for ant in ants %}
+            {% if loop.index > 3 and loop.index <= 5 %}
+            <tr class="bg-info">
+                <th colspan="2" class=" text-white text-center">{{ ant.nom }}</th>
+            </tr>
+            {% for a in ant.antecedents %}
+        <tr>
+            <th>{{ a.antecedent }}</th>
+            <td><input name="antpat[{{ a.id }}]" type="checkbox" {% for pat in patants  %}{% if pat.antecedent.id==a.id %} checked {% endif %} {% endfor %}/></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+    </table>
+        </div>
+            <div class="col-md-4">
+                <table class="table">
+                    {% for ant in ants %}
+                        {% if loop.index > 6 %}
+                            <tr class="bg-info">
+                                <th colspan="2" class=" text-white text-center">{{ ant.nom }}</th>
+                            </tr>
+                            {% for a in ant.antecedents %}
+                                <tr>
+                                    <th>{{ a.antecedent }}</th>
+                                    <td><input name="antpat[{{ a.id }}]" type="checkbox"  {% for pat in patants  %}{% if pat.antecedent.id==a.id %} checked {% endif %} {% endfor %}/></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+    </div>
+        <div class="row">
+            <input type="submit" value="Enregistrer ses antécédents" class="btn btn-info center-block">
+        </div>
+    </div>
+</form>

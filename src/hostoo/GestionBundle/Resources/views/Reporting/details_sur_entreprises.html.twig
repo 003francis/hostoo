@@ -1,0 +1,55 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menurapport.html.twig' %}
+{% endblock %}
+{% block title %}Entreprise {{ proprietaire }}{% endblock %}
+{% block titrepage %}Entreprise {{ proprietaire }}{% endblock %}
+
+{% block body %}
+<h3>{{ proprietaire }}</h3>
+    <div class="card-box">
+    <table class="table table-striped">
+        <tr>
+            <th>Patients</th>
+            <td>{{ proprietaire.patients|length }}</td>
+        </tr>
+        <tr>
+            <th>Formules ({{ render(controller('hostooGestionBundle:Reporting:nbreFormule',{'id': proprietaire.id })) }})</th>
+            <td>
+            <ul class="list-inline list-unstyled">
+                {% for formule in formtabs %}
+                <li>{{ formule.myf }} {{ render(controller('hostooGestionBundle:Default:nbPatients',{'societe': proprietaire.id, 'formule':formule.id })) }}</li>
+                {% endfor %}
+            </ul>
+            </td>
+        </tr>
+        <tr>
+            <th>Etat</th>
+            <td>{% if proprietaire.etat %}Activée {% else %} Désactivée {% endif %}</td>
+        </tr>
+    </table>
+    </div>
+
+    <div class="card-box">
+        <table class="table table-striped">
+            <caption><h5>Total des épisodes Medicaux des Agents {{ epi.visites }}</h5></caption>
+            <thead>
+            <tr>
+                <th>Visites</th>
+                <th>Mois</th>
+            </tr>
+            </thead>
+            {% for key,epi in epis %}
+                <tr>
+
+
+                    <td><a href="{{ path('liste_des_patients_filtres_soc',{'conv': proprietaire.id, 'date': epis[key].mois|slice(0,4) ~"-"~epis[key].mois|slice(4,5) }) }}">{{ epi.visites }}</a></td>
+                <td><a href="{{ path('liste_des_patients_filtres_soc',{'conv': proprietaire.id, 'date': epis[key].mois|slice(0,4) ~"-"~epis[key].mois|slice(4,5) }) }}">{{ epis[key].mois|slice(0,4) ~"-"~epis[key].mois|slice(4,5) }}</a></td>
+
+                </tr>
+
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}

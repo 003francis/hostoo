@@ -1,0 +1,36 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+
+{% block title %}<h3>Tarif des actes pour la convention {{ convention.nomconvention }} </h3>{% endblock %}
+{% block titrepage %}<h3>Tarif des actes pour convention {{ convention.nomconvention }} </h3>{% endblock %}
+{% block body %}
+<form action="{{ path('modifier_des_prix',{'convention':convention.id}) }}" method="post">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Actes Médicaux</th>
+            <th>Prix</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cat in convention.tarif %}
+            <tr>
+                <td>{{ cat.actes.designationacte }}</td>
+                <td>
+
+                    <div class="input-group m-t-10">
+                        <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                        <input id="example-input3-group1" name="actes[{{ cat.id }}]" value="{{ cat.prix }}" class="form-control" placeholder="0" type="text">
+                        <span class="input-group-addon">.00</span>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Valider" class="btn btn-lg btn-success">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+{% endblock %}

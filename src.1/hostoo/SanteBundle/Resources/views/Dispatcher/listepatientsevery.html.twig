@@ -1,0 +1,133 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+{% endblock %}
+{% block titrepage %}Fil d'attente patients{% endblock %}
+{% block options %}{% endblock %}
+{% block body %}
+
+{% if episodes == null %}
+    <h2>Pas de liste</h2>
+    {% else %}
+        <div class="card-box">
+        <table class="table table-striped" id="listepatients">
+            <thead>
+        <tr>
+            <th>Date</th>
+            <th>Nom</th>
+            <th>Sexe</th>
+
+            <th></th>
+        </tr></thead>
+            <tbody>
+        {% for episode in episodes %}
+       <tr>
+           <td>{{ episode.dateepisode|date('d-m-Y') }}</td>
+                <td>{{ episode.patient.nom }}  {{ episode.patient.postnom }}  {{ episode.patient.prenom }}</td>
+                <td>{% if episode.patient.sexe == true %}M{% else %}F{% endif %}</td>
+            <td><a href="{{ path('voirpatient_prel',{'id':episode.id }) }}" class="btn btn-custom pull-right"><i class="fa fa-eye"></i> </a> </td>
+                {#<td><a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" > <i class="fa fa-eye"></i>Details</a></td>#}
+            </tr>{% endfor %}
+</tbody>
+            </table>
+</div>
+        {% endif %}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('assets/plugins/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
+    <script src="{{ asset('assets/plugins/select2/dist/js/select2.min.js') }}" type="text/javascript"></script>
+    <script>
+        $(function () {
+           $('#listepatients').dataTable({
+               "order": [[ 0, "desc" ]],
+               language:{
+               "sProcessing":     "Traitement en cours...",
+               "sSearch":         "Rechercher&nbsp;:",
+               "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+               "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+               "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+               "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+               "sInfoPostFix":    "",
+               "sLoadingRecords": "Chargement en cours...",
+               "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+               "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+               "oPaginate": {
+                   "sFirst":      "Premier",
+                   "sPrevious":   "Pr&eacute;c&eacute;dent",
+                   "sNext":       "Suivant",
+                   "sLast":       "Dernier"
+               }},
+               "oAria": {
+                   "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                   "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+               }
+           });
+        });
+    </script>
+    <script>
+$(function () {
+
+    {% for episode in episodes %}
+        //advance multiselect start
+        $('#my_multi_select{{ episode.id }}').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+    {% endfor %}
+    // Select2
+    $(".select2").select2();
+
+    $(".select2-limiting").select2({
+        placeholder: "Choisir les actes"
+    });
+
+
+});
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/plugins/jquery-datatables-editable/datatables.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/datatables/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}"  rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}

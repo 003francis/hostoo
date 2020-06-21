@@ -1,0 +1,14 @@
+<form action="{{ path('hostoo_caisse_taux') }}" method="post" class="">
+    <div class="form-group">
+
+    {{ form_errors(form.montant) }}
+    <div class="col-sm-12"> {{ form_widget(form.montant,{'attr':{'placeholder':'Taux du jour'}}) }}</div>
+
+    {{ form_errors(form.datetaux) }}
+    {{ form_widget(form.datetaux) }}
+<br>
+        <div class="col-sm-12"> {{ form_widget(form.save,{'attr':{'class':'btn btn-success btn-block'}}) }}</div>
+
+    {{ form_rest(form) }}
+    </div>
+</form>

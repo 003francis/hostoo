@@ -1,0 +1,51 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}Chiffres du Mois{% endblock %}
+{% block options %}{% endblock %}
+{% block menu %}{% include 'hostooSanteBundle:menus:menulabo.html.twig' %}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exd'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exd.total }}</h2>
+                    <h5>Examens demandés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exf'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exnr.total }}</h2>
+                    <h5>Examens non réalisés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exe'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exr.total }}</h2>
+                    <h5>Examens réalisés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo') }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ ords|length }}</h2>
+                    <h5>Bons disponibles</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+{% endblock %}

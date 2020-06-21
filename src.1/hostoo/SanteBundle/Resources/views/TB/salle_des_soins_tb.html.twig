@@ -1,0 +1,112 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+
+{% block title %}Tableau de bord salle des soins{% endblock %}
+{% block titrepage %}Tableau de bord salle des soins{% endblock %}
+{% block body %}
+    <div class="col_12">
+
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3 class="cleartext">{{ rdvs|length }}</h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>Médécins Disponibles</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel bg-brick">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3  class="cleartext">{{ epis|length }}</h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>Episodes</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3 class="cleartext">{{ svs|length }}</h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>Prélévements</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3 class="cleartext"></h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>Privés</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3  class="cleartext"></h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>Feriés</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel bg-dark">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h3  class="cleartext"></h3>
+                        </div>
+                        <div class="col-xs-9">
+                            <br>
+                            <strong>dependants</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

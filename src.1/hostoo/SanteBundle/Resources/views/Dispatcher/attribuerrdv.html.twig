@@ -1,0 +1,31 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block body %}
+    <table class="table">
+        <tr>
+            <th>Medecin</th>
+            <th>Date du rendez-vous</th>
+            <th>Debut</th>
+            <th>Fin</th>
+            <th>Patients en Attente</th>
+            <th>Disponibilite</th>
+        </tr>
+
+            <tr>
+                <td>{{ rdv.medecin.nom }} {{ rdv.medecin.postnom }}</td>
+                <td>{{ rdv.daterdv|date('d-m-Y') }}</td>
+                <td>{{ rdv.heureDebut|date('H:m') }}</td>
+                <td>{{ rdv.heureFin|date('H:m') }}</td>
+                {% if  rdv.rDVspatients.count > 0 %}
+                        <td>{{ rdv.rDVspatients.count }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+                <td>{{ rdv.disponibilite }}</td>
+            </tr>
+    </table>
+    {% if rdv.heureFin|date("H:m") > datenow|date("H:m")  %}
+    <form action="{{ path('hostoo_rdv_attrrdv',{'id':rdv.id}) }}" method="post">
+        {{ form_widget(form) }}
+    </form>
+        {% endif %}
+{% endblock %}

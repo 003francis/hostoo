@@ -1,0 +1,39 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menuimg.html.twig' %}
+{% endblock %}
+{% block body %}
+    <div class="card-box">
+    {{ form_start(edit_form) }}
+    {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+        {{ form_widget(edit_form) }}
+        <button type="submit" class="btn btn-warning">Mettre à jour</button>
+    {{ form_end(edit_form) }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/plugins/summernote/summernote.min.js') }}"></script>
+    <script>
+
+        jQuery(document).ready(function(){
+
+            $('.summernote').summernote({
+                height: 250,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: false                 // set focus to editable area after initializing summernote
+            });
+
+            $('.inline-editor').summernote({
+                airMode: true
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/plugins/summernote/summernote.css') }}" rel="stylesheet" />
+{% endblock %}

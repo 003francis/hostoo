@@ -1,0 +1,26 @@
+{% if bons == null %}
+    <div class="alert alert-danger alert-block     alert-dismissible text-center">Aucun bon de sortie établi !</div>
+{% else %}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Motif</th>
+        <th>Montant</th>
+        <th>Devise</th>
+        <th>Beneficiaire</th>
+        <th>Visa</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for bs in bons %}
+    <tr>
+        <td>{{ bs.motif }}</td>
+        <td>{{ bs.montant }}</td>
+        <td>{{ bs.devise }}</td>
+        <td>{{ bs.beneficiaire }}</td>
+        <td>{{ bs.visa }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}

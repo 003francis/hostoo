@@ -1,0 +1,59 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+
+
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuadmin.html.twig' %}
+{% endblock %}
+{% block body %}
+    <h1>Liste des Chambres</h1>
+<div class="card-box">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Libelle</th>
+                <th>Nombredeslits</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for chambre in chambres %}
+            <tr>
+                <td><a href="{{ path('chambre_show', { 'id': chambre.id }) }}">{{ chambre.id }}</a></td>
+                <td>{{ chambre.libelle }}</td>
+                <td>{{ chambre.nombreDesLits }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('chambre_show', { 'id': chambre.id }) }}">afficher</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('chambre_edit', { 'id': chambre.id }) }}">Modifier</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{{ path('chambre_new') }}" class="btn btn-success">Nouvelle chambre</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.scripts.html.twig' %}
+    <script>
+        $(function () {
+            $('.table').dataTable();
+        });
+    </script>
+{% endblock %}

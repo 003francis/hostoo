@@ -1,0 +1,75 @@
+hostoo_gestion_rapportcaissejr:
+    resource: "@hostooGestionBundle/Resources/config/routing/rapportcaissejr.yml"
+    prefix:   /rapportcaissejr
+
+hostoo_gestion_prop:
+    path:     /proprietaire/{id}/voir
+    defaults: { _controller: hostooGestionBundle:Default:afficherProprietaire }
+
+nouvelle_convention:
+    path:     /nouvelleConvention
+    defaults: { _controller: hostooGestionBundle:Gestion:nouvelleConvention }
+
+liste_conventions:
+    path:     /listeConventions
+    defaults: { _controller: hostooGestionBundle:Gestion:listeConventions }
+
+modifier_convention:
+    path:     /modifierConvention
+    defaults: { _controller: hostooGestionBundle:Gestion:modifierConvention }
+
+ajouter_un_prix:
+    path:     /ajouterUnPrix/{acte}
+    defaults: { _controller: hostooGestionBundle:Prix:ajouterUnPrix }
+
+ajouter_des_prix:
+    path:     /ajouterDesPrix/{convention}
+    defaults: { _controller: hostooGestionBundle:Prix:ajouterDesPrix }
+
+modifier_des_prix:
+    path:     /modifierDesPrix/{convention}
+    defaults: { _controller: hostooGestionBundle:Prix:modifierDesPrix }
+
+modifier_un_prix:
+    path:     /modifierUnPrix
+    defaults: { _controller: hostooGestionBundle:Prix:modifierUnPrix }
+
+tableau_de_bord:
+    path:     /tableauDeBord
+    defaults: { _controller: hostooGestionBundle:Reporting:tableauDeBord }
+
+_actes_factures:
+    path:     /ActesFactures
+    defaults: { _controller: hostooGestionBundle:Reporting:ActesFactures }
+
+_conventions_des_entreprises:
+    path:     /ConventionsDesEntreprises
+    defaults: { _controller: hostooGestionBundle:Reporting:ConventionsDesEntreprises }
+
+details_sur_entreprises:
+    path:     /detailsSurEntreprises/{id}
+    defaults: { _controller: hostooGestionBundle:Reporting:detailsSurEntreprises }
+
+activite_journaliere:
+    path:     /activiteJournaliere
+    defaults: { _controller: hostooGestionBundle:Reporting:activiteJournaliere }
+
+patients_recus:
+    path:     /patientsRecus
+    defaults: { _controller: hostooGestionBundle:Reporting:patientsRecus }
+
+caisses_hostoo:
+    path:     /caisse-hostoo
+    defaults: { _controller: hostooGestionBundle:Reporting:caisse }
+
+caisses_performances:
+    path:     /performances-hostoo
+    defaults: { _controller: hostooGestionBundle:Reporting:performances }
+    methods: [POST,GET]
+caisses_requisitions:
+    path:     /requisitions-hostoo
+    defaults: { _controller: hostooGestionBundle:Reporting:requisitions }
+switch_entreprise:
+    path:     /switch_entreprise/{id}
+    defaults: { _controller: hostooGestionBundle:Gestion:switchEntreprise }
+

@@ -1,0 +1,154 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titre %} {{ parent() }}::Fiche du Patient{% endblock %}
+{% block titrepage %} {{ "Identité du patient"|upper }}{% endblock %}
+{% block options %}
+    <a href="{{ path('hostoo_sante_listepatients') }}" class="btn btn-info" > <i class="fa fa-backward"></i> liste des patients</a>
+    <a href="{{ path('hostoo_sante_editpatientrc',{'id':patient.id }) }}" class="btn btn-warning" > <i class="fa fa-edit"></i>Modifier</a>
+
+{% endblock %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block body %}
+
+{% if patient == null or patient.formule == null and patient.societe.id != 15 %}
+    <h2 class="alert alert-danger"><i class="fa fa-stop"></i> Ce patient n'existe pas ou manque de formule</h2>
+    {% else %}
+            <div class="col-md-6">
+                <div class="card-box"><div class="row">
+        <table class="table">
+            <tr>
+                <th>Nom</th>
+                <td>{{ patient.nom|upper }}</td>
+            </tr>
+            <tr>
+                <th>Postnom</th>
+                <td>{{ patient.postnom|upper }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ patient.prenom|upper }}</td>
+            </tr>
+            <tr>
+                <th>Date de naissance</th>
+                <td>{{ patient.datenaissance|date('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <th>Sexe</th>
+                <td>{% if patient.sexe == true %}M{% else %}F{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{% if patient.adresse is defined %}{{ patient.adresse }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Société</th>
+                <td>{{ patient.societe.nom }}</td>
+            </tr>
+            <tr>
+                <th>Type de patient</th>
+                <td>{{ patient.societe }}</td>
+            </tr>
+            <tr>
+                <th>Numéro du Dossier</th>
+                <td>{{ patient.numerodossier }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ patient.telephone1 }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone 2</th>
+                <td>{{ patient.telephone2 }}</td>
+            </tr>
+            <tr>
+                {% if patient.formule.nom is defined %}
+                <th>Formule</th>
+                <td>{{ patient.formule.nom }}</td>{% endif %}
+            </tr>
+            <tr>
+                <th>Nationalité</th>
+                <td>{{ patient.nationalite }}</td>
+            </tr>
+        </table>
+            {#<h4>Liste des dépendants<a href="{{ path('hostoo_ajouter_parent',{'id':patient.id}) }}" class="btn btn-info btn-rounded pull-right" title="ajouter un dependant"><i class="zmdi zmdi-account-add"></i> </a></h4>#}
+            {#{% if patient.dependants|length == 0 %}#}
+                {#<div class="alert alert-danger alert-block"><i class="fa fa-battery-empty"></i>Aucune dependance</div>#}
+            {#{% else %}#}
+                {#<table class="table table-striped">#}
+                    {#<tr>#}
+                        {#<th>Nom</th>#}
+                        {#<th>Prénom</th>#}
+                        {#<th>Parenté</th>#}
+                        {#<th></th>#}
+                    {#</tr>#}
+                    {#{% for dep in patient.dependants %}#}
+                        {#<tr>#}
+                            {#<td>{{ dep.nom }}</td>#}
+                            {#<td>{{ dep.prenom }}</td>#}
+                            {#<td>{{ dep.parente.parente }}</td>#}
+                            {#<th><a href="{{ path('hostoo_sante_voirpatient',{'id':dep.moi.id}) }}" class="btn btn-sm btn-default" title="Afficher le patient"><i class="fa fa-eye"></i></a> </th>#}
+                        {#</tr>#}
+                    {#{% endfor %}#}
+                {#</table>#}
+            {#{% endif %}#}
+            </div>
+                </div></div>
+        <div class="col-md-6">
+        <div class="row card-box">
+            <div class="col-md-6">
+                <h4>Historique du patient</h4>
+                <ul class="list-group">
+                    {% for episode in episodes %}
+                        <li class="list-group-item"><a href="{{ path('hostoo_sante_lireepisode',{'id':episode.id}) }}">{{ episode.dateepisode|date('d-m-Y') }}</a></li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+            <div class="col-md-6">
+                <button class="btn-primary" id="afficherEpiform">Nouvel episode</button>
+                <form action="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" method="post" id="epiform">
+
+                    {{ form_errors(form.dateepisode) }}
+                    {{ form_widget(form.dateepisode) }}
+
+
+                    {{ form_errors(form.observation) }}
+                    {{ form_widget(form.observation,{'attr':{'class':'form-control', 'placeholder':'Observation (Optionnelle)'}}) }}
+                    <label for="consulta">Choisir une Consultation</label>
+                    <select name="consulta" class="form-control">
+                        {% if patient.societe.id != 15 and patient.formule %}
+                    {% for acte in patient.formule.forsoc %}
+                        {% if acte.acte.id>1 and acte.acte.id<=13 and acte.societe.id == patient.societe.id %}
+                       <option value="{{ acte.acte.id }}">{{ acte.acte.designationacte }}</option>
+                        {% endif %}
+                    {% endfor %}
+                            {% else %}
+                                {% for acte in actess %}
+                                    {% if acte.id in [186,182, 362] %}
+                                        <option value="{{ acte.actes.id }}">{{ acte.actes.designationacte }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                    </select>
+                    {{ form_label(form.consultation) }}
+                    {{ form_errors(form.consultation) }}
+                    {{ form_widget(form.consultation,{'attr':{'class':'form-control'}}) }}
+{{ form_rest(form) }}
+                    <input type="submit" value="creer un episode" class="btn btn-success" >
+                </form>
+                <script>
+                    $(function () {
+                        $('#epiform').hide();
+                        $('#afficherEpiform').on('click',function () {
+                            $('#epiform').show();
+                            $(this).hide();
+                        });
+                    });
+                </script>
+
+            </div>
+            </div>
+        </div>
+        {% endif %}
+{% endblock %}

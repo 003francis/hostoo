@@ -1,0 +1,882 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+
+{% block menu %}
+    {% if is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% elseif  is_granted('ROLE_INFIRMIER') %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block options %}
+        <div class="btn-group pull-right m-t-5 m-b-20">
+            <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Actions <span class="m-l-5"><i class="fa fa-cog"></i></span></button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a data-toggle="modal" data-target="#tabr1">Consultation</a></li>
+                <li><a data-toggle="modal" data-target="#tabr3">Laboratoire</a></li>
+                <li><a data-toggle="modal" data-target="#tabr5">Pharmacie</a></li>
+                <li><a data-toggle="modal" data-target="#tabr4">Imagerie</a></li>
+                <li><a data-toggle="modal" data-target="#tabr6">Autres</a></li>
+                <li><a data-toggle="modal" data-target="#tabr7">Traitement</a></li>
+                <li><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+{% endblock %}
+{% block body %}
+    <h1>Hospitalisation</h1>
+
+    <div class="row">
+
+    <div class="col-md-8">
+        <div class="card-box">
+        <h3 class="text-center">Informations</h3>
+        <div class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>N°</th>
+                <td>{{ hospitalisation.id }}</td>
+            </tr>
+            <tr>
+                <th>Date d'entrée</th>
+                <td>{% if hospitalisation.datehospi %}{{ hospitalisation.datehospi|date('d/m/Y H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Date de sortie</th>
+                <td>{% if hospitalisation.datesortie %}{{ hospitalisation.datesortie|date('d/m/Y H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Type d'hospitalisation</th>
+                <td>{{ hospitalisation.typehospitalisation }}</td>
+            </tr>
+        <tr>
+            <th>Médecin</th>
+            <td>{{ hospitalisation.medecin.nom~" "~hospitalisation.medecin.postnom~" "~hospitalisation.medecin.prenom }}</td>
+        </tr>
+            <tr>
+                <th>Patient</th>
+            <td>{{ hospitalisation.patient }}</td>
+            </tr>
+            <tr><th>Chambre</th>
+                <td>{{ hospitalisation.chambre }}</td>
+            </tr>
+            <tr>
+                <th>Societé</th>
+                <td>{{ hospitalisation.patient.societe }}</td>
+        </tr>
+        </tbody>
+    </table>
+        </div>
+    <ul class="list-inline list-unstyled">
+        <li>
+            <a href="{{ path('hospitalisation_index') }}" class="btn btn-info">Liste des hopitalisations</a>
+        </li>
+        <li>
+            <a href="{{ path('hospitalisation_edit', { 'id': hospitalisation.id }) }}" class="btn btn-warning">Modifier</a>
+        </li>
+        <li>
+            <a href="#" class="btn btn-default"> Cloturer</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+
+</div>
+    </div>
+        <div class="col-md-4">
+
+
+            <div class="card-box">
+            <h3 class="text-center">Panier des actes medicaux</h3>
+            <table class="table table-striped">
+
+                {% if (tabacte is not null) %}
+                    <tr>
+                        <th class="bg-success">Laboratoire</th>
+                    </tr>
+                    {% set som = 0 %}
+                    {% set taillelabo=0 %}
+
+                    {% for tacte in tabacte %}
+                        <tr>
+                            <td>{{ tacte.designationacte }}<a href="{{ path('hostoo_med_suppcte',{'id':taillelabo }) }}" ><i class="fa fa-trash pull-right text-danger"></i></a></td>
+                        </tr>
+                        {% set taillelabo = taillelabo + 1 %}
+                    {% endfor %}{% endif %}
+
+                {% if (tabimg is not null) %}
+                    <tr>
+                        <th class="bg-blue">Imagérie</th>
+                    </tr>
+                    {% set som = 0 %}
+                    {% set tailleimg = 0 %}
+                    {% for tacte in tabimg %}
+                        <tr>
+                            <td>{{ tacte.designationacte }}<a href="{{ path('hostoo_med_suppimg',{'id':tailleimg }) }}" ><i class="fa fa-trash pull-right text-danger"></i></a></td>
+                        </tr>
+                        {% set tailleimg = tailleimg +1 %}
+                    {% endfor %}{% endif %}
+                {% if (tabmed is not null) %}
+                    <tr>
+                        <th class="bg-danger">Pharmacie</th>
+                    </tr>
+                    {% set som = 0 %}
+                    {% set phar = app.session.get('phar') %}
+                    {% set poso = app.session.get('pos') %}
+                    {% for tacte in tabmed %}
+                        <tr>
+                            <td><div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-lg-4">{{ tacte.nom }}</div>
+                                        <div class="col-lg-6">
+                                            <form class="" action="{{ path('hostoo_med_ajoutermed',{'id':tacte.id }) }}">
+                                                <div class="row">
+                                                    <input type="number" name="qte" onchange="this.form.submit()" value="{% if phar[tacte.id] is defined %}{{ phar[tacte.id] }}{% endif %}" class="form-control-static col-lg-6" >
+                                                    <input type="text" name="pos" onchange="this.form.submit()" value="{% if poso[tacte.id] is defined %} {{ poso[tacte.id] }} {% endif %}" class="form-control-static col-lg-6" placeholder="Posologie"></div>
+                                            </form></div>
+                                        <div class="col-lg-2">
+                                            <a href="{{ path('hostoo_med_suppmed',{'id':tacte.id }) }}"><i class="fa fa-trash right text-danger"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}{% endif %}
+                {% if (tabautres is not null or tabautres is defined) %}
+                    <tr>
+                        <th class="bg-retina_wood">Autres</th>
+                    </tr>
+                    {% set som = 0 %}
+                    {% for tacte in tabautres %}
+                        <tr>
+                            <td>{{ tacte.designationacte }}<a href="{{ path('hostoo_med_suppautre',{'id':tacte.id }) }}" ><i class="fa fa-trash pull-right text-danger"></i></a></td>
+                        </tr>
+                    {% endfor %}{% endif %}
+
+                <tr>
+                    <td><div class="btn-group">
+                            <a href="{{ path('facturer_actes_tout',{'id':hospitalisation.id }) }}" class="btn green">Valider les actes</a>
+                            <a href="{{ path('hostoo_med_resetactes') }}" class="btn red">Annuler</a>
+                        </div></td>
+                </tr>
+            </table>
+        </div>
+
+</div>
+</div>
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card-box">
+        <h3>Examens laboratoire</h3>
+            <dl>
+                {% for ord in hospitalisation.ordonnancelabos %}
+                {% if ord.resultats.count > 0 %}
+                    {% for res in ord.resultats %}
+                        <dt>{{ res.acte.actes.designationacte }}</dt>
+                        <dd>
+                            {{ ord.afficherresultat(res.acte.actes.id) }}
+                        </dd>
+                    {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </dl>
+    </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-box">
+        <h3>Examens Imagerie</h3>
+            <dl>
+                {% for ord in hospitalisation.ordonnanceimgs %}
+                    {% if ord.resultats.count > 0 %}
+                        {% for res in ord.resultats %}
+                            <dt>{{ res.acte.actes.designationacte }}</dt>
+                            <dd>
+                                {{ ord.afficherresultat(res.acte.actes.id) }}
+                            </dd>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </dl>
+    </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card-box">
+            <h3>autres actes </h3>
+            <dl>
+                {% for ord in hospitalisation.ordonnanceimgs %}
+                    {% if ord.resultats.count > 0 %}
+                        {% for res in ord.resultats %}
+                            <dt>{{ res.acte.actes.designationacte }}</dt>
+                            <dd>
+                                {{ ord.afficherresultat(res.acte.actes.id) }}
+                            </dd>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+</div>
+    <div class="tab-content">
+        <div id="tabr1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="full-width-modalLabel">Consultation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel">
+
+
+                            <div class="panel-body">
+                                {{ render(controller('hostooSanteBundle:Consultation:newConsult', {'id': hospitalisation.id })) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tabr3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="full-width-modalLabel">Les examens du laboratoire</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel">
+
+
+                            <div class="panel-body">
+                                <form class="form-inline"  method="post" action="{{ path('labo_actes') }}">
+                                    <input type="hidden" name="hospitalisation" value="{{ hospitalisation.id }}">
+                                    <select name="labo[]" class="multi-select" multiple="" id="my_multi_select3" >
+
+                                        {% for acte in labos %}
+                                            {% set tampon=0 %}
+                                            {% if hospitalisation.patient.societe.id !=15 and hospitalisation.patient.formule != null %}
+                                                {% for pacte in hospitalisation.patient.formule.forsoc %}
+                                                    {% if acte.id == pacte.acte.id %}
+                                                        {% if pacte.societe.id==hospitalisation.patient.societe.id %}
+                                                            {% set tampon=acte.id %}
+                                                            <option value="{{ pacte.acte.id }}" class="bg-success">{{ pacte.acte.designationacte }}</option>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if acte.id != tampon %}
+                                                <option value="{{ acte.id }}">{{ acte.designationacte }}</option>
+
+                                            {% endif %}
+                                        {% endfor %}
+
+
+                                    </select>
+                                    <input type="submit" class="btn btn-custom">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tabr4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="full-width-modalLabel">Les examens d'imagérie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel">
+
+                            <div class="panel-body">
+                                <form class="form-inline"  method="post" action="{{ path('img_actes') }}">
+                                    <input type="hidden" name="hospitalisation" value="{{ hospitalisation.id }}">
+                                    <select name="imgr[]" class="multi-select" multiple="" id="my_multi_select4" >
+
+                                        {% for acte in imgs %}
+                                            {% set tampon=0 %}
+                                            {% if hospitalisation.patient.societe.id !=15 and hospitalisation.patient.formule != null %}
+                                                {% for pacte in hospitalisation.patient.formule.forsoc %}
+                                                    {% if acte.id == pacte.acte.id %}
+                                                        {% if pacte.societe.id==hospitalisation.patient.societe.id %}
+                                                            {% set tampon=acte.id %}
+                                                            <option value="{{ pacte.acte.id }}" class="bg-success">{{ pacte.acte.designationacte }}</option>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if acte.id != tampon %}
+
+                                                <option value="{{ acte.id }}">{{ acte.designationacte }}</option>
+
+                                            {% endif %}
+                                        {% endfor %}
+
+
+                                    </select>
+                                    <input type="submit" class="btn btn-custom">
+                                </form></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tabr5" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="full-width-modalLabel">Pharmacie</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class=row>
+                            <div class="col-lg-6 col-md-12">
+                                {{ render(controller('hostooSanteBundle:Ordonnance:newHospis',{'id':hospitalisation.id })) }}
+
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                {{ render(controller('hostooSanteBundle:Ordonnance:hospitalisationOrdonnance',{'id':hospitalisation.id })) }}
+                            </div>
+                        </div>
+                        {#<form class="form-inline"  method="post" action="{{ path('hostoo_med_ajouterprod') }}">
+               <input type="hidden" name="hospitalisation" value="{{ hospitalisation.id }}">
+               <select name="qte[]" class="multi-select" multiple="" id="my_multi_select9" >
+                   {% for produit in produits %}
+                               <option value="{{ produit.id }}">{{ produit.nom }} - {{ produit.grammage }} mg - {{ produit.prix }}</option>
+
+                           {% endfor %}
+           </select>
+                            <input type="submit" class="btn btn-custom">
+
+                        </form>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tabr6" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-full">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="full-width-modalLabel">Les actes supplementaires</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel">
+
+                            <div class="panel-body">
+                                <form class="form-inline"  method="post" action="{{ path('autres_actes_hop') }}">
+                                    <input type="hidden" name="episode" value="{{ hospitalisation.id }}">
+                                    <select name="aut[]" class="multi-select" multiple="" id="my_multi_select6" >
+
+                                        {% for acte in actes %}
+                                            {% set tampon=0 %}
+                                            {% if hospitalisation.patient.societe.id !=15 and hospitalisation.patient.formule != null %}
+                                                {% for pacte in hospitalisation.patient.formule.forsoc %}
+                                                    {% if acte.id == pacte.acte.id %}
+                                                        {% if pacte.societe.id==hospitalisation.patient.societe.id %}
+                                                            {% set tampon=acte.id %}
+                                                            <option value="{{ pacte.acte.id }}" class="bg-success">{{ pacte.acte.designationacte }}</option>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if acte.id != tampon %}
+
+                                                <option value="{{ acte.id }}">{{ acte.designationacte }}</option>
+
+                                            {% endif %}
+                                        {% endfor %}
+
+
+                                    </select>
+                                    <input type="submit" class="btn btn-custom">
+                                </form></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+    <script src="{{ asset('assets/plugins/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+    <script src="{{ asset('assets/plugins/select2/dist/js/select2.min.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
+    <script src="{{ asset('assets/plugins/summernote/summernote.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#listepatients').dataTable();
+        });
+    </script>
+    <script>
+
+        $(function () {
+            $('#add_symptome_form').hide();
+            $('#hide_symptome_form').hide();
+            $('#show_form_symptome').on('click',function(e){
+                e.preventDefault();
+                $('#add_symptome_form').show();
+                $('#hide_symptome_form').show();
+                $(this).hide();
+            });
+            $('#hide_form_symptome').on('click',function(e){
+                e.preventDefault();
+                $('#add_symptome_form').hide();
+                $('#show_form_symptome').show();
+                $(this).hide();
+            });
+            var dataAppleDevices = [{id: 1, text: "iPhone"}, {id: 2, text: "iPad"}, {id: 3, text: "iPod"}];
+            var dataSamsungDevices = [{id: 1, text: "Galaxy S"}, {id: 2, text: "Galaxy Tab"}, {id: 3, text: "Galaxy A"}];
+
+            //advance multiselect start
+            var $inp=$('#hypodiagno');
+
+            //$('.selecta').select2();
+            $('.selecthd').select2();
+            $('.mypro').select2();
+            $('.mypro-limiting').select2({
+                placeholder: "Choisir les actes"
+            });
+        });
+        /** pharmacie **/
+        $('#my_multi_select9').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+
+        /*** labo ***/
+        $('#my_multi_select3').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+        // Select2
+        $(".select2").select2().attr('name','acteslabo[]');
+        $(".selecta").select2();
+
+        $(".selectdc").select2();
+
+
+        // $(".selecthd").select2();
+
+        $(".select2-limiting").select2({
+            placeholder: "Choisir les actes"
+        });
+
+        //img
+        $('#my_multi_select4').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+        // Select2
+        $(".select3").select2().attr('name','acteslabo[]');
+
+        $(".select3-limiting").select2({
+            placeholder: "Choisir les actes"
+        });
+        //advance multiselect start
+        $('#my_multi_select5').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+        $('#my_multi_select6').multiSelect({
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which === 40) {
+                            that.$selectableUl.focus();
+                            return false;
+                        }
+                    });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                    .on('keydown', function (e) {
+                        if (e.which == 40) {
+                            that.$selectionUl.focus();
+                            return false;
+                        }
+                    });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+        // Select2
+        $(".select4").select2().attr('name','acteslabo[]');
+
+        $(".select4-limiting").select2({
+            placeholder: "Choisir les actes"
+        });
+
+    </script>
+    <script>
+        $('#signes_vitaux_taille').on('change',function () {
+            var poids=$('#signes_vitaux_poids').val();
+            $('#signes_vitaux_imc').val(poids/(Math.pow($(this).val(),2)));
+        });
+
+        $('#signes_vitaux_pp').on('change',function () {
+            var poids=$('#signes_vitaux_pa').val();
+            $('#signes_vitaux_wrh').val($(this).val()/poids,2);
+        });
+    </script>
+    <script src="{{ asset('assets/js/signesvitaux.js') }}"></script>
+    <script src="{{ asset('assets/js/rdvmed.js') }}"></script>
+    <script src="{{ asset('assets/js/exphys.js') }}"></script>
+    <script src="{{ asset('assets/js/anamnese.js') }}"></script>
+    <script src="{{ asset('assets/js/antecedent.js') }}"></script>
+    <script src="{{ asset('assets/js/symptomes.js') }}"></script>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('ckeditor/samples/js/sample.js') }}"></script>
+    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}" rel="stylesheet"></script>
+    <script>
+        initSample();
+        historique();
+        complements();
+    </script>
+    <script type="text/javascript">
+        var $collectionHolder;
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="add_tag_link btn btn-info" title="Ajouter un produit"><i class="fa fa-plus"></i></a>');
+        var $newLinkLi = $('<li></li>').append($addTagLink);
+        jQuery(document).ready(function() {
+// Get the ul that holds the collection of tags
+            $collectionHolder = $('div#ordonnance_posologie');
+// add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+// count the current form inputs we have (e.g. 2), use that as the new
+// index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $addTagLink.on('click', function(e) {
+// prevent the link from creating a "#" on the URL
+                e.preventDefault();
+// add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+        function addTagForm($collectionHolder, $newLinkLi) {
+
+// Get the data-prototype explained earlier
+
+            var prototype = $collectionHolder.data('prototype');
+
+
+// get the new index
+
+            var index = $collectionHolder.data('index');
+
+
+// Replace '__name__' in the prototype's HTML to
+
+// instead be a number based on how many items we have
+
+            var newForm = prototype.replace(/__name__/g, index);
+
+// increase the index with one for the next item
+
+            $collectionHolder.data('index', index + 1);
+
+// Display the form in the page in an li, before the "Add a tag" link li
+
+            var $newFormLi = $('<li></li>').append(newForm);
+
+            $newLinkLi.before($newFormLi);
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#diagnostic_Diagnostiques').tagsinput();
+            // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+
+            var $container = $('div#anamnese_symptomes');
+
+
+            // On ajoute un lien pour ajouter une nouvelle catégorie
+
+            var $addLink = $('<a href="#" id="add_category" class="btn btn-default">Ajouter une catégorie</a>');
+
+            $container.append($addLink);
+
+
+            // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+
+            $addLink.click(function(e) {
+
+                addCategory($container);
+
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+
+                return false;
+
+            });
+
+
+            // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+
+            var index = $container.find(':input').length;
+
+
+            // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+
+            if (index == 0) {
+
+                addCategory($container);
+
+            } else {
+
+                // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
+
+                $container.children('div').each(function() {
+
+                    addDeleteLink($(this));
+
+                });
+
+            }
+
+
+            // La fonction qui ajoute un formulaire Categorie
+
+            function addCategory($container) {
+
+                // Dans le contenu de l'attribut « data-prototype », on remplace :
+
+                // - le texte "__name__label__" qu'il contient par le label du champ
+
+                // - le texte "__name__" qu'il contient par le numéro du champ
+
+                var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Catégorie n°' + (index+1))
+
+                    .replace(/__name__/g, index));
+
+
+                // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+
+                addDeleteLink($prototype);
+
+
+                // On ajoute le prototype modifié à la fin de la balise <div>
+
+                $container.append($prototype);
+
+
+                // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+
+                index++;
+
+            }
+
+
+            // La fonction qui ajoute un lien de suppression d'une catégorie
+
+            function addDeleteLink($prototype) {
+
+                // Création du lien
+
+                $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+
+                // Ajout du lien
+
+                $prototype.append($deleteLink);
+
+
+                // Ajout du listener sur le clic du lien
+
+                $deleteLink.click(function(e) {
+
+                    $prototype.remove();
+
+                    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+
+                    return false;
+
+                });
+
+            }
+
+        });
+
+    </script>
+
+    <script>
+
+        $(function(){
+
+            $('.summernote').summernote({
+                height: 350,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: false                 // set focus to editable area after initializing summernote
+            });
+
+            $('.inline-editor').summernote({
+                airMode: true
+            });
+
+        });
+    </script>
+
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link href="{{ asset('assets/plugins/summernote/summernote.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/jquery-datatables-editable/datatables.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatables/buttons.bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}"  rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2-bootstrap.css') }}" rel="stylesheet" />
+{% endblock %}

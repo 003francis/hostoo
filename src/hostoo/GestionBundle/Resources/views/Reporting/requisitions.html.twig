@@ -1,0 +1,50 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menurapport.html.twig' %}
+{% endblock %}
+{% block body %}
+    <div class="well">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>N</th>
+                <th>Requisitions</th>
+                <th>Montant</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set montusd, montcdf = 0, 0 %}
+            {% for req in requisitions %}
+                {% for myw in req.qtereq %}
+                {% if myw.article.devise == 1 %}
+                    {%  set montusd = montusd + (myw.article.prix* myw.qte) %}
+                {% else %}
+                    {%  set montcdf = montcdf + (myw.article.prix* myw.qte) %}
+                {% endif %}
+                    {% endfor %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ req.demandeur }}</td>
+                <td>{{ montusd }} $</td>
+                <td>{{ montcdf }} CDF</td>
+                <td><a href="{{ path('requisition_show', {'id': req.id }) }}" class="btn btn-info"><i class="fa fa-eye"></i> </a> </td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+    {% block Stylesheets %}
+        {{ parent() }}
+        {% include 'hostooSanteBundle:plugins:datatable.style.html.twig' %}
+    {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        {% include 'hostooSanteBundle:plugins:datatable.scripts.html.twig' %}
+        <script>
+            $(function() {
+                $('.table').DataTable();
+            });
+        </script>
+    {% endblock %}

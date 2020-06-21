@@ -1,0 +1,145 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+
+{% block title %}Tableau de Bord{% endblock %}
+{% block titrepage %}Tableau de Bord de la caisse{% endblock %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+{% endblock %}
+
+
+{% block body %}
+<div class="col-md-12">
+    <div class="row">
+        <h2 class="text-warning">Cumule</h2>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3 class="cleartext">{{ Cprive.montantcdf }}</h3>
+                    </div>
+                    <div class="col-xs-8">
+                        <h3>CDF</h3>
+                        Caisse des Privés
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3 class="cleartext">{{ Cprive.montantusd }}</h3>
+                    </div>
+                    <div class="col-xs-8">
+                        <h3>USD</h3>
+                        Caisse des Privés
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3 class="cleartext">{{ CConv.montantcdf }}</h3>
+                    </div>
+                    <div class="col-xs-8">
+                        <h3>CDF</h3>
+                        Caisse des Conventionnés
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3 class="cleartext">{{ CConv.montantusd }}</h3>
+                    </div>
+                    <div class="col-xs-8">
+                        <h3>USD</h3>
+                        Caisse des Conventionnés
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+    <div class="col-md-12">
+        <div class="row">
+            <h2 class="text-warning">Journalier</h2>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h3 class="cleartext">{{ facts }}</h3>
+                        </div>
+                        <div class="col-xs-8">
+                            <h3>USD</h3>
+                            Caisse Privés
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h3 class="cleartext">{{ CConv.montantusd }}</h3>
+                        </div>
+                        <div class="col-xs-8">
+                            <h3>USD</h3>
+                            Caisse Conventionnés
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="col-md-6">
+        <div class="card-box">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Montant</th><th>Percepteur</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for s in snp %}
+            <tr>
+                <td>{{ s.usd }}</td><td>{{ s.percepteur }}</td><th><button>Ok</button></th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,14 @@
+
+    <h4>Nouveau symptome</h4>
+
+    <form action="{{ path('symptomes_new') }}" method="post" id="mysymptomes">
+        {{ form_widget(form) }}
+        <input type="submit" value="Créer" />
+    </form>
+
+    <ul>
+        <li>
+            <a href="{{ path('symptomes_index') }}">Back to the list</a>
+        </li>
+    </ul>
+

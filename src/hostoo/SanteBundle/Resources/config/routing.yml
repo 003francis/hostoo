@@ -1,0 +1,104 @@
+hostoo_sante_antecedent:
+    resource: "@hostooSanteBundle/Resources/config/routing/antecedent.yml"
+    prefix:   /antecedent
+
+hostoo_sante_homepage:
+    path:     /
+    defaults: { _controller: hostooSanteBundle:Default:index }
+_index:
+    path:     /indeximagerie
+    defaults: { _controller: hostooSanteBundle:Imagerie:Index }
+
+transactions_conventionnees:
+    path:     /transactionsConventionnees
+    defaults: { _controller: hostooSanteBundle:Rapport:transactionsConventionnees }
+
+transactions_privees:
+    path:     /transactionsPrivees
+    defaults: { _controller: hostooSanteBundle:Rapport:transactionsPrivees }
+
+rapport_intervalle_dates:
+    path:     /rapportIntervalleDates
+    defaults: { _controller: hostooSanteBundle:Rapport:rapportIntervalleDates }
+
+rapport_transactions_patients:
+    path:     /rapportTransactionsPatients
+    defaults: { _controller: hostooSanteBundle:Rapport:rapportTransactionsPatients }
+
+rapport_transactions_par_societe:
+    path:     /rapportTransactionsParSociete
+    defaults: { _controller: hostooSanteBundle:Rapport:rapportTransactionsParSociete }
+
+rapport_detaille_patient:
+    path:     /rapportDetaillePatient
+    defaults: { _controller: hostooSanteBundle:Rapport:rapportDetaillePatient }
+
+doc_t_b:
+    path:     /docTB
+    defaults: { _controller: hostooSanteBundle:TB:docTB }
+
+labo_t_b:
+    path:     /laboTB
+    defaults: { _controller: hostooSanteBundle:TB:laboTB }
+
+_img_t_b:
+    path:     /ImgTB
+    defaults: { _controller: hostooSanteBundle:TB:ImgTB }
+
+_admin_t_b:
+    path:     /AdminTB
+    defaults: { _controller: hostooSanteBundle:TB:TBAdmin }
+
+creer_acte:
+    path:     /creerActe
+    defaults: { _controller: hostooSanteBundle:Actes:creerActe }
+
+modifier_acte:
+    path:     /modifierActe/{id}
+    defaults: { _controller: hostooSanteBundle:Actes:modifierActe }
+
+_supprimer_acte:
+    path:     /SupprimerActe/{id}
+    defaults: { _controller: hostooSanteBundle:Actes:SupprimerActe }
+
+liste_actes:
+    path:     /listeActes
+    defaults: { _controller: hostooSanteBundle:Actes:listeActes }
+
+_cree_une_categorie:
+    path:     /CreeUneCategorie
+    defaults: { _controller: hostooSanteBundle:Categories:CreeUneCategorie }
+
+_modifie_une_categorie:
+    path:     /ModifieUneCategorie/{id}
+    defaults: { _controller: hostooSanteBundle:Categories:ModifieUneCategorie }
+
+_supprime_une_categorie:
+    path:     /SupprimeUneCategorie/{id}
+    defaults: { _controller: hostooSanteBundle:Categories:SupprimeUneCategorie }
+
+_liste_des_categories:
+    path:     /ListeDesCategories
+    defaults: { _controller: hostooSanteBundle:Categories:ListeDesCategories }
+
+importe_les_patients:
+    path:     /importeLesPatients
+    defaults: { _controller: hostooSanteBundle:ImporterDonnees:importeLesPatients }
+
+importe_les_dependants:
+    path:     /dependantsimports
+    defaults: { _controller: hostooSanteBundle:ImporterDonnees:importeLesDependants }
+inserer_les_actes:
+    path:     /insererlesactes
+    defaults: { _controller: hostooGestionBundle:Default:insererLesActes }
+
+les_pathologies:
+    path:     /lesPathologies
+    defaults: { _controller: hostooSanteBundle:Cim10:lesPathologies }
+    methods: [POST,GET]
+    options:
+        expose: true
+les_episodes:
+    path:     /lesepisodes
+    defaults: { _controller: hostooSanteBundle:Episode:lesepisodes }
+    methods: [POST,GET]

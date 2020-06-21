@@ -1,0 +1,267 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}RECEPTION-ACCUEIL{% endblock %}
+{% block titre %}{{ parent() }}::RECEPTION-ACCUEIL{% endblock %}
+{% block options %}
+<button class="btn btn-success waves-effect">Nouveau patient</button>
+{% endblock %}
+{% block menu %}
+{% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="card-box">
+            <ul class="list-group list-unstyled" id="mesitems" style="display: none">
+
+            </ul>
+        </div>
+    </div>
+        <ul id="rec-tabler" class="tabs left">
+            <li><a href="#tabr1">Liste des patients</a></li>
+            <li><a href="#tabr2">Creation Fiche</a></li>
+            <li><a href="#tabr3">Gestion des RDV</a></li>
+            <li><a href="#tabr4">Tarification</a></li>
+            <li><a href="#tabr5">Rapport</a></li>
+        </ul>
+
+    <div id="tabr1" class="tab-content"><!-- Second onglet -->
+
+        {% if patients == null %}
+            <h2>Pas de liste</h2>
+        {% else %}
+            <table id="patients" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type de patient</th>
+                    <th>Formule Convention</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for patient in patients %}
+
+                    <tr>
+                        <td>{{ patient.nom }} {{ patient.postnom }} {{ patient.prenom }}</td>
+                        <td>{{ patient.societe.convention.nomconvention }}</td>
+                        <td>{{ patient.formule.nom }}</td>
+                        <td><a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" >Details</a>
+                            <a href="{{ path('hostoo_ajouter_parent',{'id':patient.id}) }}" class="btn btn-info" > <i class="fa fa-plus"></i>Dependant</a></td>
+                    </tr>
+                {% endfor %}</tbody>
+            </table>
+
+        {% endif %}
+    </div>
+    <div class="row"><br></div>
+    <script>
+        $(document).ready(function() {
+            $('#patients').DataTable();
+        });
+
+    </script>
+        <div id="tabr2" class="tab-content"><!-- Premier onglet -->
+            <h3>
+                Nouveau patient
+            </h3>
+            <form action="{{ path('hostoo_sante_reception') }}" method="post" class="horizontal">
+                <div class="col-lg-6">
+
+                    {{ form_label(form.nom) }}
+                    {{ form_errors(form.nom,{'attr':{'class':'text-danger'}}) }}
+                    {{ form_widget(form.nom,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.postnom) }}
+                    {{ form_errors(form.postnom) }}
+                    {{ form_widget(form.postnom,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.prenom) }}
+                    {{ form_errors(form.prenom) }}
+                    {{ form_widget(form.prenom,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.sexe) }}
+                    {{ form_errors(form.sexe) }}
+                    {{ form_widget(form.sexe,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.datenaissance, 'Date de naissance') }}
+                    {{ form_errors(form.datenaissance) }}
+                    {{ form_widget(form.datenaissance,{'attr':{'class':'form-control'}}) }}
+
+
+                    {{ form_label(form.nationalite) }}
+                    {{ form_errors(form.nationalite) }}
+                    {{ form_widget(form.nationalite,{'attr':{'class':'form-control'}}) }}
+
+
+
+                    <br>
+
+
+
+                </div>
+                <div class="col-lg-6">
+
+                    {{ form_label(form.adresse) }}
+                    {{ form_errors(form.adresse) }}
+                    {{ form_widget(form.adresse,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.telephone1) }}
+                    {{ form_errors(form.telephone1) }}
+                    {{ form_widget(form.telephone1,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.telephone2) }}
+                    {{ form_errors(form.telephone2) }}
+                    {{ form_widget(form.telephone2,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.societe) }}
+                    {{ form_errors(form.societe) }}
+                    {{ form_widget(form.societe,{'attr':{'class':'form-control'}}) }}
+
+
+                    {{ form_label(form.formule) }}
+                    {{ form_errors(form.formule) }}
+                    {{ form_widget(form.formule,{'attr':{'class':'form-control'}}) }}
+
+
+                </div>
+                <div class="col-lg-12 center">
+                    {{ form_widget(form.save,{'attr':{'class':'btn-primary btn-large'}}) }}
+                    {{ form_rest(form) }}
+                </div>
+            </form>
+        </div>
+
+
+        </div>
+
+        <div id="tabr3" class="tab-content"><!-- Quatrième onglet -->
+            {% if rdvs==null %}
+                <h2 class="alert alert-danger alert-dismissable text-center">Aucun Rendez-vous Disponible!</h2>
+                {% else %}
+            <ul class="list-unstyled">
+                {% for rdv in rdvs %}
+                <li class="col-xs-3 col-sm-4">
+                    <legend class="column">Dr.{{ rdv.medecin.nom }}</legend>
+                    <div class="col_12">Disponibilité : {% if rdv.disponibilite == true %}<button class="medium green">{% else %}<button class="medium red">{% endif %}</button></div>
+                    <div class="col_12"><button class="medium"><i class="fa fa-users"></i> Patients assignés : {{ rdv.Rdvspatients.count }}</button></div>
+                    <div class="col_12"><button class="medium"><i class="fa fa-clock-o"></i> Patients en attente : {{ rdv.Rdvspatients.count - rdv.patientsrecus }}</button></div>
+                    <div class="col_12"><button class="medium"><i class="fa fa-check"></i> Patients consultés : {{ rdv.patientsrecus }}</button></div>
+                </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+
+        <div id="tabr4" class="tab-content"><!-- Cinquième onglet -->
+            <!-- panel-->
+            <span class="alert alert-warning pull-left">Ajouter Zone de recherche</span>
+            <div class="panel col-md-offset-1 col-md-10 col-md-offset-1">
+                {% set i=0 %}
+
+                {% for cat in categories %}
+                    {% set i=i+1 %}
+                    <!-- panel heading-->
+
+                    <div class="panel-heading">
+                        <a class="accordion-toggle" href="#acte{{ i }}" data-toggle="collapse">{{ cat.nom }}</a>
+                    </div>
+                    <!-- panel heading end-->
+                    <!-- panel collapse-->
+                    <ul class="list-group">
+                        <div id="acte{{ i }}" {% if i==1 %}class="panel-collapse collapse in" {% else %}class="panel-collapse collapse"{% endif %}>
+                            <div class="panel-body">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            Libelle
+                                        </div>
+                                        <div class="col-sm-2">
+                                            Privé
+                                        </div>
+                                        <div class="col-sm-2">
+                                            Férié
+                                        </div>
+                                        <div class="col-sm-2">
+                                            Conventionné
+                                        </div>
+                                    </div>
+                                </li>
+                                {% for acte in actes %}
+
+                                    {% if cat.nom == acte.categories.nom %}
+
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                {{acte.designationacte }}
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    {{acte.prive }}$
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    {{acte.gardejourferie }}$
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    {{acte.conventionne }}$
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}</div></div></ul>
+                {% endfor %}</div>
+
+        </div>
+        <div id="tabr5" class="tab-content">Tab3</div><!-- Sixième onglet -->
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script type="application/javascript">
+        $inp=$('#motcle');
+        $inp.keyup(function(event){
+            $('#mesitems').show().html('');
+            //$(".loading").show();
+            var motcle = $(this).val();
+            var DONNEE = 'motcle=' + motcle;
+            $.ajax({
+                type: "POST",
+                dataType:'json',
+                url: Routing.generate('recherche_patient'),
+                data: DONNEE,
+                cache: false,
+                minLength: 2,
+                beforeSend: function () {
+                    $('#mesitems').find('li').remove();
+                },
+                success: function(data) {
+
+
+                    $.each(data.items, function(index,value) {
+                        //$("#ott").text(value.libelle+'<br/>'+value.Prix);
+                        var nophoto="../../jquery-ui/images/no_image.jpg";
+                        var lien=Routing.generate('hostoo_sante_voirpatient',{id:value.id});
+                        var lien2=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        var lien3=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        $('#mesitems').prepend('<li class="list-group-item"><img src='+nophoto+' class="box-carre" />'+value.nom+' '+value.postnom+' '+value.prenom+'<div class="btn-group pull-right"><a href="'+lien2+'" class="btn btn-success">Dependants</a><a class="btn btn-info" href="'+lien+'">Afficher</a>{#<a class="btn btn-warning" href="'+lien3+'">Episode</a><a class="btn btn-warning" href="#">Control</a>#}</div> </li>');
+                        //$('#resultats').html('<div>'+value.libelle+'</div>');
+                        //alert(value.libelle);
+                    });
+
+                    // $(".loading").hide();
+                }
+            });
+            return false;
+        });
+
+        // Date Picker
+        jQuery('#datepicker').datepicker();
+        jQuery('#patient_datenaissance').datepicker({
+            autoclose: true,
+            dateFormat: "dd/mm/yy",
+            dayNames: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ],
+            dayNamesMin: [ "Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa" ],
+            monthNames: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+            todayHighlight: true
+        });
+
+    </script>
+{% endblock %}

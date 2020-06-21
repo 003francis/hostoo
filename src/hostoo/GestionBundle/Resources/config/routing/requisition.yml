@@ -1,0 +1,34 @@
+requisition_index:
+    path:     /
+    defaults: { _controller: "hostooGestionBundle:Requisition:index" }
+    methods:  GET
+
+requisition_show:
+    path:     /{id}/show
+    defaults: { _controller: "hostooGestionBundle:Requisition:show" }
+    methods:  GET
+
+requisition_new:
+    path:     /new
+    defaults: { _controller: "hostooGestionBundle:Requisition:new" }
+    methods:  [GET, POST]
+
+requisition_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "hostooGestionBundle:Requisition:edit" }
+    methods:  [GET, POST]
+
+requisition_approuver:
+    path:     /{id}/approuver
+    defaults: { _controller: "hostooGestionBundle:Requisition:approuverRequisition" }
+    methods:  [GET, POST]
+
+requisition_livrer:
+    path:     /{id}/livrer
+    defaults: { _controller: "hostooGestionBundle:Requisition:livrerRequisition" }
+    methods:  [GET, POST]
+
+requisition_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "hostooGestionBundle:Requisition:delete" }
+    methods:  DELETE

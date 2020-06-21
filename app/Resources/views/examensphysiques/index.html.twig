@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>Les Examens Physiques</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Désignation</th>
+                <th>Observation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examensPhysique in examensPhysiques %}
+            <tr>
+                <td>{{ examensPhysique.typeexamen }}</td>
+                <td><a href="{{ path('examensphysiques_show', { 'id': examensPhysique.id }) }}">{{ examensPhysique.id }}</a></td>
+                <td>{{ examensPhysique.observation }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('examensphysiques_show', { 'id': examensPhysique.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('examensphysiques_edit', { 'id': examensPhysique.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{#
+    <ul>
+        <li>
+            <a href="{{ path('examensphysiques_new', { 'id': id }) }}">Create a new entry</a>
+        </li>
+    </ul>#}
+{% endblock %}

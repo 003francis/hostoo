@@ -1,0 +1,25 @@
+
+<li class="text-muted menu-title">Navigation</li>
+
+<li class="">
+    <a href="{{ path('hostoo_pharmacie_tb') }}" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> Tableau de Bord </span> </a>
+</li>
+
+
+<li class="has_sub">
+    <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-medkit"></i> <span>Pharmacie</span> <span class="menu-arrow"></span> </a>
+    <ul class="list-unstyled">
+        <li><a href="{{ path('hostoo_pharmacie_homepage') }}">Liste des produts</a></li>
+        <li><a href="{{ path('hp_ajoutercatt') }}"> Catégories des Produits</a></li>
+        <li><a href="{{ path('hp_ajouternature') }}">Nouvelle Nature</a></li>
+        <li><a href="{{ path('hp_ajouterproduit') }}">Nouveau Produit</a></li>
+    </ul>
+</li>
+
+<li class="">
+    <a href="{{ path('hp_rapports') }}" class="waves-effect"><i class="zmdi zmdi-mail-reply"></i> <span> Le journal Appro </span> </a>
+</li>
+<li class="">
+    <a href="{{ path('hp_rapports_conso') }}" class="waves-effect"><i class="zmdi zmdi-mail-reply"></i> <span> Le journal Conso </span> </a>
+</li>
+

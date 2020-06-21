@@ -1,0 +1,389 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titre %} {{ parent() }}::Caisse {% endblock %}
+{% block titrepage %} La Caisse {% endblock %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menucaisse.html.twig" %}
+{% endblock %}
+{% block body %}
+    <div class="col-lg-9">
+            <!-- Tabs Left -->
+            <ul class="nav nav-tabs">
+                <li role ="presentation" class="active"><a href="#tabr1" role="tab" data-toggle="tab" class="bg-danger">Factures en attente</a></li>
+                <li role ="presentation"><a href="#tabr4" role="tab" data-toggle="tab">Payées</a></li>
+                {#<li role ="presentation"><a href="#tabr2" role="tab" data-toggle="tab">Retrait d'argent</a></li>#}
+                {#<li role ="presentation"><a href="#tabr3" role="tab" data-toggle="tab">Mouvements</a></li>#}
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="tabr1">
+                <!-- Premier onglet -->
+
+
+                        <table class="table table-striped">
+                        <thead>
+                         <tr>
+                         <th>N°</th>
+                         <th>NOMS</th>
+                         <th>Etat</th>
+                         <th>MONTANT A PAYER</th>
+                         <th>SOLDE</th>
+                         <th>RESTE A PAYER</th>
+                         <th></th>
+                         <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for facture in listeNP %}
+                            {% if facture.episode %}
+                            <tr>
+                            <td>{{ facture.id }}</td>
+                            <td>{{ facture.episode.patient }}</td>
+                            <td>{{ facture.validation?'<span class="label label-success">PAYEE</span>':'<span class="label label-warning">En Attente</span>' }}</td>
+                            <td>{{ facture.prix }}</td>
+                            <td>{{ facture.lasolde }}</td>
+                            <td>{{ facture.prix-facture.lasolde }}</td>
+                            <td>{%  if facture.lasolde>0 and facture.validation == 1  %}
+                              <div class="row">
+                                        <div class="col-lg-12">
+                                    <form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post">
+                                        <div class="form-inline">
+                                            <label for="solde">Payer un accompte :</label>
+                                            <div class="form-group">
+                                                <input type="number" name="solde"  id="solde" class="form-control">
+                                                <select name="devise" id="devise" class="form-control">
+                                                    <option selected value="USD">USD</option>
+                                                    <option value="CDF">FC</option>
+                                                </select>
+                                                <button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>
+                                            </div></div>
+                                    </form>
+                                        </div>
+                                    </div>
+
+                             {% endif %}</td>
+                             <td>
+                             <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                             <a href="{{ path('edition-facture_show',{'id':facture.id}) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                             </td>
+</tr>
+                            {% endif %}
+
+                            {% if facture.requerant %}
+                            <tr>
+                            <td>{{ facture.id }}</td>
+                            <td>{{ facture.requerant.nom~" "~facture.requerant.postnom~" "~facture.requerant.prenom }}</td>
+                            <td>{{ facture.validation?'<span class="label label-success">PAYEE</span>':'<span class="label label-warning">En Attente</span>' }}</td>
+                            <td>{{ facture.prix }}</td>
+                            <td>{{ facture.lasolde }}</td>
+                            <td>{{ facture.prix-facture.lasolde }}</td>
+                            <td>{%  if facture.lasolde>0 and facture.validation == 1  %}
+                              <div class="row">
+                                        <div class="col-lg-12">
+                                    <form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post">
+                                        <div class="form-inline">
+                                            <label for="solde">Payer un accompte :</label>
+                                            <div class="form-group">
+                                                <input type="number" name="solde"  id="solde" class="form-control">
+                                                <select name="devise" id="devise" class="form-control">
+                                                    <option selected value="USD">USD</option>
+                                                    <option value="CDF">FC</option>
+                                                </select>
+                                                <button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>
+                                            </div></div>
+                                    </form>
+                                        </div>
+                                    </div>
+
+                             {% endif %}</td>
+                             <td>
+                             <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                             <a href="{{ path('edition-facture_show',{'id':facture.id}) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                             </td>
+</tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
+
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="tabr4">
+           <table class="table table-striped">
+                        <thead>
+                         <tr>
+                         <th>N°</th>
+                         <th>NOMS</th>
+                         <th>Etat</th>
+                         <th>MONTANT A PAYER</th>
+                         <th>SOLDE</th>
+                         <th>RESTE A PAYER</th>
+                         <th></th>
+                         <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for facture in liste %}
+                            {% if facture.episode %}
+                            <tr>
+                            <td>{{ facture.id }}</td>
+                            <td>{{ facture.episode.patient }}</td>
+                            <td>{{ facture.validation?'<span class="label label-success">PAYEE</span>':'<span class="label label-warning">En Attente</span>' }}</td>
+                            <td>{{ facture.prix }}</td>
+                            <td>{{ facture.lasolde }}</td>
+                            <td>{{ facture.prix-facture.lasolde }}</td>
+                            <td>{%  if facture.lasolde>0 and facture.validation == 1  %}
+                              <div class="row">
+                                        <div class="col-lg-12">
+                                    <form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post">
+                                        <div class="form-inline">
+                                            <label for="solde">Payer un accompte :</label>
+                                            <div class="form-group">
+                                                <input type="number" name="solde"  id="solde" class="form-control">
+                                                <select name="devise" id="devise" class="form-control">
+                                                    <option selected value="USD">USD</option>
+                                                    <option value="CDF">FC</option>
+                                                </select>
+                                                <button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>
+                                            </div></div>
+                                    </form>
+                                        </div>
+                                    </div>
+
+                             {% endif %}</td>
+                             <td>
+                             <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                             <a href="{{ path('edition-facture_show',{'id':facture.id}) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                             </td>
+</tr>
+                            {% elseif facture.requerant %}
+                            <tr>
+                            <td>{{ facture.id }}</td>
+                            <td>{{  facture.requerant.nom~" "~facture.requerant.postnom~" "~facture.requerant.prenom }}</td>
+                            <td>{{ facture.validation?'<span class="label label-success">PAYEE</span>':'<span class="label label-warning">En Attente</span>' }}</td>
+                            <td>{{ facture.prix }}</td>
+                            <td>{{ facture.lasolde }}</td>
+                            <td>{{ facture.prix-facture.lasolde }}</td>
+                            <td>{%  if facture.lasolde>0 and facture.validation == 1  %}
+                              <div class="row">
+                                        <div class="col-lg-12">
+                                    <form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post">
+                                        <div class="form-inline">
+                                            <label for="solde">Payer un accompte :</label>
+                                            <div class="form-group">
+                                                <input type="number" name="solde"  id="solde" class="form-control">
+                                                <select name="devise" id="devise" class="form-control">
+                                                    <option selected value="USD">USD</option>
+                                                    <option value="CDF">FC</option>
+                                                </select>
+                                                <button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>
+                                            </div></div>
+                                    </form>
+                                        </div>
+                                    </div>
+
+                             {% endif %}</td>
+                             <td>
+                             <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                             <a href="{{ path('edition-facture_show',{'id':facture.id}) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                             </td>
+</tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                        </table>
+
+                </div>
+
+
+            <div role="tabpanel" class="tab-pane fade" id="tabr2">
+                <!-- Second onglet -->
+                <div class="row">
+                {{ render(controller('hostooSanteBundle:Caisse:creeBS')) }}
+                </div>
+            </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="tabr3">
+                <!-- Troisieme onglet -->
+        <div class="row">
+                {{ render(controller('hostooSanteBundle:Caisse:listeBS')) }}
+        </div>
+            </div>
+                </div></div>
+    <div class="col-lg-3 col-md-12">
+   <div class="card-box">
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="alert alert-success">{{ render(controller('hostooSanteBundle:Caisse:donneTaux')) }}</div>
+            </div>
+                <div class="col-md-6 col-xs-12">
+                    {{ render(controller('hostooSanteBundle:Caisse:nouveauTaux')) }}
+                </div>
+
+            </div>
+    </div>
+            <div class="text-center">
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box bg-info widget-user text-white">
+                            <span class="fa fa-2x">
+                            {% if caisseprivusd.usd==null %}
+                                0 USD
+                            {% else %}
+                                {{ caisseprivusd.usd }} USD
+                            {% endif %}
+                            </span>
+                         <hr>
+                            <h5 class="text-white">Caisse Privées USD</h5>
+                        </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box bg-success widget-user text-white">
+                            <span class="fa fa-2x">
+                                {% if caisseprivcdf.cdf==null %}
+                                    0 CDF
+                                {% else %}
+                                    {{ caisseprivcdf.cdf }} CDF
+                                {% endif %}
+                            </span>
+                            <hr>
+                            <h5 class="text-white">Caisse Privées CDF</h5>
+                            
+                        </div>
+</div>
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box bg-primary text-white widget-user">
+                            <span class="fa fa-2x">
+                                {% if caisseconvusd ==null %}
+                                0 USD
+                                {% else %}
+                                {{ caisseconvusd }} USD
+                                {% endif %}
+                                </span>
+                            <hr>
+                            <h5 class="text-white">Caisse Conventionnés USD</h5>
+
+                        </div>
+</div>
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box widget-user bg-purple text-white">
+                            <span class="fa fa-2x">{{ render(controller(('hostooSanteBundle:Caisse:sommeBScdf'))) }} CDF</span>
+                            <hr>
+                            <h5 class="text-white">Dépenses</h5>
+                        </div>
+</div>
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box widget-user bg-danger text-white">
+                            <span class="fa fa-2x">{{ render(controller(('hostooSanteBundle:Caisse:sommeBSusd'))) }} USD</span>
+                            <hr>
+                            <h5 class="text-white">Dépenses</h5>
+                        </div>
+
+            </div>
+        </div>
+
+{% endblock %}
+{#{% block javascripts %}#}
+        {#{{ parent() }}#}
+        {#<script src="{{ asset('assets/js/jquery.paginate.min.js') }}"></script>#}
+     {#<script type="text/javascript">#}
+                        {#$(function() {#}
+                            {#$('#listitems').paginate({itemsPerPage: 10});#}
+                             {#$('#listitems2').paginate({itemsPerPage: 10});#}
+                        {#});#}
+                    {#</script>#}
+{#{% endblock %}#}
+        {% block stylesheets %}
+    {{ parent() }}
+    {% include "hostooSanteBundle:plugins:datatable.style.html.twig" %}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% include "hostooSanteBundle:plugins:datatable.scripts.html.twig" %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.table').dataTable({
+                deferRender:    true,
+                scrollY:        2000,
+                scrollCollapse: true,
+                scroller:       true,
+                dom: "Bfrtip",
+                buttons: [{extend: "copy", className: "btn-sm"}, {extend: "csv", className: "btn-sm"}, {
+                    extend: "excel",
+                    className: "btn-sm"
+                }, {extend: "pdf", className: "btn-sm"}, {extend: "print", className: "btn-sm"}],
+                responsive: !0
+                ,language: {
+                    processing:     "Traitement en cours...",
+                    search:         "Rechercher&nbsp;:",
+                    lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+                    info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                    infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                    infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                    infoPostFix:    "",
+                    loadingRecords: "Chargement en cours...",
+                    zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                    emptyTable:     "Aucune donnée disponible dans le tableau",
+                    paginate: {
+                        first:      "Premier",
+                        previous:   "Pr&eacute;c&eacute;dent",
+                        next:       "Suivant",
+                        last:       "Dernier"
+                    },
+                    aria: {
+                        sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                    }},
+                    sorting:[[0,'desc']]
+            });
+        });
+    </script>
+    <script type="application/javascript">
+        $inp=$('#motcle');
+        $inp.keyup(function(event){
+            $('#mesitems').show().html('');
+            //$(".loading").show();
+            var motcle = $(this).val();
+            var DONNEE = 'motcle=' + motcle;
+            $.ajax({
+                type: "POST",
+                dataType:'json',
+                url: Routing.generate('recherche_patient'),
+                data: DONNEE,
+                cache: false,
+                minLength: 2,
+                beforeSend: function () {
+                    $('#mesitems').find('li').remove();
+                },
+                success: function(data) {
+
+
+                    $.each(data.items, function(index,value) {
+                        //$("#ott").text(value.libelle+'<br/>'+value.Prix);
+                        var nophoto="../../jquery-ui/images/no_image.jpg";
+                        var lien=Routing.generate('hostoo_sante_voirpatient',{id:value.id});
+                        var lien2=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        var lien3=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        $('#mesitems').prepend('<li class="list-group-item"><span class="fa fa-user"></span>'+value.nom+' '+value.postnom+' '+value.prenom+'<div class="btn-group pull-right"><a href="'+lien2+'" class="btn btn-success">Dependants</a><a class="btn btn-info" href="'+lien+'">Afficher</a>{#<a class="btn btn-warning" href="'+lien3+'">Episode</a><a class="btn btn-warning" href="#">Control</a>#}</div> </li>');
+                        //$('#resultats').html('<div>'+value.libelle+'</div>');
+                        //alert(value.libelle);
+                    });
+
+                    // $(".loading").hide();
+                }
+            });
+            return false;
+        });
+
+        // Date Picker
+        jQuery('#datepicker').datepicker();
+        jQuery('#patient_datenaissance').datepicker({
+            autoclose: true,
+            dateFormat: "dd/mm/yy",
+            dayNames: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ],
+            dayNamesMin: [ "Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa" ],
+            monthNames: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+            todayHighlight: true
+        });
+
+    </script>
+{% endblock %}

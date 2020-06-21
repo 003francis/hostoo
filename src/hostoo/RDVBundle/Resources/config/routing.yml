@@ -1,0 +1,14 @@
+hostoo_rdv_rdvmed:
+    resource: "@hostooRDVBundle/Resources/config/routing/rdvmed.yml"
+    prefix:   /rdvmed
+
+hostoo_rdv_homepage:
+    path:     /rdv
+    defaults: { _controller: hostooRDVBundle:Default:index }
+throw_autorization:
+    path:     /non-autorise
+    defaults: { _controller: hostooUserBundle:Default:throwAuthorization }
+
+throw_direction:
+    path:     /direction
+    defaults: { _controller: hostooRDVBundle:Default:direction }

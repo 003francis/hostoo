@@ -1,0 +1,21 @@
+
+{% if consultation %}
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Date</th>
+                <td>{% if  consultation and consultation.dateconsultation %}{{ consultation.dateconsultation|date('d-m-Y H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Consultation</th>
+                <td>{{ consultation.consultation|raw }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
+    <ul class="list-unstyled">
+        <li>
+            <a href="#settings-2" data-toggle="tab" aria-expanded="false" class="btn btn-warning">Modifier</a>
+        </li>
+
+    </ul>

@@ -1,0 +1,28 @@
+<h4>Bon de sortie</h4>
+
+    <form action="{{ path('hostoo_sante_bscaisse') }}" method="post" class="vertical col-lg-12">
+        <div class="form-group">
+        {{ form_label(form.motif) }}
+        {{ form_errors(form.motif) }}
+        {{ form_widget(form.motif,{'attr':{'class':'form-control'}}) }}
+
+        {{ form_label(form.montant) }}
+        {{ form_errors(form.montant) }}
+        {{ form_widget(form.montant,{'attr':{'class':'form-control'}}) }}
+
+        {{ form_label(form.devise) }}
+        {{ form_errors(form.devise) }}
+        {{ form_widget(form.devise,{'attr':{'class':'form-control'}}) }}
+
+        {{ form_label(form.beneficiaire) }}
+        {{ form_errors(form.beneficiaire) }}
+        {{ form_widget(form.beneficiaire,{'attr':{'class':'form-control'}}) }}
+
+        {{ form_label(form.visa) }}
+        {{ form_errors(form.visa) }}
+        {{ form_widget(form.visa,{'attr':{'class':'form-control'}}) }}
+
+            {{ form_widget(form.save,{'attr':{'class':'form-control btn btn-sm btn-success'}}) }}
+        {{ form_rest(form) }}
+        </div>
+    </form>

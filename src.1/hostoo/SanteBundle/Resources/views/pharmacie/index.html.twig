@@ -1,0 +1,252 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block body %}
+
+    <!-- Liste de médicaments -->
+    <div class="col-sm-6">
+        <div class="panel-group" id="accordion2">
+            <h3 class="column">Classes thérapeutique</h3>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#info1">
+                            Analgésique
+                        </a> <span class="btn btn-xs btn-warning pull-right"><i class="fa fa-warning"></i></span>
+                    </h4>
+                </div>
+
+                <div id="info1" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul class="alt">
+                            <li>
+                                Eferalgan
+                            </li>
+                            <li>
+                                Doliprane
+                            </li>
+                            <li class="tooltip-top" title="This is a Top tooltip">
+                                Butorphanol<span class="btn btn-warning btn-xs pull-right"><i class="fa fa-warning"></i></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#info2">
+                            Antitussif
+                        </a> <span class="badge"></span>
+                    </h4>
+                </div>
+
+                <div id="info2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul class="alt">
+                            <li>
+                                Betatoux
+                            </li>
+                            <li>
+                                Histaminic
+                            </li>
+                            <li>
+                                Polery
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- Tabs Left -->
+    <ul id="rec-tabler" class="tabs left">
+        <li><a href="#tabr1">Livraisons</a></li>
+        <li><a href="#tabr2">Réapprovisionnement</a></li>
+    </ul>
+
+    <div id="tabr1" class="tab-content"><!-- Premier onglet -->
+        <div class="row">
+            <div class="col_6">
+                <legend>Avec Ordonnance</legend>
+                <form>
+                    <label class="col_12"><u>Nom du produit</u> :</label><br>
+                    <table id="example" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Name</th>
+                            <th>Grammage</th>
+                            <th>Enfant/Adulte</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Name</th>
+                            <th>Grammage</th>
+                            <th>Enfant/Adulte</th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Butorphanol</td>
+                            <td>500mg</td>
+                            <td>
+                                <input type="number" class="col_4" />
+                            </td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Doliprane</td>
+                            <td>500mg</td>
+                            <td>
+                                <input type="number" class="col_4" />
+                            </td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Doliprane</td>
+                            <td>1000mg</td>
+                            <td>
+                                <input type="number" class="col_4" />
+                            </td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <label class="col_12"><u>Medecin traitant</u> :
+                        <input type="text" />
+                    </label><br>
+
+                </form>
+            </div>
+            <div class="col_6">
+                <legend>Sans Ordonnance</legend>
+                <form class="col-md-12 column">
+                    <label class="col_12"><u>Nom du produit</u> :</label><br>
+                    <table id="example1" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Name</th>
+                            <th>Grammage</th>
+                            <th>Enfant/Adulte</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Classe</th>
+                            <th>Name</th>
+                            <th>Grammage</th>
+                            <th>Enfant/Adulte</th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Butorphanol</td>
+                            <td>500mg</td>
+                            <td><input type="number" class="col_4" /></td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Doliprane</td>
+                            <td>500mg</td>
+                            <td>
+                                <input type="number" class="col_4" />
+                            </td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Analgésique</td>
+                            <td>Doliprane</td>
+                            <td>1000mg</td>
+                            <td>
+                                <input type="number" class="col_4" />
+                            </td>
+                            <td>
+                                <div class="make-switch" data-on="success" data-off="info">
+                                    <input type="checkbox" name="my-checkbox">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <label class="col_12">Commentaire :
+                        <input type="text" /></label>
+                    <br>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="tabr6" class="tab-content">Réapprovisionnement</div><!-- Sixième onglet -->
+
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript" src="{{ asset('makeup/js/Moment.js') }}"></script>
+<script src="{{ asset('makeup/js/bootstrap-switch.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('makeup/js/bootstrap-datetimepicker.js') }}"></script>
+<script type="text/javascript" language="javascript" src="{{ asset('makeup/media/js/jquery.dataTables.js') }}"></script>
+<script type="text/javascript" language="javascript" src="{{ asset('makeup/media/js/dataTables.bootstrap.js') }}"></script>
+    <script>
+        $(function() {
+            //$('.dash-report-item').matchHeight();
+        });
+        $(document).ready(function() {
+            var sideslider = $('[data-toggle=collapse-side]');
+            var sel = sideslider.attr('data-target');
+            var sel2 = sideslider.attr('data-target-2');
+            sideslider.click(function(event){
+                $(sel).toggleClass('in');
+                $(sel2).toggleClass('out');
+            });
+
+
+            $('input[name="my-checkbox"]').bootstrapSwitch('onText', 'Oui');
+            $('input[name="my-checkbox"]').bootstrapSwitch('offText', 'Non');
+            $('input[name="my-checkbox"]').bootstrapSwitch('onColor', 'success');
+            $('input[name="my-checkbox"]').bootstrapSwitch('offColor', 'danger');
+            $('input[name="my-checkbox"]').bootstrapSwitch('size', 'mini');
+        });
+        $(document).ready(function() {
+            $('#example').DataTable();
+            $('#example1').DataTable();
+        } );
+    </script>
+    {% endblock %}
+{% endblock %}

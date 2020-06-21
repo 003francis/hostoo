@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Ordonnance list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Dateordo</th>
+                <th>Valider</th>
+                <th>Livre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ordonnance in ordonnances %}
+            <tr>
+                <td><a href="{{ path('ordonnance_med_show', { 'id': ordonnance.id }) }}">{{ ordonnance.id }}</a></td>
+                <td>{% if ordonnance.dateordo %}{{ ordonnance.dateordo|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ordonnance.valider %}Yes{% else %}No{% endif %}</td>
+                <td>{% if ordonnance.livre %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ordonnance_med_show', { 'id': ordonnance.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ordonnance_med_edit', { 'id': ordonnance.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ordonnance_med_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

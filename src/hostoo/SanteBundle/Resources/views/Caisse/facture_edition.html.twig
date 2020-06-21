@@ -1,0 +1,424 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu   %}
+    {% if is_granted('ROLE_CAISSIER') and not is_granted('ROLE_RECEPTION') %}
+        {% include "hostooSanteBundle:menus:menucaisse.html.twig" %}
+
+{% elseif is_granted('ROLE_RECEPTION','ROLE_CAISSIER','ROLE_INFIRMIER')  %}
+    {% include 'hostooSanteBundle:menus:menurc.html.twig' %}
+
+    {% endif %}
+{% endblock %}
+{% block title %}facturer Patient{% endblock %}
+{% block titrepage %}{% endblock %}
+{% block options %}
+    {#<a href="{{ path('etalonner_facture', {'id': facture.id }) }}" class="btn btn-info"> Calibrer </a>#}
+    <button class="btn btn-custom waves-effect waves-light" data-toggle="modal" data-target="#myModal1">Laboratoire</button>
+    <button class="btn btn-custom waves-effect waves-light" data-toggle="modal" data-target="#myModal2">Imagérie</button>
+    <button class="btn btn-custom waves-effect waves-light" data-toggle="modal" data-target="#myModal3">Autres Soins</button>
+         {#<a class="btn btn-success" data-toggle="modal" data-target="#actes">Ajouter les Actes</a>#}
+       {#<a class="btn btn-inverse" data-toggle="modal" data-target="#produits">Pharmacie</a>#}
+
+{% endblock %}
+
+{% block body %}
+    {% set newArray=[] %}
+    {% set pnewArray=[] %}
+    <div class="col-lg-8">
+<div class="card-box">
+
+
+                <h3 class="text-center">FACTURE N° {{ facture.id }}</h3>
+                <div class="alert alert-danger">
+                    <p>Avant toute suppression commencez d'abord par remettre le prix de l'acte à zéro puis supprimer l'acte.</p>
+                </div>
+    {% if facture.hospitalisation is defined and facture.hospitalisation is not null %}
+    <table class="table table-condensed">
+        <tr>
+            <th>Nom</th>
+            <th>{{ facture.hospitalisation.patient }}</th>
+        </tr>
+        <tr>
+            <th>Categorie</th>
+            <th>{{ facture.hospitalisation.patient.convention }}</th>
+        </tr>
+        <tr>
+            <th>Societe</th>
+            <th>{{ facture.hospitalisation.patient.societe }}</th>
+        </tr>
+
+    </table>
+    {% elseif facture.episode is defined  and facture.episode is not null %}
+    <table class="table table-condensed">
+        <tr>
+            <th>Nom</th>
+            <th>{{ facture.episode.patient }}</th>
+        </tr>
+        <tr>
+            <th>Categorie</th>
+            <th>PRIVEE</th>
+        </tr>
+        <tr>
+            <th>Societe</th>
+            <th>PRIVEE </th>
+        </tr>
+
+    </table>
+    {% endif %}
+        <table class="table table-striped">
+
+            <tr>
+                <th>Désignation</th>
+                <th>prix</th>
+                <th>Actions</th>
+            </tr>
+            {% if facture.commandes|length > 0 %}
+            {% for cmd in  facture.commandes %}
+            {% for acte in  cmd.tarifs %}
+                {% if acte.actes.categories.nom not in newArray %}
+                    <tr>
+                        <th colspan="2" class="text-center">{{ acte.actes.categories.nom }}</th>
+                    </tr>
+                    {% set newArray = newArray|merge([acte.actes.categories.nom]) %}
+                {% endif %}
+            <tr>
+                <th>{{ acte.actes.designationacte }}</th>
+                <td>{{ acte.prix }}</td>
+                <td>
+                        {#<ul class="list-unstyled list-inline">#}
+                            {#<li>#}
+                                {#<a href="{{ path('traitementFacture_edit',{'id': acte.id }) }}">Traiter</a>#}
+                            {#</li>#}
+                            {#<li>#}
+                                {#<a href="{{ path('traitementFacture_delete',{'id': acte.id }) }}">Supprimer</a>#}
+                            {#</li>#}
+                        {#</ul>#}
+
+                </td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+            <tfoot>
+            <tr>
+                <th align="right">Total</th>
+                <th align="right">{{ facture.prix }}</th>
+                <th></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    </div>
+
+        <div class="col-lg-4">
+
+        <div class="card-box">
+            <h3 class="text-center">PANIER DES ACTES</h3>
+            <form class="" method="post" action="{{ path('facture_actes_valider',{'id':facture.id }) }}">
+            <table class="table table-condensed">
+                <tr>
+                    <th>Designation acte</th><th>Montant</th>
+                </tr>
+                {% set tot = 0 %}
+                {% if app.session.get('panier_actes') %}
+                    {#{% set panieractes=app.session.get('panier_actes')  %}#}
+                    {% for acte in panieractes %}
+                            {% if acte.categories.nom not in pnewArray %}
+                                <tr>
+                                    <th colspan="2" class="text-center">{{ acte.categories.nom }}</th>
+                                </tr>
+                                {% set pnewArray = pnewArray|merge([acte.categories.nom]) %}
+                            {% endif %}
+                <tr>
+                    <td> {{ acte.designationacte }}</td><td>{{ acte.tarif.prix }}USD</td>
+                </tr>
+                        {%  set tot = tot + acte.tarif.prix %}
+                    {% endfor %}
+                {% endif %}
+                <tr>
+                    <th>TOTAL </th>
+                    <th> {{ tot }} USD</th>
+                </tr>
+            </table>
+                <div class="form-group">
+                    <label>
+                    {#<input type="date" name="date_tour" class="form-control" />#}
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="medecin">
+                        Medecin :
+                    </label>
+                    <select name="medecin" id="medecin" class="form-control" required>
+                        <option value="">Choisir un medecin demandeur</option>
+                        {% for md in medecins %}
+                        <option value="{{ md.id }}">Dr. {{ md.nom~" "~md.postnom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-success btn-group-lg">Valider</button>
+                    <a href="{{ path('facture_actes_annuler',{'id':facture.id }) }}" class="btn btn-danger  btn-group-lg">Annuler</a>
+                    <a href="{{ path('facture_actes_supprimer',{'id':facture.id }) }}" class="btn btn-outline-danger  btn-group-lg">Supprimer</a>
+                </div>
+            </form>
+        </div>
+        </div>
+ <div id="actes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-full">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="full-width-modalLabel">Actes Medicaux</h4>
+                </div>
+                <div class="modal-body">
+                    <h5 class="m-t-30"><b>Recherche</b></h5>
+                    <p class="text-muted m-b-15 font-13">
+                        Selectionner les actes des premiers soins du patient.
+                    </p>
+                    <form class="form-inline" action="{{ path('facture_actes_ajouter',{'id': facture.id }) }}" method="post">
+                        <select name="actes[]" class="multi-select actes" multiple="" id="my_multi_select" >
+
+                            {% for acte in actes %}
+                                    <option value="{{ acte.id }}" > {{ acte.code }}  {{ acte.designationacte }} == {% if facture.hospitalisation %}{% if facture.hospitalisation.patient.convention.id != 2 %}{{ acte.prix*facture.hospitalisation.patient.societe.indice }}{% else %}{{ acte.prix }}{% endif %}{% endif %}</option>
+
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <br>
+                        <input type="submit" value="Soumettre les actes" class="btn btn-custom">
+                        <input type="reset" value="Annuler" class="btn btn-danger">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="myModal1" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Facturer les actes du laboratoire</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ path('facture_actes_ajouter', {'id': facture.id,'tag':'labo' }) }}" method="post" >
+                        <h5 class="m-t-30"><b>Recherche des actes</b></h5>
+
+                        <select name="labos[]" class="multi-select" multiple="" id="my_multi_select3" style="position: absolute; left: -9999px;">
+                            {% for acte in actes %}
+                                {% if acte.categories.id  == 3 %}
+                                    <option value="{{ acte.id }}">{{ acte.designationacte }} - <span class="pull-right"> ({{ acte.tarif.prix }} USD)</span></option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        {#<label>Examen demande par :</label>#}
+                        {#<select name="med" class="form-control">#}
+                            {#{% for med in medecins %}#}
+                                {#<option value="{{ med.id }}">{{ med.nom~" "~med.postnom~" "~med.prenom }}</option>#}
+                            {#{% endfor %}#}
+                        {#</select>#}
+                        <button class="btn btn-success" type="submit">Facturer</button>
+                    </form> </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+                    {#<button type="button" class="btn btn-custom waves-effect waves-light">Save changes</button>#}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div id="myModal2" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel3">Facturer les actes de l'imagerie</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ path('facture_actes_ajouter', {'id': facture.id,'tag':'img' }) }}" method="post" >
+                        <h5 class="m-t-30"><b>Recherche des actes</b></h5>
+
+                        <select name="imgs[]" class="multi-select" multiple="" id="my_multi_select4" style="position: absolute; left: -9999px;">
+                            {% for acte in actes %}
+                                {% if acte.categories.id  == 4 %}
+
+                                    <option value="{{ acte.id }}">{{ acte.designationacte }} - <span class="pull-right"> ({{ acte.tarif.prix }} USD)</span></option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        {#<label>Examen demande par :</label>#}
+                        {#<select name="med" class="form-control">#}
+                            {#{% for med in medecins %}#}
+                                {#<option value="{{ med.id }}">{{ med.nom~" "~med.postnom~" "~med.prenom }}</option>#}
+                            {#{% endfor %}#}
+                        {#</select>#}
+                        <button class="btn btn-success" type="submit">Facturer</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+                    {#<button type="button" class="btn btn-custom waves-effect waves-light">Save changes</button>#}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div id="myModal3" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel3">Facturer les autres actes</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ path('facture_actes_ajouter', {'id': facture.id,'tag':'autre' }) }}" method="post" >
+                        <h5 class="m-t-30"><b>Recherche des actes</b></h5>
+
+                        <select name="autres[]" class="multi-select" multiple="" id="my_multi_select5" style="position: absolute; left: -9999px;">
+                            {% for acte in actes %}
+                                {% if acte.categories.id  == 1 or acte.categories.id  == 2 %}
+
+                                    <option value="{{ acte.id }}">{{ acte.designationacte }} - <span class="pull-right"> ({{ acte.tarif.prix }} USD)</span></option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        {#<label>Examen demande par :</label>#}
+                        {#<select name="med" class="form-control">#}
+                            {#{% for med in medecins %}#}
+                                {#<option value="{{ med.id }}">{{ med.nom~" "~med.postnom~" "~med.prenom }}</option>#}
+                            {#{% endfor %}#}
+                        {#</select>#}
+                        <button class="btn btn-success" type="submit">Facturer</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+                    {#<button type="button" class="btn btn-custom waves-effect waves-light">Save changes</button>#}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}"  rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('assets/plugins/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/plugins/jquery-quicksearch/jquery.quicksearch.js') }}"></script>
+    <script>
+        jQuery(document).ready(function() {
+            //advance multiselect start
+            $('#my_multi_select3').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+            $('#my_multi_select4').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+            $('#my_multi_select5').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='recherche...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

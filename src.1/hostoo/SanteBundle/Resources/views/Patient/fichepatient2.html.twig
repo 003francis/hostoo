@@ -1,0 +1,78 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titre %} {{ parent() }}::Fiche du Patient{% endblock %}
+{% block titrepage %} Identité du patient{% endblock %}
+{% block options %}
+    <a href="{{ path('hostoo_sante_listepatients') }}" class="btn btn-info" > <i class="fa fa-backward"></i> liste des patients</a>
+{% endblock %}
+{% block body %}
+
+    <div class="row">
+        <div class="card-box">
+            <ul class="list-group list-unstyled" id="mesitems" style="display: none">
+
+            </ul>
+        </div>
+    </div>
+{% if patient == null %}
+    <h2>Patient inconnu</h2>
+    {% else %}
+        <h2>Fiche Patient</h2>
+            <div class="col-md-4">
+        <dl class="dl-horizontal">
+
+                <dt>Nom</dt>
+                <dd>{{ patient.nom }}</dd>
+                <dt>Postnom</dt>
+                <dd>{{ patient.postnom }}</dd>
+                <dt>Prenom</dt>
+                <dd>{{ patient.prenom }}</dd>
+                <dt>Date de naissance</dt>
+                <dd>{{ patient.datenaissance|date('d-m-Y') }}</dd>
+                <dt>Sexe</dt>
+                <dd>{% if patient.sexe == true %}M{% else %}F{% endif %}</dd>
+                <dt>Societe</dt>
+                <dd>{{ patient.societe.nom }}</dd>
+                <dt>Telephone</dt>
+                <dd>{{ patient.telephone1 }}</dd>
+                <dt>Telephone2</dt>
+                <dd>{{ patient.telephone2 }}</dd>
+                {% if patient.formule.nom is defined %}
+                    <dt>Formule</dt>
+                <dd>{{ patient.formule.nom }}</dd>
+                {% endif %}
+                <dt>Nationalite</dt>
+                <dd>{{ patient.nationalite }}</dd>
+
+        </dl></div>
+
+            <div class="col-md-5">
+                <h2>Controle</h2>
+                <button class="btn-primary" id="afficherEpiform">Nouvel episode</button>
+                <form action="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" method="post" id="epiform">
+
+                    {{ form_errors(form.dateepisode) }}
+                    {{ form_widget(form.dateepisode) }}
+
+
+                    {{ form_errors(form.observation) }}
+                    {{ form_widget(form.observation,{'attr':{'class':'form-control', 'placeholder':'Observation (Optionnelle)'}}) }}
+
+                    {{ form_label(form.consultation) }}
+                    {{ form_errors(form.consultation) }}
+                    {{ form_widget(form.consultation,{'attr':{'class':'form-control'}}) }}
+{{ form_rest(form) }}
+                    <input type="submit" value="creer un episode" class="btn btn-success" >
+                </form>
+                <script>
+                    $(function () {
+                        $('#epiform').hide();
+                        $('#afficherEpiform').on('click',function () {
+                            $('#epiform').show();
+                            $(this).hide();
+                        });
+                    });
+                </script>
+
+            </div>
+        {% endif %}
+{% endblock %}

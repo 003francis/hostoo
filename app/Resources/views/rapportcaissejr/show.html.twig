@@ -1,0 +1,74 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menucaisse.html.twig" %}
+{% endblock %}
+{% block body %}
+    <h1>rapportCaisseJr</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rapportCaisseJr.id }}</td>
+            </tr>
+            <tr>
+                <th>Numdoc</th>
+                <td>{{ rapportCaisseJr.numdoc }}</td>
+            </tr>
+            <tr>
+                <th>Daterap</th>
+                <td>{% if rapportCaisseJr.daterap %}{{ rapportCaisseJr.daterap|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ rapportCaisseJr.libelle|raw }}</td>
+            </tr>
+            <tr>
+                <th>Report</th>
+                <td>{{ rapportCaisseJr.report }}</td>
+            </tr>
+            <tr>
+                <th>Recettebrute</th>
+                <td>{{ rapportCaisseJr.recettebrute }}</td>
+            </tr>
+            <tr>
+                <th>Depenseusd</th>
+                <td>{{ rapportCaisseJr.depenseusd }}</td>
+            </tr>
+            <tr>
+                <th>Depensecdf</th>
+                <td>{{ rapportCaisseJr.depensecdf }}</td>
+            </tr>
+            <tr>
+                <th>Recettenet</th>
+                <td>{{ rapportCaisseJr.recettenet }}</td>
+            </tr>
+            <tr>
+                <th>Justificatif</th>
+                <td>{{ rapportCaisseJr.justificatif }}</td>
+            </tr>
+            <tr>
+                <th>Medecin</th>
+                <td>{{ rapportCaisseJr.medecin }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ rapportCaisseJr.commentaire }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('rapportcaissejr_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('rapportcaissejr_edit', { 'id': rapportCaisseJr.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

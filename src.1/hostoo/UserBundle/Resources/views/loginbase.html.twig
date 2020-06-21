@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- META -->
+    <title>HOSTOO| Système de Gestion Hospitalière</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo_hostoo.png') }}">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}" media="all" />
+    <link href="{{ asset('assets/css/core.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/components.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/pages.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/menu.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
+</head>
+<body>{#
+<div class="text-center">
+    <img src="{{ asset('assets/images/logo/logo_hostoo.png') }}" width="50px" height="60px">
+</div>#}
+<div class="text-center logo-alt-box">
+    <a href="#" class="logo"><h2 class="text-info">Hostoo</h2></a>
+
+    <h4 class="text-muted m-t-0">Système de Gestion Hospitalière</h4>
+</div>
+
+<div class="wrapper-page" style="background-image:url({{ asset('assets/images/bg/hostoo_bg.jpg') }});background-size: cover;">
+
+    <div class="m-t-30 card-box">
+        <div class="text-center">
+            <h4 class="text-uppercase font-bold m-b-0">Se Connecter</h4>
+        </div>
+        <div class="panel-body">
+{% block body %}
+{% endblock %}
+        </div>
+    </div>
+    <!-- end card-box -->
+
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <p class="text-muted">2017 © <a href="http://calculus-system.net">Calculus System</a> </p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

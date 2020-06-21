@@ -1,0 +1,30 @@
+
+    <table class="table">
+        <tr>
+            <th>Medecin</th>
+            <th>Temps</th>
+            <th>En Attente</th>
+            <th>Réçus</th>
+            <th>Disponibilite</th>
+            <th></th>
+        </tr>
+        {% for rdv in liste %}
+
+            <tr>
+
+                <td>{{ rdv.medecin.nom }} {{ rdv.medecin.postnom }}</td>
+                <td>De {{ rdv.heureDebut|date('H:m') }} a {{ rdv.heureFin|date('H:m') }}</td>
+                {% if  rdv.rDVspatients.count > 0 %}
+                        <td>{{ rdv.rDVspatients.count }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+                <td>{{ rdv.patientsrecus }}</td>
+                <td>{{ rdv.disponibilite }}</td>
+
+
+                <td><a href="{{ path('hostoo_sante_attrrdv',{'id':rdv.id,'patient':app.session.get('patient') }) }}">attribuer</a></td>
+
+            </tr>
+        {% endfor %}
+    </table>

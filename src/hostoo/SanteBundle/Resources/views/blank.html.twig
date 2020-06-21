@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="calculus-system">
+
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo/logo_hostoo.png') }}">
+
+    <title>{% block title %}Hostoo{% endblock %}</title>
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/menu.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/core.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/components.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/pages.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
+    {% endblock %}
+
+    {#<script src="{{ asset('assets/js/modernizr.min.js') }}"></script>#}
+
+</head>
+
+<body class="fixed-left">
+
+<!-- Begin page -->
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- Top Bar Start -->
+    <div class="topbar">
+
+        <!-- LOGO -->
+        <div class="topbar-left">
+            <div class="text-center">
+                <a href="#" class="logo">
+                    <i class="zmdi zmdi-toys icon-c-logo"></i>
+                    <span>
+    <img src="{{ asset('assets/images/logo/logoepamed.jpg') }}" alt="logo" style="width: 54px;"></span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Button mobile view to collapse sidebar menu -->
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="">
+                    <div class="pull-left">
+                        <button class="button-menu-mobile open-left waves-effect waves-light">
+                            <i class="zmdi zmdi-menu"></i>
+                        </button>
+                        <span class="clearfix"></span>
+                    </div>
+
+                    {#<form role="search" method="post" class="navbar-left app-search pull-left hidden-xs" action="{{ path('recherche_patient') }}">#}
+                        {#<input type="text" placeholder="Search..." id="motcle" name="motcle" class="form-control" style="background-color: white">#}
+                        {#<a href="#"><i class="fa fa-search"></i></a>#}
+                    {#</form>#}
+
+
+                    <ul class="nav navbar-nav navbar-right pull-right">
+                        {#<li>#}
+                            {#<!-- Notification -->#}
+                            {#<div class="notification-box">#}
+                                {#<ul class="list-inline m-b-0">#}
+                                    {#<li>#}
+                                        {#<a href="javascript:void(0);" class="right-bar-toggle">#}
+                                            {#<i class="zmdi zmdi-notifications-none"></i>#}
+                                        {#</a>#}
+                                        {#<div class="noti-dot">#}
+                                            {#<span class="dot"></span>#}
+                                            {#<span class="pulse"></span>#}
+                                        {#</div>#}
+                                    {#</li>#}
+                                {#</ul>#}
+                            {#</div>#}
+                            {#<!-- End Notification bar -->#}
+                        {#</li>#}
+                        {% if is_granted('ROLE_CAISSE') %}
+                                <li><a href="{{ path('actes_listes') }}" class="bg-danger text-white fa-2x"><i class="badge ti-money m-r-5"></i> Caisse</a></li>
+                        {% endif %}
+                        <li class="dropdown user-box">
+                            <a href="#" class="dropdown-toggle waves-effect waves-light profile " data-toggle="dropdown" aria-expanded="true">
+                                <img src="{{ asset('assets/images/logo/logo_hostoo.png') }}" alt="user-img" class="img-circle user-img">
+                                <div class="user-status away"><i class="zmdi zmdi-dot-circle"></i></div>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> Profile</a></li>
+                                {#<li><a href="javascript:void(0)"><i class="ti-settings m-r-5"></i> Settings</a></li>#}
+                                <li><a href="{{ path('fos_user_change_password') }}"><i class="ti-lock m-r-5"></i> Changer de Mot de passe</a></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}"><i class="ti-power-off m-r-5"></i> Deconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+    <!-- Top Bar End -->
+
+
+    <!-- ========== Left Sidebar Start ========== -->
+
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <!--- Divider -->
+            <div id="sidebar-menu">
+                <ul>
+                    {% block menu %}
+                    <li class="text-muted menu-title">Navigation</li>
+
+                    <li class="has_sub">
+                        <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-view-dashboard"></i> <span> Dashboard </span> </a>
+                    </li>
+
+                    <li class="has_sub">
+                        <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-nature-people"></i> <span>Patients</span> <span class="menu-arrow"></span> </a>
+                        <ul class="list-unstyled">
+                            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-invert-colors"></i> <span>Privés</span> <span class="menu-arrow"></span> </a>
+                            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-invert-colors"></i> <span>Conventionnées </span> <span class="menu-arrow"></span> </a>
+
+                        </ul>
+                    </li>
+                    {#
+                                        <li class="has_sub">
+                                            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-case"></i> <span>Rendez-vous </span> <span class="menu-arrow"></span> </a>
+                                            <ul class="list-unstyled">
+                                                <li><a href="javascript:void(0);">Sends</a></li>
+                                                <li><a href="javascript:void(0);">Received</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="has_sub">
+                                            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-text"></i><span class="label label-default pull-right">6</span><span> Commissions </span> </a>
+                                            <ul class="list-unstyled">
+                                                <li><a href="form-elements.html">Total Commission</a></li>
+                                                <li><a href="form-advanced.html">Commission par Agence</a></li>
+                                                <li><a href="form-validation.html">Commission des envois</a></li>
+                                                <li><a href="form-wizard.html">Commission des receptions</a></li>
+                                                <li><a href="form-summernote.html">Summernote</a></li>
+                                                <li><a href="form-uploads.html">Form Uploads</a></li>
+                                            </ul>
+                                        </li>
+
+
+                                        <li class="text-muted menu-title">More</li>
+
+                                        <li class="has_sub">
+                                            <a href="javascript:void(0);" class="waves-effect"><i class="zmdi zmdi-collection-item">
+
+                    </i><span class="label label-default pull-right">8</span><span> Pages </span></a>
+                                            <ul class="list-unstyled">
+                                                <li><a href="page-starter.html">Starter Page</a></li>
+                                                <li><a href="page-timeline.html">Timeline</a></li>
+                                                <li><a href="page-login.html">Login</a></li>
+                                                <li><a href="page-register.html">Register</a></li>
+                                                <li><a href="page-recoverpw.html">Recover Password</a></li>
+                                                <li><a href="page-lock-screen.html">Lock Screen</a></li>
+                                                <li><a href="page-confirm-mail.html">Confirm Mail</a></li>
+                                                <li><a href="page-404.html">Error 404</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="has_sub">
+                                            <a href="javascript:void(0);" class="waves-effect"><i class="ti-share"></i><span> Multi Level </span> <span class="menu-arrow"></span></a>
+                                            <ul>
+                                                <li class="has_sub">
+                                                    <a href="javascript:void(0);" class="waves-effect"><span>Menu Level 1.1</span> <span class="menu-arrow"></span></a>
+                                                    <ul style="">
+                                                        <li><a href="javascript:void(0);"><span>Menu Level 2.1</span></a></li>
+                                                        <li><a href="javascript:void(0);"><span>Menu Level 2.2</span></a></li>
+                                                        <li><a href="javascript:void(0);"><span>Menu Level 2.3</span></a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);"><span>Menu Level 1.2</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                    #}
+                </ul>
+                {% endblock %}
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    <!-- Left Sidebar End -->
+
+
+
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+        <!-- Start content -->
+        <div class="content">
+            <div class="container">
+
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <div class="btn-group pull-right m-t-5 m-b-20">{% block options %}
+                            {% endblock %}
+                        </div>
+
+                        <h4 class="page-title">{% block titrepage %}{% endblock %}</h4>
+                    </div>
+                </div>
+                {% block body %}
+
+                {% endblock %}
+
+            </div> <!-- container -->
+
+        </div> <!-- content -->
+
+        <footer class="footer">
+            2017 © Hostoo by <a href="http://calculus-system.net/" target="_blank" class="text-muted">calculus-system</a>
+        </footer>
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Right content here -->
+    <!-- ============================================================== -->
+
+
+    <!-- Right Sidebar -->
+    <div class="side-bar right-bar">
+        <a href="javascript:void(0);" class="right-bar-toggle">
+            <i class="zmdi zmdi-close-circle-o"></i>
+        </a>
+        <h4 class="">Notifications</h4>
+        <div class="notification-list nicescroll">
+            <ul class="list-group list-no-border user-list">
+                <li class="list-group-item">
+                    <a href="#" class="user-list-item">
+                        <div class="avatar">
+                            <img src="{{ asset('assets/images/users/avatar-2.jpg') }}" alt="">
+                        </div>
+                        <div class="user-desc">
+                            <span class="name">Michael Zenaty</span>
+                            <span class="desc">There are new settings available</span>
+                            <span class="time">2 hours ago</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" class="user-list-item">
+                        <div class="icon">
+                            <i class="zmdi zmdi-account"></i>
+                        </div>
+                        <div class="user-desc">
+                            <span class="name">New Signup</span>
+                            <span class="desc">There are new settings available</span>
+                            <span class="time">5 hours ago</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" class="user-list-item">
+                        <div class="icon">
+                            <i class="zmdi zmdi-comment"></i>
+                        </div>
+                        <div class="user-desc">
+                            <span class="name">New Message received</span>
+                            <span class="desc">There are new settings available</span>
+                            <span class="time">1 day ago</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" class="user-list-item">
+                        <div class="avatar">
+                            <img src="{{ asset('assets/images/users/avatar-3.jpg') }}" alt="">
+                        </div>
+                        <div class="user-desc">
+                            <span class="name">James Anderson</span>
+                            <span class="desc">There are new settings available</span>
+                            <span class="time">2 days ago</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="list-group-item active">
+                    <a href="#" class="user-list-item">
+                        <div class="icon">
+                            <i class="zmdi zmdi-settings"></i>
+                        </div>
+                        <div class="user-desc">
+                            <span class="name">Settings</span>
+                            <span class="desc">There are new settings available</span>
+                            <span class="time">1 day ago</span>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- /Right-bar -->
+
+
+</div>
+<!-- END wrapper -->
+
+<script>
+    var resizefunc = [];
+</script>
+{% block javascripts %}
+    <!-- jQuery  -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/detect.js') }}"></script>
+    <script src="{{ asset('assets/js/fastclick.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.slimscroll.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.blockUI.js') }}"></script>
+    <script src="{{ asset('assets/js/waves.js') }}"></script>
+    <script src="{{ asset('assets/js/wow.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.nicescroll.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.scrollTo.min.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ asset('assets/js/jquery.core.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.app.js') }}"></script>
+{% endblock %}
+</body>
+
+</html>

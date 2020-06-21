@@ -1,0 +1,68 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %} {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %} {% endblock %}
+{% block body %}
+    <div class="card-box">
+    <h1>Cloture</h1>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Numero</th>
+                <td>{{ cloture.id }}</td>
+            </tr>
+            <tr class="text-warning">
+                <th>Date d'ouverture</th>
+                <td>{% if cloture.dateouverture %}{{ cloture.dateouverture|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+
+            <tr class="text-danger">
+                <th>Date de fermeture</th>
+                <td>{% if cloture.datefermeture %}{{ cloture.datefermeture|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Montant USD</th>
+                <td>{{ cloture.montantusd }}</td>
+            </tr>
+            <tr>
+                <th>Montant CDF</th>
+                <td>{{ cloture.montantcdf }}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+<div class="card-box">
+    <table class="table table-bordered">
+        <caption class="text-center">VENTILATION</caption>
+        <thead>
+        <tr>
+            <th>Service</th>
+            <th>Nb. Actes</th>
+            <th>montant</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cat in factures %}
+            <tr>
+                <td>{{ cat.nom }}</td>
+                <td>{{ cat.actes }}</td>
+                <td>{{ cat.montant }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+    {#<ul>#}
+        {#<li>#}
+            {#<a href="{{ path('cloture_index') }}">Back to the list</a>#}
+        {#</li>#}
+        {#<li>#}
+            {#<a href="{{ path('cloture_edit', { 'id': cloture.id }) }}">Edit</a>#}
+        {#</li>#}
+        {#<li>#}
+            {#{{ form_start(delete_form) }}#}
+                {#<input type="submit" value="Delete">#}
+            {#{{ form_end(delete_form) }}#}
+        {#</li>#}
+    {#</ul>#}
+
+{% endblock %}

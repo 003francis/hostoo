@@ -1,0 +1,87 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menurapport.html.twig' %}
+{% endblock %}
+{% block title %}Frequentation{% endblock %}
+{% block titrepage %}Frequentation{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="card-box">
+        <form class="form-inline">
+            <label>
+                <input type="date" name="datea" class="form-control"/>
+            </label>
+            <label>
+                <input type="date" name="dateb" class="form-control"/>
+            </label>
+            <input type="submit" class="btn btn-success" value="Afficher">
+        </form>
+        </div>
+    </div>
+    <div class="card-box">
+    <h6>Frequentations générales</h6>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Aujourd'hui</th>
+            <th>Mois</th>
+            <th>Année</th>
+            <th>Total général</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ todayfreq|length }}</td>
+            <td>{{ fms|length }}</td>
+            <td>{{ fans|length }}</td>
+            <td>{{ freqs|length }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+<h6>Frequentations Conventionnnées</h6>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Aujourd'hui</th>
+            <th>Mois</th>
+            <th>Année</th>
+            <th>Total général</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ cvday|length }}</td>
+            <td>{{ cvmois|length }}</td>
+            <td>{{ cvmois|length }}</td>
+            <td>{{ freqs|length }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h6>Frequentations Privées</h6>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Aujourd'hui</th>
+            <th>Mois</th>
+            <th>Année</th>
+            <th>Total général</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ pvday|length }}</td>
+            <td>{{ pvmois|length }}</td>
+            <td>{{ pvmois|length }}</td>
+            <td>{{ freqs|length }}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+{% endblock %}

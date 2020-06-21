@@ -1,0 +1,31 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+
+{% block body %}
+    <h1>Visa creation</h1>
+<div class="card-box">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Enregistrer Visa" />
+    {{ form_end(form) }}
+</div>
+    <ul class="list-unstyled">
+        <li>
+            <a href="{{ path('visa_index') }}" class="btn btn-info">Visas émis</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2-bootstrap.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/plugins/select2/dist/js/select2.min.js') }}" type="text/javascript"></script>
+    <script>
+        $(function () {
+            $("#visa_patient").select2();
+            $("#visa_auteur").select2();
+        });
+    </script>
+{% endblock %}

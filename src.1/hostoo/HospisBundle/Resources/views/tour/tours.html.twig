@@ -1,0 +1,37 @@
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Infirmier</th>
+                <th>Laboratoire</th>
+                <th>Imagerie</th>
+                <th>Pharmacie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tour in tours %}
+            <tr>
+                <td>{% if tour.datetour %}{{ tour.datetour|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('hospitalisation_tour_show', { 'id': tour.id }) }}" class="btn btn-default">Afficher</a>
+                        </li>
+                        {#
+                        <li>
+                            <a href="{{ path('hospitalisation_tour_edit', { 'id': tour.id }) }}">edit</a>
+                        </li>
+                        #}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+

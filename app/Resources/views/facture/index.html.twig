@@ -1,0 +1,51 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+{% endblock %}
+{% block body %}
+<div class="card-box">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>N_</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Patient</th>
+                <th>Societe</th>
+                <th>Validation</th>
+                <th>Lasolde</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for facture in factures %}
+            <tr>
+                <td><a href="{{ path('edition-facture_show', { 'id': facture.id }) }}">{{ facture.id }}</a></td>
+                <td>{% if facture.datefacture %}{{ facture.datefacture|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ facture.prix }}</td>
+                <td>{% if facture.episode %}{{ facture.episode.patient }}{% elseif facture.hospitalisation %}{{ facture.hospitalisation.patient }} {% else %} Non Defini {% endif %}</td>
+                <td>{% if facture.episode %} {{ facture.episode.patient.societe }} {% else %} {{ facture.hospitalisation.patient.societe }} {% endif %}</td>
+                <td>{% if facture.validation %}Oui{% else %}Non{% endif %}</td>
+                <td>{{ facture.lasolde }}</td>
+                <td>
+                    <ul class="list-inline list-unstyled">
+                        <li>
+                            <a href="{{ path('edition-facture_show', { 'id': facture.id }) }}">Afficher</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('edition-facture_edit', { 'id': facture.id }) }}">Modifier</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {#<ul>#}
+        {#<li>#}
+            {#<a href="{{ path('edition-facture_new') }}">Create a new entry</a>#}
+        {#</li>#}
+    {#</ul>#}
+</div>
+{% endblock %}

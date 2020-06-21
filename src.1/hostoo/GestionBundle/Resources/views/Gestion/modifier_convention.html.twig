@@ -1,0 +1,71 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}hostoo|Gestion modifier Convention{% endblock %}
+
+{% block body %}
+    {% block body %}
+        <h1 class="text-center">Modifier Convention</h1>
+        <div class="card-box col-md-6 col-md-offset-3">
+            <form action="{{ path('nouvelle_convention') }}" method="post">
+                <div class="form-group">
+                    {{ form_label(form.nom) }}
+                    {{ form_errors(form.nom) }}
+                    {{ form_widget(form.nom,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.adresse) }}
+                    {{ form_errors(form.adresse) }}
+                    {{ form_widget(form.adresse,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.telephone) }}
+                    {{ form_errors(form.telephone) }}
+                    {{ form_widget(form.telephone,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.email) }}
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email,{'attr':{'class':'form-control'}}) }}
+                    {#
+                            {{ form_label(form.convention) }}
+                            {{ form_errors(form.convention) }}
+                            {{ form_widget(form.convention,{'attr':{'class':'form-control'}}) }}#}
+
+                    {{ form_label(form.convention.nomconvention,'Nom de la Convention') }}
+                    {{ form_errors(form.convention.nomconvention) }}
+                    {{ form_widget(form.convention.nomconvention,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.convention.tconvention,'Type de Convention') }}
+                    {{ form_errors(form.convention.tconvention) }}
+                    {{ form_widget(form.convention.tconvention,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_label(form.convention.dateconvention,'Date ') }}
+                    {{ form_errors(form.convention.dateconvention) }}
+                    {{ form_widget(form.convention.dateconvention,{'attr':{'class':'form-control'}}) }}
+
+                    {{ form_widget(form.save,{'attr':{'class':'btn btn-success'}}) }}
+                </div>
+            </form>
+        </div>
+    {% endblock %}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'HostooSanteBundle:plugins:timepicker.style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'HostooSanteBundle:plugins:timepicker.js.html.twig' %}
+    <script>
+        $(function () {
+            //$.datepicker.setDefaults( $.datepicker.regional[ "fr" ] );
+            // Date Picker
+            jQuery('#proprietaire_convention_dateconvention').datepicker({
+                autoclose: true,
+                format: "dd/mm/yyyy",
+                dayNames: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ],
+                monthNames: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+                todayHighlight: true
+
+            });
+
+        });
+    </script>
+{% endblock %}

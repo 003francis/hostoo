@@ -1,0 +1,52 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}Liste des examens{% endblock %}
+{% block options %}{% endblock %}
+{% block menu %}{% include 'hostooSanteBundle:menus:menulabo.html.twig' %}{% endblock %}
+{% block body %}
+
+    <div class="card-box">
+            <table class="table table-striped table-bordered" id="patients">
+                <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Nom - Postnom - Prénom</th>
+                    <th>Sexe</th>
+                    <th>Date_nais</th>
+
+                    <th>Categorie</th>
+                    <th>Societé</th>
+                    <th>Examens</th>
+                    <th>Medecin</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ord in exd %}
+                    <tr>
+                        <td>{{ ord.episode.patient.id }}</td>
+                        <td>{{ ord.episode.patient.nom }} {{ ord.episode.patient.postnom }} {{ ord.episode.patient.prenom }}{% if ord.episode.patient.madependance %}<span class="label label-warning">Dependant</span>{% endif %} </td>
+                        <td>{% if ord.episode.patient.sexe == true %}M{% else %}F{% endif %}</td>
+                        <td>{% if ord.episode.patient.datenaissance %}{{ ord.episode.patient.datenaissance|date('d/m/Y') }}{% else %}<span class="label label-warning">Pas de date</span> {% endif %}</td>
+
+                        <td>{{ ord.episode.patient.convention }}</td>
+                        <td>{% if ord.episode.patient.societe %}{{ ord.episode.patient.societe.nom }}{% else %}PRIVE {% endif %}</td>
+                        <td>
+                            <ul>
+                                {% for res in ord.resultats %}
+                                <li>{{ res.acte }}</li>
+                                {% endfor %}
+                            </ul>
+
+                        </td>
+                            <td>{{ ord.medecin }}</td>
+                        <td>
+                            <a href="{{ path('ordonnancelabo_show',{'id':ord.id}) }}" class="btn btn-success" title="Bon d'examens" > <i class="fa fa-eye"></i></a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+{% endblock %}

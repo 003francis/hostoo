@@ -1,0 +1,45 @@
+
+    <h1>Becaisse list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libellé</th>
+                <th>Compte</th>
+                <th>Montant</th>
+                <th>Dévise</th>
+                <th>Observation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for becaisse in becaisses %}
+            <tr>
+                <td><a href="{{ path('becaisse_show', { 'id': becaisse.id }) }}">{{ becaisse.id }}</a></td>
+                <td>{{ becaisse.libelle }}</td>
+                <td>{{ becaisse.compte }}</td>
+                <td>{{ becaisse.montant }}</td>
+                <td>{{ becaisse.devise }}</td>
+                <td>{{ becaisse.observation }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('becaisse_show', { 'id': becaisse.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('becaisse_edit', { 'id': becaisse.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('becaisse_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+

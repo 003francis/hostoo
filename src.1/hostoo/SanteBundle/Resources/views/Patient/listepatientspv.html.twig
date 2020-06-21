@@ -1,0 +1,71 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block titrepage %} Patients Privés {% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="card-box">
+            <ul class="list-group list-unstyled" id="mesitems" style="display: none">
+
+            </ul>
+        </div>
+    </div>
+    <div class="card-box">
+{% if patients == null %}
+    <h2>Pas de liste</h2>
+    {% else %}
+        <table class="table table-striped" id="patients">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Postnom</th>
+                <th>Prenom</th>
+                <th>Date de naissance</th>
+                <th>Sexe</th>
+                <th>Societe</th>
+                <th>Type de Client</th>
+                <th>Telephone</th>
+                <th>Telephone2</th>
+                <th>Formule</th>
+                <th>Nationalite</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+{% for patient in patients %}
+            <tr>
+                <td>{{ patient.nom }}</td>
+                <td>{{ patient.postnom }}</td>
+                <td>{{ patient.prenom }}</td>
+                <td>{{ patient.datenaissance|date('d-m-Y') }}</td>
+                <td>{% if patient.sexe == true %}M{% else %}F{% endif %}</td>
+                <td>{{ patient.societe.nom }}</td>
+                <td>{{ patient.societe.convention.nomconvention }}</td>
+                <td>{{ patient.telephone1 }}</td>
+                <td>{{ patient.telephone2 }}</td>
+                <td>{{ patient.formule.nom }}</td>
+                <td>{{ patient.nationalite }}</td>
+                <td><a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" > <i class="fa fa-eye"></i>Details</a>
+                </td>
+            </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include "hostooSanteBundle:plugins:datatable.style.html.twig" %}
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% include "hostooSanteBundle:plugins:datatable.scripts.html.twig" %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#patients').dataTable();
+        });
+    </script>
+{% endblock %}

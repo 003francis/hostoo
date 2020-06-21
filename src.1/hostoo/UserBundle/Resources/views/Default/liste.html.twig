@@ -1,0 +1,59 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuadmin.html.twig' %}
+{% endblock %}
+{% block titrepage %}
+    Comptes utilisateurs
+{% endblock %}
+{% block title %}
+    {{ parent() }}
+    Comptes utilisateurs
+{% endblock %}
+{% block options %}
+    <a href="{{ path('hostoo_user_creeruser') }}" class="btn btn-success"><i class="zmdi zmdi-account-add"></i> </a>
+    {% endblock %}
+{% block body %}
+    <legend>Liste des utilisateurs</legend>
+    <div class="card-box">
+    <table class="table table-striped" cellspacing="0" cellpadding="0" id="utilisateurs">
+        <thead><tr class="alt first last">
+            <th>id</th>
+            <th>Nom</th>
+            <th>postnom</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Date de naissance</th>
+            <th>service</th>
+            <th>identifiant</th>
+            <th></th>
+        </tr></thead>
+        <tbody>
+        {% for utilisateur in users %}
+        <tr class="">
+            <td>{{ utilisateur.id }}</td>
+            <td>{{ utilisateur.nom }}</td>
+            <td>{{ utilisateur.postnom }}</td>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.roles[0] }}</td>
+            <td>{{ utilisateur.datenaissance|date('d-m-Y') }}</td>
+            <td></td>
+            <td>{{ utilisateur.username }}</td>
+            <td><a href="{{ path('hostoo_user_edituser',{'id':utilisateur.id}) }}" class="btn btn-default"><i class="fa fa-edit"></i> </a> </td>
+        </tr>
+            {% endfor %}
+    </table>
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'hostooSanteBundle:plugins:datatable.scripts.html.twig' %}
+    <script>
+        $(function () {
+            $('#utilisateurs').dataTable();
+        })
+    </script>
+{% endblock %}

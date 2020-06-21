@@ -1,0 +1,274 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+
+{% block title %}Réception{% endblock %}
+{% block titrepage %}Réception{% endblock %}
+{% block options %}
+    <button class="btn btn-success waves-effect" data-toggle="modal" data-target="#enregister-patient"><i class="fa fa-plus-circle fa-user"></i><i class="fa fa-user"></i></button>
+{% endblock %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <h5 class="text-center">Recherchez le patient par nom / postnom  / numéro de dossier</h5>
+            <form class="" action="{{ path('recherche_patient') }}" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control input-lg col-md-12" id="motcle" name="motcle" autocomplete="off" />
+                    <div class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </div>
+                </div>
+            </form>
+            <ul id="mesitems" class="list-unstyled list-group">
+
+            </ul>
+        </div>
+
+    </div>
+    {#<div class="row">#}
+    {#<div class="card-box">#}
+{#<ul class="list-group list-unstyled" id="mesitems" style="display: none">#}
+
+    {#</ul>#}
+{#</div>#}
+    {#</div>#}
+<div class="col-lg-12">
+    <div class="col-lg-3 col-md-6">
+                                <a href="{{ path('hostoo_sante_listepatients') }}">
+                                <div class="card-box widget-user">
+                                    <div class="text-center">
+                                        <h2 class="text-custom" data-plugin="counterup">{{ patients|length-dependants|length }}</h2>
+                                        <h5>Tous les patients</h5>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+
+    {#<div class="col-lg-3 col-md-6">#}
+                                {#<div class="card-box widget-user">#}
+                                    {#<div class="text-center">#}
+                                        {#<h2 class="text-custom" data-plugin="counterup">{{ prive }}</h2>#}
+                                        {#<h5>Conventionnés</h5>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+    {#<div class="col-lg-3 col-md-6">#}
+                                {#<div class="card-box widget-user">#}
+                                    {#<div class="text-center">#}
+                                        {#<h2 class="text-custom" data-plugin="counterup">{{ conv }}</h2>#}
+                                        {#<h5>Privés</h5>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+
+    {#<div class="col-lg-3 col-md-6">#}
+                                {#<div class="card-box widget-user">#}
+                                    {#<div class="text-center">#}
+                                        {#<h2 class="text-custom" data-plugin="counterup">{{ dependants|length }}</h2>#}
+                                        {#<h5>Dépendants</h5>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#</div>#}
+
+    <div class="col-lg-3 col-md-6">
+                                <div class="card-box widget-user">
+                                    <div class="text-center">
+                                        <h2 class="text-custom" data-plugin="counterup">{{ epis|length }}</h2>
+                                        <h5>Episodes du jour</h5>
+                                    </div>
+                                </div>
+                            </div>
+    <div class="col-lg-3 col-md-6">
+        <a href="{{ path('rdvmed_show_today') }}">
+        <div class="card-box widget-user">
+            <div class="text-center">
+                <h2 class="text-custom" data-plugin="counterup">{{ rdvs|length }}</h2>
+               <a href="{{ path('rdvmed_show_today') }}"> <h5>RDV du Jour</h5></a>
+            </div>
+        </div>
+        </a>
+    </div>
+</div>
+    <div class="row">
+        {#<div class="col-lg-4 col-md-12">#}
+        {#<div class="card-box">#}
+
+        {#<table class="table table-striped">#}
+            {#<caption><h4 class="text-center">Patients par Société</h4></caption>#}
+            {#{% for soc in socs %}#}
+                {#<tr>#}
+                    {#<th class=""><a href="{{ path('hostoo_sante_listepatients') }}?societe={{ soc.id }}">{{ soc.nom }}</a> </th><td class="text-right text-danger"><i class="badge badge-success">{{ soc.patients.count }}</i></td>#}
+                {#</tr>#}
+            {#{% endfor %}#}
+        {#</table>#}
+        {#</div>#}
+        {#</div>#}
+        {#<div class="col-lg-4 col-md-12">#}
+            {#<div class="card-box">#}
+
+                {#<table class="table table-striped">#}
+                    {#<caption><h4 class="text-center">Patients par formules</h4></caption>#}
+                    {#{% for soc in patfor %}#}
+                    {#<tr>#}
+                        {#<th class=""><a href="{{ path('hostoo_sante_listepatients') }}?formule={{ soc.id }}">{{ soc.nom }}</a> </th><td class="text-right text-danger"><i class="badge badge-info"> {{ soc.patients|length }}</i><i class="badge badge-danger">{{ soc.fortar|length }}</i></td>#}
+                        {#</tr>#}
+                    {#{% endfor %}#}
+                {#</table>#}
+            {#</div>#}
+        {#</div>#}
+        <div class="col-lg-6 col-md-12">
+            <div class="card-box">
+                <h4>Le {{ "now"|date('d-M-Y') }}</h4>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Nom du patient</th>
+                        <th>Nombres Actes</th>
+                        <th>Medécin vu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for episode in episodes %}
+                        {% if episode.dateepisode|date('d-m-Y') == "now"|date('d-m-Y') %}
+                        <tr>
+                            <td>{{ episode.dateepisode|date('H:i:s') }}</td>
+                            <td>{{ episode.patient.nom~" "~episode.patient.postnom }}</td>
+                            <td>{{ episode.nbActes }}</td>
+                            <td>{% if 'ROLE_MEDECIN' in episode.utilisateur.roles %}{{ episode.utilisateur }} {% endif %}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card-box">
+                <h4>Fréquentation : {{ "now"|date('M-Y') }}</h4>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Nom du patient</th>
+                        <th>Nombres Actes</th>
+                        <th>Medécin vu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for episode in episodes %}
+                        {% if episode.dateepisode|date('m-Y') == "now"|date('m-Y') %}
+                            <tr>
+                                <td>{{ episode.dateepisode|date('d-m-Y') }}</td>
+                                <td>{{ episode.patient.nom~" "~episode.patient.postnom }}</td>
+                                <td>{{ episode.nbActes }}</td>
+                                <td>{% if 'ROLE_MEDECIN' in episode.utilisateur.roles %}{{ episode.utilisateur }} {% endif %}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    </div>
+<div id="enregister-patient" class="modal fade" tabindex="1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-full">
+        <div class="card-box">
+            {{ render(controller('hostooSanteBundle:Patient:enregistrerPatientRC')) }}
+        </div>
+    </div>
+</div>
+    <div id="full-width-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-full">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="full-width-modalLabel">Liste de patients</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-custom waves-effect waves-light"></button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+      <!-- Plugins css-->
+        {% include 'hostooSanteBundle:plugins:timepicker.style.html.twig' %}
+    {% include "hostooSanteBundle:plugins:datatable.style.html.twig" %}
+    {% include "hostooSanteBundle:plugins:modals.style.html.twig" %}
+    {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/plugins/counterup/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/waypoints/lib/jquery.waypoints.js') }}"></script>
+    <script src="{{ asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+   {% include 'hostooSanteBundle:plugins:timepicker.js.html.twig' %}
+    {% include "hostooSanteBundle:plugins:datatable.scripts.html.twig" %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.table').DataTable();
+        });
+    </script>
+    <script type="application/javascript">
+        // Date Picker
+        $(function () {
+            //$('#patient_datenaissance').datepicker();
+            $('#patient_datenaissance').datepicker({
+                  autoclose: true,
+                  format: "dd/mm/yyyy",
+                  dayNames: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ],
+                  monthNames: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+                  todayHighlight: true
+
+              });
+        });
+    $inp=$('#motcle');
+    $inp.keyup(function(event){
+    $('#mesitems').show().html('');
+    //$(".loading").show();
+    var motcle = $(this).val();
+    var DONNEE = 'motcle=' + motcle;
+    $.ajax({
+        type: "POST",
+        dataType:'json',
+        url: Routing.generate('recherche_patient'),
+        minWidth:3,
+        data: DONNEE,
+        cache: false,
+        minLength: 2,
+        beforeSend: function () {
+            $('#mesitems').find('li').remove();
+        },
+        success: function(data) {
+
+
+            $.each(data.items, function(index,value) {
+                //$("#ott").text(value.libelle+'<br/>'+value.Prix);
+                var nophoto="../../jquery-ui/images/no_image.jpg";
+                var lien=Routing.generate('hostoo_sante_voirpatient',{id:value.id});
+                var lien2=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                var lien3=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                $('#mesitems').prepend('<li class="list-group-item"><span class="fa fa-user"></span>'+value.nom+' '+value.postnom+' '+value.prenom+'<div class="btn-group pull-right"><a class="btn btn-info" href="'+lien+'">Afficher</a>{#<a class="btn btn-warning" href="'+lien3+'">Episode</a><a class="btn btn-warning" href="#">Control</a>#}</div> </li>');
+                //$('#resultats').html('<div>'+value.libelle+'</div>');
+                //alert(value.libelle);
+            });
+
+           // $(".loading").hide();
+        }
+    });
+    return false;
+});
+</script>
+
+    {% include "hostooSanteBundle:plugins:modals.html.twig" %}
+{% endblock %}

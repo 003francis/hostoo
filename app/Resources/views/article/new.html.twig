@@ -1,0 +1,31 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% if is_granted('ROLE_CAISSIER') %}
+        {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+    {% elseif is_granted('ROLE_RECEPTION') %}
+        {% include 'hostooSanteBundle:menus:menurc.html.twig' %}
+    {% elseif is_granted('ROLE_LABORATOIRE')%}
+        {% include 'hostooSanteBundle:menus:menulabo.html.twig' %}
+    {% elseif is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% else %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block titrepage %}{% endblock %}
+{% block options %}{% endblock %}
+{% block body %}
+    <h1>Nouvel Article</h1>
+<div class="card-box">
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Enregistrer" />
+    {{ form_end(form) }}
+</div>
+<br>
+    <ul class="list-unstyled">
+        <li>
+            <a href="{{ path('req_article_index') }}" class="btn btn-custom">Aller à la liste</a>
+        </li>
+    </ul>
+{% endblock %}

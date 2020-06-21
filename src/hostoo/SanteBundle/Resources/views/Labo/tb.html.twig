@@ -1,0 +1,97 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}Chiffres du Mois{% endblock %}
+{% block options %}{% endblock %}
+{% block menu %}{% include 'hostooSanteBundle:menus:menulabo.html.twig' %}{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exd'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exd.total }}</h2>
+                    <h5>Examens demandés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exf'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exnr.total }}</h2>
+                    <h5>Examens non réalisés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo',{'tag': 'exe'}) }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ exr.total }}</h2>
+                    <h5>Examens réalisés</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ path('examens_labo') }}">
+            <div class="card-box widget-user">
+                <div class="text-center">
+                    <h2 class="text-custom" data-plugin="counterup">{{ ords|length }}</h2>
+                    <h5>Bons disponibles</h5>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card-box">
+
+                <table class="table table-bordered table-striped">
+                    <caption><h3>Effectués </h3></caption>
+                    <thead>
+                    <tr>
+                        <th>Designation Acte </th>
+                        <th>Effectue</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for resultat in resultats %}
+                        <tr>
+                            <th>{{ resultat.nom }}</th>
+                            <th>{{ resultat.nbreff }}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card-box">
+                <table class="table table-bordered table-striped">
+                    <caption><h3>En Attente </h3></caption>
+                    <thead>
+                    <tr>
+                        <th>Designation Acte </th>
+                        <th>En Attente </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for resultat in resultatsne %}
+                        <tr>
+                            <th>{{ resultat.nom }}</th>
+                            <th>{{ resultat.nbreff }}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

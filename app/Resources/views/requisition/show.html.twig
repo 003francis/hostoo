@@ -1,0 +1,112 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% if is_granted('ROLE_CAISSIER') %}
+        {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+    {% elseif is_granted('ROLE_RECEPTION') %}
+        {% include 'hostooSanteBundle:menus:menurc.html.twig' %}
+    {% elseif is_granted('ROLE_LABORATOIRE')%}
+        {% include 'hostooSanteBundle:menus:menulabo.html.twig' %}
+    {% elseif is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% elseif is_granted('ROLE_REPORT') %}
+        {% include 'hostooSanteBundle:menus:menurapport.html.twig' %}
+    {% else %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block titrepage %}{% endblock %}
+{% block options %}
+<ul class="list-unstyled list-inline">
+    {% if is_granted('ROLE_CAISSIER') %}
+    <li><a href="{{ path('requisition_approuver',{'id': requisition.id}) }}" class="btn btn-warning">Approuver</a> </li>
+    <li><a href="{{ path('requisition_livrer',{'id': requisition.id}) }}" class="btn btn-success">Approuver et  Livrer</a> </li>
+    {% endif %}
+</ul>
+{% endblock %}
+{% block body %}
+    <h3>Requisition</h3>
+    <div class="card-box">
+<div class="row">'
+
+    <div class="col-md-6 col-sm-12">
+            <dl class="dl-horizontal">
+                <dt>Ref</dt>
+                <dd>{{ requisition.id }}/{{ requisition.dateops|date('M-Y') }}</dd>
+                <dt>Service</dt>
+                <dd>{{ requisition.demandeur.service.nomservice }}</dd>
+                <dt>Emetteur</dt>
+                <dd>{{ requisition.demandeur.nom }} {{ requisition.demandeur.postnom }} {{ requisition.demandeur.prenom }}</dd>
+                <dt>Observation</dt>
+                <dd>{{ requisition.observation }}</dd>
+            </dl>
+    </div>
+    <div class="col-md-6 col-sm-12">
+            <dl class="dl-horizontal">
+                <dt>Date</dt>
+                <dd>{% if requisition.dateops %}{{ requisition.dateops|date('d-m-Y H:i:s') }}{% endif %}</dd>
+                <dt>Etat</dt>
+                <dd><ul class="list-inline">
+                   <li>Approuvé :  {% if  requisition.approuver == true %} <span class="label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-warning">En Attente</span>{% endif %}
+                   </li>
+                        <li>Livré :  {% if  requisition.livrer == true %} <span class="label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-warning">En Attente</span>{% endif %}
+                        </li>
+                    </ul>
+             </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+    {% set montcdf,montusd=0,0 %}
+            <div class="row">
+                <div class="card-box">
+            <table class="table table-striped">
+                <caption><h4>Les articles</h4></caption>
+            <tr>
+                <th>Désignation</th>
+                <th>Reste</th>
+                <th>Qté</th>
+                <th>unité</th>
+                <th>PU</th>
+                <th>PT</th>
+
+            </tr>
+            {% for qte in requisition.qtereq %}
+        <tr>
+            <th>{{ qte.article.designation }}</th>
+            <td>{{ qte.article.prodstock.qte }}</td>
+            <td>{{ qte.qte }}</td>
+            <td>{{ qte.unit }}</td>
+                <td>{{ qte.article.prix }} {% if qte.article.devise ==1 %}USD{% else %}CDF{% endif %}</td>
+                <td>{{ qte.article.prix * qte.qte }} {% if qte.article.devise ==1 %}USD{% else %}CDF{% endif %}</td>
+
+{% if qte.article.devise == 1 %}
+            {%  set montusd = montusd + (qte.article.prix* qte.qte) %}
+            {% else %}
+            {%  set montcdf = montcdf + (qte.article.prix* qte.qte) %}
+            {% endif %}
+        </tr>{% endfor %}
+
+                <tfoot>
+                <tr>
+                    <td colspan="3" class="text-center"><strong class="fa fa-3x text-success">TOTAL USD : {{ montusd }}</strong></td>
+                    <td colspan="3" class="text-center"><strong class="fa fa-3x text-purple">TOTAL CDF : {{ montcdf  }} ({{ (montcdf/render(controller('hostooSanteBundle:Caisse:Taux')))|round(2,'floor') }} USD)</strong></td>
+                </tr>
+                </tfoot>
+
+            </table>
+                </div>
+                </div>
+    <ul class="list-unstyled list-inline">
+        <li>
+            <a href="{{ path('requisition_index') }}">Liste des requisitions</a>
+        </li>
+        <li>
+            <a href="{{ path('requisition_edit', { 'id': requisition.id }) }}">Modifier</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer" class="btn btn-danger">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

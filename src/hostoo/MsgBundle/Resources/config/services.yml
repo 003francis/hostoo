@@ -1,0 +1,4 @@
+services:
+#    hostoo_msg.example:
+#        class: hostoo\MsgBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

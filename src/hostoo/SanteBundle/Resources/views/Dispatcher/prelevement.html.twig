@@ -1,0 +1,135 @@
+
+<form action="{{ path('hostoo_sante_ajoutersv',{'id':episode.id }) }}" method="post">
+
+<div class="row">
+    <div class="form-group">
+    <div class="col-lg-3 col-md-6">
+    {{ form_label(form.temperature,'La temperature °C',{'attr':{'class':'form-control'}}) }}<br>
+    {{ form_errors(form.temperature) }}
+    {{ form_widget(form.temperature,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.poids,'Le poids Kg') }}<br>
+    {{ form_errors(form.poids) }}
+    {{ form_widget(form.poids,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.taille,'La taille m') }}<br>
+    {{ form_errors(form.taille) }}
+    {{ form_widget(form.taille,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.tension,'La tension mmHg ') }}<br>
+    {{ form_errors(form.tension) }}
+    {{ form_widget(form.tension,{'attr':{'class':'form-control'}}) }}
+    </div>
+    <div class="col-lg-3 col-md-6">
+    {{ form_label(form.frequenceCardiaque,'La Frequence cardiaque bpm') }}<br>
+    {{ form_errors(form.frequenceCardiaque) }}
+    {{ form_widget(form.frequenceCardiaque,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.frequenceRespiratoire,'La Frequence Respiratoire cpm') }}<br>
+    {{ form_errors(form.frequenceRespiratoire) }}
+    {{ form_widget(form.frequenceRespiratoire,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.glycemieDextro,'Glycemie Dextro mg/dl') }}<br>
+    {{ form_errors(form.glycemieDextro) }}
+    {{ form_widget(form.glycemieDextro,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.saturationOxygene,'Saturation d\'Oxygene %') }}<br>
+    {{ form_errors(form.saturationOxygene) }}
+    {{ form_widget(form.saturationOxygene,{'attr':{'class':'form-control'}}) }}
+
+</div>
+    <div class="col-lg-3 col-md-6">
+
+    {{ form_label(form.imc,'IMC Kg/m²') }}<br>
+    {{ form_errors(form.imc) }}
+    {{ form_widget(form.imc,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.pc,'PC cm') }}<br>
+    {{ form_errors(form.pc) }}
+    {{ form_widget(form.pc,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.pb,'PB cm') }}<br>
+    {{ form_errors(form.pb) }}
+    {{ form_widget(form.pb,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.pa,'PA cm') }}<br>
+    {{ form_errors(form.pa) }}
+    {{ form_widget(form.pa,{'attr':{'class':'form-control'}}) }}<br>
+        </div>
+    <div class="col-lg-3 col-md-6">
+
+    {{ form_label(form.pp,'PP cm') }}<br>
+    {{ form_errors(form.pp) }}
+    {{ form_widget(form.pp,{'attr':{'class':'form-control'}}) }}<br>
+
+    {{ form_label(form.wrh,'WRH') }}<br>
+    {{ form_errors(form.wrh) }}
+    {{ form_widget(form.wrh,{'attr':{'class':'form-control'}}) }}<br>
+
+
+    {{ form_errors(form.daterecolte) }}<br>
+    {{ form_widget(form.daterecolte) }}<br>
+        {{ form_widget(form.save) }}
+        </div>
+</div>
+    <hr class="line">
+</div>
+    <div class="row">
+        <table class="table table-responsive">
+            <tr>
+
+                <th>Temp. °C</th>
+                <th>Poids Kg</th>
+                <th>Taille m</th>
+                <th>tension mmHg</th>
+                <th>FC bpm</th>
+                <th>FR cpm</th>
+                <th>GD mg/dl</th>
+                <th>SO %</th>
+                <th>IMC</th>
+                <th>PC</th>
+                <th>PB</th>
+                <th>PA</th>
+                <th>PP</th>
+                <th>WRH</th>
+                <th>Date</th>
+            </tr>
+            {% for Sv in episode.sv %}
+                <tr>
+                    <td>{{ Sv.temperature }}</td>
+                    <td>{{ Sv.poids }}</td>
+                    <td>{{ Sv.taille }}</td>
+                    <td>{{ Sv.tension }}</td>
+                    <td> {{ Sv.frequenceCardiaque }}</td>
+                    <td> {{ Sv.frequenceRespiratoire }}</td>
+                    <td> {{ Sv.glycemieDextro }}</td>
+                    <td> {{ Sv.saturationOxygene }}</td>
+                    <td> {{ Sv.imc }}</td>
+                    <td> {{ Sv.pc }}</td>
+                    <td> {{ Sv.pb }}</td>
+                    <td> {{ Sv.pa }}</td>
+                    <td> {{ Sv.pp }}</td>
+                    <td> {{ Sv.wrh }}</td>
+                    <td> {{ Sv.daterecolte|date('d-m-Y H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-lg-12 center">
+        <br>
+
+        </div>
+    {{ form_rest(form) }}
+</form>
+
+    <script>
+        $('#signes_vitaux_taille').on('change',function () {
+            var poids=$('#signes_vitaux_poids').val();
+            $('#signes_vitaux_imc').val(poids/(Math.pow($(this).val(),2)));
+        });
+
+        $('#signes_vitaux_pp').on('change',function () {
+            var poids=$('#signes_vitaux_pa').val();
+            $('#signes_vitaux_wrh').val($(this).val()/poids,2);
+        });
+    </script>

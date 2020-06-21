@@ -1,0 +1,33 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% if is_granted('ROLE_CAISSIER') %}
+        {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+    {% elseif is_granted('ROLE_RECEPTION') %}
+        {% include 'hostooSanteBundle:menus:menurc.html.twig' %}
+    {% elseif is_granted('ROLE_LABORATOIRE')%}
+        {% include 'hostooSanteBundle:menus:menulabo.html.twig' %}
+    {% elseif is_granted('ROLE_MEDECIN') %}
+        {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+    {% else %}
+        {% include 'hostooSanteBundle:menus:menunrs.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block body %}
+    <h1>Modifier l'Article</h1>
+
+    {{ form_start(edit_form) }}
+        {{ form_widget(edit_form) }}
+        <input type="submit" value="Modifier" />
+    {{ form_end(edit_form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('req_article_index') }}">Allez à la liste</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Supprimer">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

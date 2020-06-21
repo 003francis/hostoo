@@ -1,0 +1,34 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+{% endblock %}
+{% block body %}
+    <h1>Type d'Antécédent</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ typeAntecedent.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ typeAntecedent.nom }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('typeantecedent_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('typeantecedent_edit', { 'id': typeAntecedent.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block body %}
+<form action="{{ path('hostoo_sante_recherchepatient') }}" method="post">
+    <input type="search" name="patient" placeholder="Recherche le patient">
+    <input type="submit" class="btn btn-success" value="Rechercher">
+</form>
+{% endblock %}

@@ -1,0 +1,122 @@
+<?php
+
+namespace hostoo\SanteBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ResultatsLabo
+ *
+ * @ORM\Table(name="resultats_labo")
+ * @ORM\Entity(repositoryClass="hostoo\SanteBundle\Repository\ResultatsLaboRepository")
+ */
+class ResultatsLabo
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateresultat", type="datetime")
+     */
+    private $dateresultat;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="resultat", type="array")
+     */
+    private $resultat;
+
+    /**
+     * @ORM\OneToOne(targetEntity="OrdonnanceLabo", mappedBy="resultat")
+     */
+    private $ordonnance;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateresultat
+     *
+     * @param \DateTime $dateresultat
+     * @return ResultatsLabo
+     */
+    public function setDateresultat($dateresultat)
+    {
+        $this->dateresultat = $dateresultat;
+
+        return $this;
+    }
+
+    /**
+     * Get dateresultat
+     *
+     * @return \DateTime 
+     */
+    public function getDateresultat()
+    {
+        return $this->dateresultat;
+    }
+
+    /**
+     * Set resultat
+     *
+     * @param array $resultat
+     * @return ResultatsLabo
+     */
+    public function setResultat($resultat)
+    {
+        $this->resultat = $resultat;
+
+        return $this;
+    }
+
+    /**
+     * Get resultat
+     *
+     * @return array 
+     */
+    public function getResultat()
+    {
+        return $this->resultat;
+    }
+
+    /**
+     * Set ordonnance
+     *
+     * @param \hostoo\SanteBundle\Entity\OrdonnanceLabo $ordonnance
+     * @return ResultatsLabo
+     */
+    public function setOrdonnance(\hostoo\SanteBundle\Entity\OrdonnanceLabo $ordonnance = null)
+    {
+        $this->ordonnance = $ordonnance;
+
+        return $this;
+    }
+
+    /**
+     * Get ordonnance
+     *
+     * @return \hostoo\SanteBundle\Entity\OrdonnanceLabo 
+     */
+    public function getOrdonnance()
+    {
+        return $this->ordonnance;
+    }
+}

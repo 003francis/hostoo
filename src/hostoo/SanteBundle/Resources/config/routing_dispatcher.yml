@@ -1,0 +1,53 @@
+hostoo_sante_listprelev:
+    path:     /listepatients-Prelevements #liste des patients valides a la caisse pour consultation
+    defaults: { _controller: hostooSanteBundle:Prelevement:listePrelevements }
+
+hostoo_sante_listprelevE:
+    path:     /listepatients-PrelevementsE #liste des patients valides a la caisse pour consultation
+    defaults: { _controller: hostooSanteBundle:Prelevement:listePrelevementsEvery }
+
+hostoo_sante_ajoutersv:
+    path:     /faire-Prelevements/{id} #liste des patients valides a la caisse pour consultation
+    defaults: { _controller: hostooSanteBundle:Prelevement:ajouterSV }
+
+hostoo_rdv_attrrdv:
+    path: /attribuer-au-med/{id}/{episode}
+    defaults: { _controller: hostooSanteBundle:Prelevement:attribuerRDV }
+
+hostoo_rdv_oterrdv:
+    path: /oter-au-med/{id}/{episode}
+    defaults: { _controller: hostooSanteBundle:Prelevement:oterRDV }
+
+hostoo_rdv_medecinrdv:
+    path: /rdv-medecins
+    defaults: { _controller: hostooSanteBundle:Prelevement:tousRDV }
+salle_des_soins_t_b:
+    path:     /salleDesSoinsTB
+    defaults: { _controller: hostooSanteBundle:TB:salleDesSoinsTB }
+
+recupprev:
+    path:     /recup_prelev
+    defaults: { _controller: hostooSanteBundle:Prelevement:recupererActes }
+
+hostoo_sante_creerdvd:
+    path:     /creerunrdvpatientd
+    defaults: { _controller: hostooSanteBundle:RDV:creerUnRDVPatientd }
+
+attrib_rdvd:
+    path:     /attribueraumedd
+    defaults: { _controller: hostooSanteBundle:RDV:attribuerAuMedd }
+
+voirpatient_prel:
+    path: /voir_patient/{id}
+    defaults: { _controller: hostooSanteBundle:Prelevement:voirPatient }
+
+actes_listes:
+    path: /les_factures_de_caisse
+    defaults: { _controller: hostooSanteBundle:Caisse:listeActesNrs }
+hostoo_sante_valideracte_nrs:
+    path: /valider-des-actes-nrs/{id}
+    defaults: { _controller: hostooSanteBundle:Caisse:validerActeNrs }
+
+new_obsinf:
+    path:     /newobsinf/{fact}/{act}
+    defaults: { _controller: hostooSanteBundle:Prelevement:newObsInf }

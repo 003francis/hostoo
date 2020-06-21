@@ -1,0 +1,33 @@
+req_article_index:
+    path:     /
+    defaults: { _controller: "hostooGestionBundle:Article:index" }
+    methods:  GET
+
+req_article_liste:
+    path:     /
+    defaults: { _controller: "hostooGestionBundle:Article:liste" }
+    methods:  GET
+
+req_article_show:
+    path:     /{id}/show
+    defaults: { _controller: "hostooGestionBundle:Article:show" }
+    methods:  GET
+
+req_article_new:
+    path:     /new
+    defaults: { _controller: "hostooGestionBundle:Article:new" }
+    methods:  [GET, POST]
+
+req_article_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "hostooGestionBundle:Article:edit" }
+    methods:  [GET, POST]
+
+req_article_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "hostooGestionBundle:Article:delete" }
+    methods:  DELETE
+article_correct_stock:
+    path: /{id}/correctstock
+    defaults: { _controller: "hostooGestionBundle:Article:corrigerStockProduit"}
+    methods: POST

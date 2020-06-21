@@ -1,0 +1,39 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}
+    Actes Facturés
+    {% endblock %}
+{% block body %}
+
+    {% for acte in liste %}
+        <table class="table table-responsive table-striped">
+            <thead>
+            <tr>
+                <th width="200px">Libelle   Prix</th><th>Date d'Episode</th><th>Patient</th><th>Prix Total</th><th>Payé</th><th>solde</th>
+            </tr>
+            </thead>
+            <tbody>
+    <tr>
+        <td>
+           {% for tab in acte.acte %}
+           {{ tab }}
+           {% endfor %}
+        </td>
+                <td>{{ acte.episode.dateepisode|date('d-m-y') }}</td>
+                <td>{{ acte.episode.patient.nom }}</td>
+                <td>{{ acte.prix }}</td>
+                <td>{% if acte.validation==false %}<a href="{{ path('hostoo_sante_valideracte',{'id':acte.id}) }}" class="btn red"></a>{% else %}<button class="green"></button>{% endif %}</td>
+        <td>{% if acte.episode.patient.typeclient.nom !='conventionné' and acte.validation==false %}
+                <form>
+                    <input type="number" name="solde" size="6">
+                    <select name="devise">
+                        <option>Devise</option>
+                        <option value="USD">USD</option>
+                        <option value="CDF">CDF</option>
+                    </select>
+                </form>
+            {% else %}<button class="orange"></button>{% endif %}</td>
+            </tr>
+            </tbody>
+
+    {% endfor %} </table>
+{% endblock %}

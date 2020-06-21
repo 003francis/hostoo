@@ -1,0 +1,103 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menucaisse.html.twig' %}
+{% endblock %}
+{% block body %}
+    <h1>Facture</h1>
+<div class="card-box">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Facture N</th>
+                <td>{{ facture.id }}</td>
+            </tr>
+            <tr>
+                <th>Patient</th>
+                {% if facture.episode %}
+                <th>{{ facture.episode.patient }}</th>
+                {% else %}
+                <th>{{ facture.hospitalisation.patient }}</th>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Categorie</th>
+                {% if facture.episode %}
+                    <th>{{ facture.episode.patient.societe }}</th>
+                {% else %}
+                    <th>{{ facture.hospitalisation.patient.societe }}</th>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{% if facture.datefacture %}{{ facture.datefacture|date('d-m-Y H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>N_</th>
+            <th>Designation acte</th>
+            <th>Prix</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cmd in facture.commandes %}
+        {% for acte in cmd.tarifs %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ acte.actes.designationacte }}</td>
+            {% if (facture.episode and facture.episode.patient.societe.id == 15) or (facture.hospitalisation and facture.hospitalisation.patient.societe.id == 15) %}
+            <td>{{ acte.prix }}</td>
+            {% else %}
+                <td>{{ acte.prix }}</td>
+                {% endif %}
+            <td>
+                <ul class="list-inline list-unstyled">
+                    {#<li>                        <a href="{{ path('facture_tarif_edit',{'fact': facture.id,'id': acte.id }) }}" class="btn btn-warning"><i class="fa fa-edit"></i> </a></li>#}
+                    <li><a href="{{ path('facture_tarif_delete',{'fact': facture.id, 'id': acte.id }) }}" class="btn btn-danger"><i class="fa fa-remove"></i></a></li>
+                </ul> </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <table class="table table-striped">
+            <tr>
+                <th>Total</th>
+                <td>{{ facture.prix }}</td>
+            </tr>
+
+        <tr>
+            <th>Solde</th>
+            <td>{{ facture.lasolde }}</td>
+        </tr>
+            <tr>
+                <th>Solde</th>
+                <td>{% if facture.solde %} OUI {% else %} NON {% endif %}</td>
+            </tr>
+            <tr>
+                <th>Urgence</th>
+                <td>{% if facture.urgence %}OUI{% else %}NON{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Validation</th>
+                <td>{% if facture.validation %}OUI{% else %}NON{% endif %}</td>
+            </tr>
+    </table>
+</div>
+    <ul class="list-unstyled list-inline">
+        <li>
+            <a href="{{ path('edition-facture_index') }}" class="btn btn-default">Liste des factures</a>
+        </li>
+        <li>
+            <a href="{{ path('edition-facture_edit', { 'id': facture.id }) }}"  class="btn btn-warning">Modifier</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete"  class="btn btn-danger">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

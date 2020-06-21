@@ -1,0 +1,24 @@
+typeantecedent_index:
+    path:     /
+    defaults: { _controller: "hostooSanteBundle:TypeAntecedent:index" }
+    methods:  GET
+
+typeantecedent_show:
+    path:     /{id}/show
+    defaults: { _controller: "hostooSanteBundle:TypeAntecedent:show" }
+    methods:  GET
+
+typeantecedent_new:
+    path:     /new
+    defaults: { _controller: "hostooSanteBundle:TypeAntecedent:new" }
+    methods:  [GET, POST]
+
+typeantecedent_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "hostooSanteBundle:TypeAntecedent:edit" }
+    methods:  [GET, POST]
+
+typeantecedent_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "hostooSanteBundle:TypeAntecedent:delete" }
+    methods:  DELETE

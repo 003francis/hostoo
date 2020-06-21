@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture </title>
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/menu.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/print.css') }}" rel="stylesheet" type="text/css" media="print"/>
+    <link href="{{ asset('assets/css/core.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/components.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/pages.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="row hidden-print">
+    <a href="{{ path('hostoo_sante_listeactes') }}" class="btn btn-danger"><i class="fa fa-backward"></i> Caisse </a>
+</div>
+<div class="col-md-6 col-md-offset-3">
+<img src="{{ asset('assets/images/logo/logoepamed.jpg') }}">
+<address>
+    <i class="fa fa-home"></i>Nyembo 13, Socimat / Gombe<br>
+    &nbsp;&nbsp;&nbsp;<u>Kinshasa RDC</u><br>
+    <i class="fa fa-phone"></i> : +(243) 81 93 19 007 <br><i class="fa">@</i> : epa.med@gmail.com<br>
+</address>
+    <hr class="clearfix"/>
+{% if facture != null %}
+                    <dl class="dl-horizontal">
+                        <dt>Nom du Patient :</dt>
+                    <dd>{{ facture.episode.patient.nom }} {{ facture.episode.patient.postnom }} {{ facture.episode.patient.prenom }}</dd>
+                        <dt>Catégorie :</dt>
+                        <dd>{{ facture.episode.patient.societe.convention.nomconvention }}</dd>
+                        <dt>Formule :</dt>
+                        <dd>{% if facture.episode.patient.formule.nom is defined %}{{ facture.episode.patient.formule.nom }} {% endif %}</dd>
+                    </dl>
+
+    <hr class="clearfix"/>
+                    {% if facture.tarif|length > 0 %}
+                    <p class="label label-danger"><strong>Actes Medicaux</strong></p>
+                    {% endif %}
+                    <ul class="list-unstyled list-group">
+                    {% for tarif in facture.tarif %}
+                    <li class="list-group-item">
+                            {{ tarif.actes.designationacte }}
+
+
+                                        <i class="badge badge-info">{{ tarif.prix }}</i>
+
+
+                    </li>
+                    {% endfor %}
+                    </ul>
+                    {% if facture.produits.count >0 %}
+                    <p class="label label-info"><strong>Pharmacie</strong></p>
+                    {% endif %}
+                    <ul class="list-unstyled">
+                    {% for tarif in facture.produits %}
+
+                        <li>
+                            {{ tarif.nom }}
+                            <i class="badge badge-info pull-right">
+                            {{ tarif.prix }}
+                                </i>
+                        </li>
+
+
+
+                    {% endfor %}
+                        </ul>
+
+                    <table>
+                        <tr>
+                            <th class="text-right">Total Prix :</th><td>{{ facture.prix }} ( {{ facture.prix * app.session.get('taux') }} FC)</td><td rowspan="4" class="text-center">{% if facture.validation==1 %}<span class="fa fa-check fa-3x text-success"></span>{% else %}<span class="fa fa-times fa-3x text-danger"></span>{% endif %}</span> </td>
+                        </tr>
+                        {% set som=0 %}
+                        {% if facture.soldes.count>0 %}
+
+                        {% for solde in facture.soldes %}
+
+                        {% set som=som+solde.solde %}
+                        {% endfor %}
+                        <tr>
+                            <th class="text-right">Total solde:</th><td>{{ som }}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th class="text-right">Solde :</th><td>{{ facture.lasolde }} USD ( {{ facture.lasolde * app.session.get('taux') }} FC)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Reste a payer :</th><td>{% if facture.lasolde>0 %}{{ facture.resteAPayer }} USD( {{ facture.resteAPayer * app.session.get('taux') }} FC){% else %}0 USD (0 FC){% endif %} </td>
+                        </tr>
+                    </table>
+    <p class="text-center">Fait à Kinshasa, le {{ facture.datefacture|date('d/m/Y') }}</p>
+    <p class="text-center">La Direction</p>
+{% endif %}
+</div>
+<script src="{{ asset('assets/js/jquery.min.js') }}" type="application/javascript"></script>
+<script>
+    $(function () {
+        print();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+hostoo_gestion_visa:
+    resource: "@hostooGestionBundle/Controller/VisaController.php"
+    type:     annotation
+
+hostoo_sante_consultation:
+    resource: "@hostooSanteBundle/Controller/ConsultationController.php"
+    type:     annotation
+
+hostoo_hospis:
+    resource: "@hostooHospisBundle/Controller/"
+    type:     annotation
+    prefix:   /
+hostoo_profiles:
+    resource: "@hostooUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+hostoo_sante_ordonnance_img:
+    resource: "@hostooSanteBundle/Controller/ordonnanceImgController.php"
+    type:     annotation
+
+hostoo_sante_episode_ok:
+    resource: "@hostooSanteBundle/Controller/EpisodeController.php"
+    type:     annotation
+hostoo_sante_caisse_ok:
+    resource: "@hostooSanteBundle/Controller/CaisseController.php"
+    type:     annotation
+
+hostoo_sante_resultats_img:
+    resource: "@hostooSanteBundle/Controller/ResultatsImgController.php"
+    type:     annotation
+
+hostoo_sante_valeur_ref:
+    resource: "@hostooSanteBundle/Controller/ValeurRefController.php"
+    type:     annotation
+
+hostoo_sante_requerant:
+    resource: "@hostooSanteBundle/Controller/RequerantController.php"
+    type:     annotation
+hostoo_rdv_reception:
+    resource: "@hostooRDVBundle/Controller/RDVMedController.php"
+    type:     annotation
+
+hostoo_sante_ordonnance_labo:
+    resource: "@hostooSanteBundle/Controller/OrdonnanceLaboController.php"
+    type:     annotation
+
+hostoo_sante_resultats_labo:
+    resource: "@hostooSanteBundle/Controller/ResultatsLaboController.php"
+    type:     annotation
+
+hostoo_gestion_cloture:
+    resource: "@hostooGestionBundle/Controller/ClotureController.php"
+    type:     annotation
+
+hostoo_gestion_compte_caisse:
+    resource: "@hostooGestionBundle/Controller/CompteCaisseController.php"
+    type:     annotation
+
+hostoo_sante_labor:
+    resource: "@hostooSanteBundle/Controller/LaboratoireController.php"
+    type:     annotation
+
+
+hostoo_sante_imgr:
+    resource: "@hostooSanteBundle/Controller/ImagerieController.php"
+    type:     annotation
+hostoo_gestion_compte:
+    resource: "@hostooGestionBundle/Controller/CompteController.php"
+    type:     annotation
+
+hostoo_front:
+    resource: "@hostooSanteBundle/Controller/"
+    type:     annotation
+    prefix:   /
+hostoo_gest:
+    resource: "@hostooGestionBundle/Controller/"
+    type:     annotation
+    prefix:   /
+hostoo_gestion_requisition:
+    resource: "@hostooGestionBundle/Resources/config/routing/requisition.yml"
+    prefix:   /requisition
+
+hostoo_msg:
+    resource: "@hostooMsgBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hostoo_ordonnance_med:
+    resource: "@hostooSanteBundle/Resources/config/routing/ordonnance.yml"
+    prefix: /ordonnance_med
+ramsey_tag:
+    resource: "@RamseyTagBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hostoo_gestion_req_article:
+    resource: "@hostooGestionBundle/Resources/config/routing/article.yml"
+    prefix:   /req_article
+
+hostoo_gestion_lesbanques:
+    resource: "@hostooGestionBundle/Resources/config/routing/lesbanques.yml"
+    prefix:   /lesbanques
+
+hostoo_gestion_banque:
+    resource: "@hostooGestionBundle/Resources/config/routing/banque.yml"
+    prefix:   /banque
+
+hostoo_gestion_becaisse:
+    resource: "@hostooGestionBundle/Resources/config/routing/becaisse.yml"
+    prefix:   /becaisse
+
+hostoo_gestion:
+    resource: "@hostooGestionBundle/Resources/config/routing.yml"
+    prefix:   /gestion
+
+hostoo_pharmacie:
+    resource: "@hostooPharmacieBundle/Resources/config/routing.yml"
+    prefix:   /pharmacie
+
+hostoo_rdv:
+    resource: "@hostooRDVBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hostoo_user:
+    resource: "@hostooUserBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hostoo_sante_bundle:
+    resource: "@hostooSanteBundle/Resources/config/routing_patient.yml"
+    prefix: /welcome
+
+hostoo_symptomes:
+    resource: "@hostooSanteBundle/Resources/config/routing/symptomes.yml"
+    prefix: /symptomes
+
+hostoo_labo_bundle:
+    resource: "@hostooSanteBundle/Resources/config/routing_labo.yml"
+    prefix: /laboratoire
+
+hostoo_img_bundle:
+    resource: "@hostooSanteBundle/Resources/config/routing_img.yml"
+    prefix: /imagerie
+
+
+hostoo_sante_episode:
+    resource: "@hostooSanteBundle/Resources/config/routing_episode.yml"
+    prefix: /welcome
+
+hostoo_sante_caisse:
+    resource: "@hostooSanteBundle/Resources/config/routing_caisse.yml"
+    prefix: /caisse
+
+hostoo_sante_dispatcher:
+    resource: "@hostooSanteBundle/Resources/config/routing_dispatcher.yml"
+    prefix: /dispatcher
+
+hostoo_sante_medecin:
+    resource: "@hostooSanteBundle/Resources/config/routing_medecin.yml"
+    prefix: /medecin
+hostoo_sante_medecin:
+    resource: "@hostooSanteBundle/Resources/config/routing/antecedent.yml"
+    prefix: /medecin
+hostoo_sante_typeantecedent:
+        resource: "@hostooSanteBundle/Resources/config/routing/typeantecedent.yml"
+        prefix:   /medecin/typeantecedent
+hostoo_sante_anamnese:
+        resource: "@hostooSanteBundle/Resources/config/routing/anamnese.yml"
+        prefix:   /medecin/anamnese
+hostoo_sante_examensphysiques:
+        resource: "@hostooSanteBundle/Resources/config/routing/examensphysiques.yml"
+        prefix:   /medecin/examensphysiques
+
+hostoo_sante_rdvmed:
+        resource: "@hostooRDVBundle/Resources/config/routing/rdvmed.yml"
+        prefix:   /medecin/rdvmdc
+hostoo_sante:
+    resource: "@hostooSanteBundle/Resources/config/routing.yml"
+    prefix: /public
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    options:
+        expose: true

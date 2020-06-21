@@ -1,0 +1,18 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+{% endblock %}
+{% block body %}
+    <h1>Type d'Antécédent</h1>
+
+    {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Enregistrer" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('typeantecedent_index') }}">Liste</a>
+        </li>
+    </ul>
+{% endblock %}

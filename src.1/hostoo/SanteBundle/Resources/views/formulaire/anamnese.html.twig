@@ -1,0 +1,20 @@
+<h4>Anamnese</h4>
+<form action="{{ path('hostoo_med_addanamnese',{'id':id }) }}" method="post" class="vertical">
+    <label>Symptômes dominants</label>
+    <select class="select2 select2-multiple" id="anamnese_symptomesDominants" name="anamnese[symptomesDominants]" multiple="multiple" multiple data-placeholder="Choose ...">
+        {% for sim in symptomes %}
+            <optgroup label="Alaskan/Hawaiian Time Zone">
+                <option value="AK">Alaska</option>
+            </optgroup>
+        {% endfor %}
+        </select>
+    {{ form_label(form.autres) }}
+    {{ form_errors(form.autres) }}
+    {{ form_widget(form.autres) }}
+
+    {{ form_label(form.complements) }}
+    {{ form_errors(form.complements) }}
+    {{ form_widget(form.complements) }}
+
+    <input type="submit" value="En">
+</form>

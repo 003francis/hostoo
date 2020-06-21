@@ -1,0 +1,8 @@
+
+    <h3>Consultation du Patient</h3>
+
+    <form action="{{ path('medecin_consultation_new', {'id': consultation.episode.id }) }}" method="post">
+        {{ form_widget(form) }}
+        <input type="submit" value="Enregistrer la consultation" class="btn btn-success"/>
+    </form>
+

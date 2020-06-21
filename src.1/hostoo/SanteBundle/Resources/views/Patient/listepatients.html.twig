@@ -1,0 +1,158 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menurc.html.twig" %}
+{% endblock %}
+{% block titrepage %}
+    Liste des patients
+    {% endblock %}
+{% block options %} <a href="{{ path('hostoo_sante_savepatient') }}" class="btn btn-success">Créer un nouveau patient </a> {% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="card-box">
+            <ul class="list-group list-unstyled" id="mesitems" style="display: none">
+
+            </ul>
+        </div>
+    </div>
+{% if patients == null %}
+    <h2>Pas de liste</h2>
+    {% else %}
+         <div class="card-box">
+        <table class="table table-striped" id="patients">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Postnom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Sexe</th>
+                <th>Societé</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+{% for patient in patients %}
+            <tr>
+                <td>{{ patient.nom }}</td>
+                <td>{{ patient.postnom }}</td>
+                <td>{{ patient.prenom }}</td>
+                <td>{% if patient.datenaissance %}{{ patient.datenaissance|date('d/m/Y') }}{% else %}<span class="label label-warning">Pas de date</span> {% endif %}</td>
+                <td>{% if patient.sexe == true %}M{% else %}F{% endif %}</td>
+                <td>{% if patient.societe %}{{ patient.societe.nom }} {% endif %}</td>
+                <td>
+                    {% if patient.societe.etat %}
+                    {% if patient.formule and patient.societe.id != 15 %}
+
+                    <a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" title="Afficher le patient"> <i class="fa fa-eye"></i></a>
+                    {% elseif patient.societe.id == 15 %}
+                        <a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" title="Afficher le patient"> <i class="fa fa-eye"></i></a>
+                    {% else %}
+                        <a href="{{ path('hostoo_sante_editpatientrc',{'id':patient.id}) }}" class="btn btn-warning" title="Modifier le patient" > <i class="fa fa-edit"></i></a>
+                    {% endif %}
+                    {% else %}
+                        <span class="label label-warning">Réactivation demandée</span>
+                    {% endif %}
+                </td>
+            </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        {% endif %}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include "hostooSanteBundle:plugins:datatable.style.html.twig" %}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% include "hostooSanteBundle:plugins:datatable.scripts.html.twig" %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#patients').dataTable({
+                deferRender:    true,
+                scrollY:        200,
+                scrollCollapse: true,
+                scroller:       true,
+                dom: "Bfrtip",
+                buttons: [{extend: "copy", className: "btn-sm"}, {extend: "csv", className: "btn-sm"}, {
+                    extend: "excel",
+                    className: "btn-sm"
+                }, {extend: "pdf", className: "btn-sm"}, {extend: "print", className: "btn-sm"}],
+                responsive: !0
+                ,language: {
+                    processing:     "Traitement en cours...",
+                    search:         "Rechercher&nbsp;:",
+                    lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+                    info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                    infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                    infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                    infoPostFix:    "",
+                    loadingRecords: "Chargement en cours...",
+                    zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                    emptyTable:     "Aucune donnée disponible dans le tableau",
+                    paginate: {
+                        first:      "Premier",
+                        previous:   "Pr&eacute;c&eacute;dent",
+                        next:       "Suivant",
+                        last:       "Dernier"
+                    },
+                    aria: {
+                        sortAscending:  ": activer pour trier la colonne par ordre croissant",
+                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                    }}
+            });
+        });
+    </script>
+    <script type="application/javascript">
+        $inp=$('#motcle');
+        $inp.keyup(function(event){
+            $('#mesitems').show().html('');
+            //$(".loading").show();
+            var motcle = $(this).val();
+            var DONNEE = 'motcle=' + motcle;
+            $.ajax({
+                type: "POST",
+                dataType:'json',
+                url: Routing.generate('recherche_patient'),
+                data: DONNEE,
+                cache: false,
+                minLength: 2,
+                beforeSend: function () {
+                    $('#mesitems').find('li').remove();
+                },
+                success: function(data) {
+
+
+                    $.each(data.items, function(index,value) {
+                        //$("#ott").text(value.libelle+'<br/>'+value.Prix);
+                        var nophoto="../../jquery-ui/images/no_image.jpg";
+                        var lien=Routing.generate('hostoo_sante_voirpatient',{id:value.id});
+                        var lien2=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        var lien3=Routing.generate('hostoo_ajouter_parent',{id:value.id});
+                        $('#mesitems').prepend('<li class="list-group-item"><span class="fa fa-user"></span>'+value.nom+' '+value.postnom+' '+value.prenom+'<div class="btn-group pull-right"><a href="'+lien2+'" class="btn btn-success">Dependants</a><a class="btn btn-info" href="'+lien+'">Afficher</a>{#<a class="btn btn-warning" href="'+lien3+'">Episode</a><a class="btn btn-warning" href="#">Control</a>#}</div> </li>');
+                        //$('#resultats').html('<div>'+value.libelle+'</div>');
+                        //alert(value.libelle);
+                    });
+
+                    // $(".loading").hide();
+                }
+            });
+            return false;
+        });
+
+        // Date Picker
+        jQuery('#datepicker').datepicker();
+        jQuery('#patient_datenaissance').datepicker({
+            autoclose: true,
+            dateFormat: "dd/mm/yy",
+            dayNames: [ "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi" ],
+            dayNamesMin: [ "Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa" ],
+            monthNames: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
+            todayHighlight: true
+        });
+
+    </script>
+{% endblock %}

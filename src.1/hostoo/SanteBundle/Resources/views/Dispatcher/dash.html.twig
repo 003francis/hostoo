@@ -1,0 +1,386 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titre %} {{ parent() }}::Caisse {% endblock %}
+{% block titrepage %}  {% endblock %}
+{% block options %}{% endblock %}
+{% block menu %}
+    {% include "hostooSanteBundle:menus:menunrs.html.twig" %}
+{% endblock %}
+{% block body %}
+    <div class="col-lg-8">
+            <!-- Tabs Left -->
+            <ul class="nav nav-tabs">
+                <li role ="presentation" class="active"><a href="#tabr1" role="tab" data-toggle="tab">Factures</a></li>
+                <li role ="presentation"><a href="#tabr4" role="tab" data-toggle="tab">Payées</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="tabr1">
+                <!-- Premier onglet -->
+                    {% if listeNP|length == 0 %}
+                        <div class="alert alert-danger alert-dismissible">Pas de Facture</div>
+                    {% else %}
+                        {% set n=0 %}
+                        {% for facture in listeNP %}
+
+                            {% set n=n+1 %}
+                            <div id="accordion" class="panel-group">
+                                <div class="panel {% if facture.validation == 0 %}panel-custom{% else %}panel-warning{% endif %}">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a href="#collapse{{ n }}" data-parent="#accordion" data-toggle="collapse">
+                                                {% if facture.episode %}{{ facture.episode.patient }} {% else %} {{ facture.hospitalisation.patient }} {% endif %} | ({{ facture.datefacture|date('d-m-Y') }})
+                                            </a>
+                                            <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                                            <a href="{{ path('edition-facture_show',{'id':facture.id }) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                        </h4>
+                                    </div>
+
+                                    <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse{{ n }}">
+                                        <div class="panel-body">
+                                            <ul class="list-unstyled">
+                                                {% if facture.commandes|length > 0 %}
+                                                    <li class="list-group-item-danger"><strong>Actes Medicaux</strong></li>
+                                                {% endif %}
+                                                {% for commande in facture.commandes %}
+                                                    {% for tarif in commande.tarifs %}
+                                                        <li {% if loop.first %}class="first list-group-item"{% else %}class="list-group-item"{% endif %}>
+                                                            <div class="row">
+                                                                {{ tarif.actes.designationacte }}
+                                                                <span class="pull-right">
+
+                                        <i class="badge badge-info">{{ tarif.prix }}</i>
+
+                                        </span>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endfor %}
+
+                                                {% if facture.produits.count >0 %}
+                                                    <li class="bg-info"><strong>Pharmacie</strong></li>
+                                                {% endif %}
+                                                {% for tarif in facture.produits %}
+
+
+                                                    <li {% if loop.first %}class="first"{% endif %}>{{ tarif.nom }}<div class="pull-right">
+
+                                                            <span class="label label-info">{{ tarif.prix }}</span>
+
+                                                            <form method="get" class="pull-right">
+                                                                <input type="checkbox" class="col-lg-1" name="acte" value="{{ tarif.id }}" onchange="this.form.submit()">
+                                                            </form>
+                                                        </div></li>
+                                                {% endfor %}
+                                            </ul>
+                                            <hr>
+                                            <div class="col-lg-6 col-lg-offset-6 pull-right">
+                                                <table>
+                                                    <tr>
+                                                        <th>Total Prix :</th><td>{{ facture.prix }} ( {{ facture.prix * app.session.get('taux') }} FC)</td>
+                                                    </tr>
+                                                    {% set som=0 %}
+                                                    {% if facture.soldes.count>0 %}
+
+                                                    {% for solde in facture.soldes %}
+
+                                                        {% set som=som+solde.solde %}
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <th>Total solde</th><td><?php echo 'boom'; ?>{{ som }}</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Solde :</th><td>{{ facture.lasolde }} USD ( {{ facture.lasolde * app.session.get('taux') }} FC)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Reste a payer :</th><td>{% if facture.lasolde>0 %}{{ facture.resteAPayer }} USD( {{ facture.resteAPayer * app.session.get('taux') }} FC){% else %}0 USD (0 FC){% endif %} </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <hr class="alt2">
+                                            <div>
+                                                {%  if facture.validation == 0 and facture.episode  or facture.hospitalisation %}
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+
+                                                            <h5>Validation avec Visa</h5>
+                                                            <form action="{{ path('valider_par_visa',{'fact': facture.id }) }}" method="post">
+                                                                <div class="form-inline">
+                                                                    <label for="visa">Selectionnez un Visa</label>
+                                                                    <select name="visa" id="visa" class="form-control">
+                                                                        {% set lock = 0 %}
+                                                                        {% for visa in visas %}
+                                                                            {% if visa.patient.id == facture.episode.patient.id %}
+                                                                                {% set lock = 1 %}
+                                                                                <option value="{{ visa.id }}">{{ visa.auteur~"/"~visa.datevisa|date('YMd') }}</option>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                    <input type="submit" class="btn btn-primary" {% if lock == 0 %}disabled{% endif %} value="Valider">
+                                                                </div>
+                                                            </form>
+
+                                                            {#<form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post" class="form-inline">#}
+                                                            {#<div class="form-group">#}
+                                                            {#<label for="solde">Payer un accompte :</label>#}
+                                                            {#<div class="input-group form-control">#}
+                                                            {#<input type="number" name="solde"  id="solde" class="input-lg col-md-4">#}
+                                                            {#<select name="devise" id="devise" class="col-md-4 input-group-addon">#}
+                                                            {#<option selected value="USD">USD</option>#}
+                                                            {#<option value="CDF">FC</option>#}
+                                                            {#</select>#}
+                                                            {#<button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>#}
+                                                            {#</div></div>#}
+                                                            {#</form>#}
+
+                                                        </div>
+                                                        <div class="col-lg-6 ">
+                                                            <div class="row pull-right">
+                                                                <h6>Validation</h6>
+                                                                <form action="{{ path('hostoo_sante_valideracte_nrs',{'id':facture.id}) }}" >
+                                                                    <div  class="form-inline">
+                                                                        <label for="devise"></label>
+                                                                        <select name="devise" id="devise" class="form-control" >
+                                                                            <option selected value="USD">USD</option>
+                                                                            <option value="CDF">FC</option>
+                                                                        </select>
+                                                                        <input class="btn-sm btn-success" type="submit" value="Valider" />
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {%  elseif facture.validation == 0 and facture.episode.patient.societe.convention.tconvention.id ==2 %}
+                                                    <a class="btn-sm btn-success pull-right" href="{{ path('hostoo_sante_valideracte_nrs',{'id':facture.id}) }}">Valider</a>
+                                                {% else %}
+                                                    <div class="row">
+                                                        <button class="btn btn-block btn-success">Facture payée</button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="tabr4">
+                    <!-- Premier onglet -->
+                    {% if liste is null %}
+                        <span class="alert alert-info alert-dismissible">Pas de Factures en attente</span>
+                    {% else %}
+                        {% set n=0 %}
+                        {% for facture in liste|sort|reverse %}
+                            {% set n=n+1 %}
+                            <div id="accordion2" class="panel-group">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a href="#collapse_{{ n }}" data-parent="#accordion2" data-toggle="collapse">
+                                                {% if facture.episode %}{{ facture.episode.patient }} {% else %} {{ facture.hospitalisation.patient }} {% endif %}| ({{ facture.datefacture|date('d-m-Y') }})
+                                            </a>
+                                            <a href="{{ path('print_facture',{'id':facture.id}) }}" class="btn btn-info"><i class="fa fa-print"></i></a>
+                                            <a href="{{ path('edition-facture_show',{'id':facture.id}) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                        </h4>
+                                    </div>
+
+                                    <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse_{{ n }}">
+                                        <div class="panel-body">
+                                            <ul class="list-unstyled">
+                                                {% if facture.commandes|length > 0 %}
+                                                    <li class="list-group-item-danger"><strong>Actes Medicaux</strong></li>
+                                                {% endif %}
+                                                {% for cmd in facture.commandes %}
+                                                    {% for tarif in cmd.tarifs %}
+                                                        <li {% if loop.first %}class="first list-group-item"{% else %}class="list-group-item"{% endif %}>
+                                                            <div class="row">
+                                                                {{ tarif.actes.designationacte }}
+                                                                <span class="pull-right">
+
+                                        <i class="badge badge-info">{{ tarif.prix }}</i>
+
+                                        </span>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endfor %}
+
+                                                {% if facture.produits.count >0 %}
+                                                    <li class="bg-info"><strong>Pharmacie</strong></li>
+                                                {% endif %}
+                                                {% for tarif in facture.produits %}
+
+
+                                                    <li {% if loop.first %}class="first"{% endif %}>{{ tarif.nom }}<div class="pull-right">
+
+                                                            <span class="label label-info">{{ tarif.prix }}</span>
+
+                                                            <form method="get" class="pull-right">
+                                                                <input type="checkbox" class="col-lg-1" name="acte" value="{{ tarif.id }}" onchange="this.form.submit()">
+                                                            </form>
+                                                        </div></li>
+                                                {% endfor %}
+                                            </ul>
+                                            <hr>
+                                            <div class="col-lg-6 col-lg-offset-6 pull-right">
+                                                <table>
+                                                    <tr>
+                                                        <th>Total Prix :</th><td>{{ facture.prix }} ( {{ facture.prix * app.session.get('taux') }} FC)</td>
+                                                    </tr>
+                                                    {% set som=0 %}
+                                                    {% if facture.soldes.count>0 %}
+
+                                                    {% for solde in facture.soldes %}
+
+                                                        {% set som=som+solde.solde %}
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <th>Total solde</th><td><?php echo 'boom'; ?>{{ som }}</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Solde :</th><td>{{ facture.lasolde }} USD ( {{ facture.lasolde * app.session.get('taux') }} FC)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Reste a payer :</th><td>{% if facture.lasolde>0 %}{{ facture.resteAPayer }} USD( {{ facture.resteAPayer * app.session.get('taux') }} FC){% else %}0 USD (0 FC){% endif %} </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <hr class="alt2">
+                                            <div>
+                                                {%  if facture.validation == 0 and facture.episode.patient.convention.tconvention.id ==1 %}
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+
+                                                            <form action="{{ path('hostoo_sante_soldeacte',{'acte':facture.id}) }}" method="post" class="form-inline">
+                                                                <div class="form-group">
+                                                                    <label for="solde">Payer un accompte :</label>
+                                                                    <div class="input-group form-control">
+                                                                        <input type="number" name="solde"  id="solde" class="input-lg col-md-4">
+                                                                        <select name="devise" id="devise" class="col-md-4 input-group-addon">
+                                                                            <option selected value="USD">USD</option>
+                                                                            <option value="CDF">FC</option>
+                                                                        </select>
+                                                                        <button type="submit" class="col-md-4 btn-sm btn-warning">accompte</button>
+                                                                    </div></div>
+                                                            </form>
+
+                                                        </div>
+                                                        <div class="col-lg-6 ">
+                                                            <div class="row pull-right">
+                                                                <h6>Validation</h6>
+                                                                <form action="{{ path('hostoo_caisse_mettredevise') }}" class="form-inline" >
+
+                                                                    <label for="devise"></label>
+                                                                    <div class="input-group">
+                                                                        <select name="devise" id="devise" class="form-control col-lg-6" onchange="this.form.submit()" >
+                                                                            <option {% if app.session.get('devise')=='USD' or app.session.get('devise')=='' %} selected {% endif %} value="USD">USD</option>
+                                                                            <option {% if app.session.get('devise')=='CDF' %} selected {% endif %} value="CDF">FC</option>
+                                                                        </select>
+                                                                        <a class="btn-sm btn-success input-group-addon" href="{{ path('hostoo_sante_valideracte',{'id':facture.id}) }}">Valider</a>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {%  elseif facture.validation == 0 and facture.episode.patient.convention.tconvention.id ==2 %}
+                                                    <a class="btn-sm btn-success pull-right" href="{{ path('hostoo_sante_valideracte',{'id':facture.id}) }}">Valider</a>
+                                                {% else %}
+                                                    <div class="row">
+                                                        <button class="btn btn-block btn-success">Facture payée</button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    {% endif %}
+
+                </div>
+
+
+
+</div>
+    </div>
+    <div class="col-lg-4 col-md-12">
+    <div class="card-box">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="alert alert-success text-center">{{ render(controller('hostooSanteBundle:Caisse:donneTaux')) }}</div>
+            </div>
+
+
+            </div>
+    </div>
+            <div class="text-center">
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box bg-info widget-user text-white">
+                            <span class="fa fa-2x">
+                            {% if caisseprivusd.usd==null %}
+                                0 USD
+                            {% else %}
+                                {{ caisseprivusd.usd - render(controller(('hostooSanteBundle:Caisse:sommeBSusd')))|number_format }} USD
+                            {% endif %}
+                            </span>
+                         <hr>
+                            <h5 class="text-white">Recettes USD</h5>
+                        </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                        <div class="card-box bg-success widget-user text-white">
+                            <span class="fa fa-2x">
+                                {% if caisseprivcdf.cdf==null %}
+                                    0 CDF
+                                {% else %}
+                                    {{ caisseprivcdf.cdf }} CDF
+                                {% endif %}
+                            </span>
+                            <hr>
+                            <h5 class="text-white">Recettes CDF</h5>
+                            
+                        </div>
+</div>
+                {#<div class="col-lg-6 col-md-12">#}
+                        {#<div class="card-box bg-primary text-white widget-user">#}
+                            {#<span class="fa fa-2x">#}
+                                {#{% if caisseconvusd ==null %}#}
+                                {#0 USD#}
+                                {#{% else %}#}
+                                {#{{ caisseconvusd.usd }} USD#}
+                                {#{% endif %}#}
+                                {#</span>#}
+                            {#<hr>#}
+                            {#<h5 class="text-white">Caisse Conventionnés USD</h5>#}
+
+                        {#</div>#}
+{#</div>#}
+                {#<div class="col-lg-6 col-md-12">#}
+                        {#<div class="card-box widget-user bg-purple text-white">#}
+                            {#<span class="fa fa-2x">{{ render(controller(('hostooSanteBundle:Caisse:sommeBScdf'))) }} CDF</span>#}
+                            {#<hr>#}
+                            {#<h5 class="text-white">Dépenses</h5>#}
+                        {#</div>#}
+{#</div>#}
+                {#<div class="col-lg-6 col-md-12">#}
+                        {#<div class="card-box widget-user bg-danger text-white">#}
+                            {#<span class="fa fa-2x">{{ render(controller(('hostooSanteBundle:Caisse:sommeBSusd'))) }} USD</span>#}
+                            {#<hr>#}
+                            {#<h5 class="text-white">Dépenses</h5>#}
+                        {#</div>#}
+
+            {#</div>#}
+        </div>
+
+{% endblock %}

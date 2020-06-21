@@ -1,0 +1,46 @@
+
+    <h4>Liste des ordonnances</h4>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Valider</th>
+                <th>Livre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ordonnance in ordonnances %}
+            <tr>
+                <td>{% if ordonnance.dateordo %}{{ ordonnance.dateordo|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ordonnance.valider %}Validée OUI{% else %}Validée Non{% endif %}</td>
+                <td>{% if ordonnance.livre %}Livrée OUI{% else %}Livrée Non{% endif %}</td>
+                <td>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{{ path('ordonnance_med_show', { 'id': ordonnance.id }) }}">afficher</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ordonnance_med_edit', { 'id': ordonnance.id }) }}">modifier</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ordonnance_med_print', { 'id': ordonnance.id }) }}">Imprimer</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr><th colspan="5">Prescriptions</th></tr>
+            <tr><th>Produit</th><th>Posologie</th><th>Quantité</th><th>Conduite a tenir</th><th></th></tr>
+            {% for pos in ordonnance.posologie %}
+              <tr>
+                  <td>{{ pos.produit }}</td>
+                  <td>{{ pos.posologie }}</td>
+                  <td>{{ pos.qte }}</td>
+                  <td>{{ pos.conduite }}</td>
+                  <td><a href="#"><i class="text-warning fa fa-edit"></i> </a><a href="#"><i class="text-danger fa fa-times"></i> </a></td>
+              </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>

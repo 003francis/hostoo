@@ -1,0 +1,35 @@
+
+    <h4>Ordonnance creation</h4>
+
+    <form action="{{ path('ordonnance_med_new',{'id':id }) }}" method="post" class="form-horizontal">
+        {{ form_label(form.dateordo) }}
+        {{ form_errors(form.dateordo) }}
+        {{ form_widget(form.dateordo) }}
+
+
+     {{ form_row(form.posologie) }}
+     <ul class="list-unstyled">
+    {% for tag in form.posologie %}
+        <li><div class="form-inline">
+                <div class="col-sm-3">
+                {{ form_widget(tag.produit, {'attr':{'class':'mypro'}}) }}
+                </div><div class="col-sm-3">
+                    {{ form_widget(tag.qte) }}
+                </div><div class="col-sm-3">
+                    {{ form_widget(tag.posologie) }}
+                </div>
+
+            {{ form_widget(tag.conduite, {'attr':{'class':'col-sm-3'}}) }}
+            </div>
+        </li>
+    {% endfor %}
+     </ul>
+        <input type="submit" value="Enregistrer" class="btn btn-success"/>
+    </form>
+    {#
+    <ul>
+        <li>
+            <a href="{{ path('ordonnance_med_index') }}">Back to the list</a>
+        </li>
+    </ul>
+#}

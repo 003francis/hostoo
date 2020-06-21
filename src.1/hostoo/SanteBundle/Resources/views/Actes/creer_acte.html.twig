@@ -1,0 +1,28 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuadmin.html.twig' %}
+{% endblock %}
+{% block title %}Nouvel acte médical{% endblock %}
+
+{% block body %}
+<h1>Nouvel Acte médical</h1>
+    <div class="col-lg-6 col-md-12">
+        <div class="card-box">
+            <form action="{{ path('creer_acte') }}" method="post">
+                <div class="form-group">
+                {{ form_label(form.designationacte,"Désignation") }}
+                {{ form_errors(form.designationacte) }}
+                {{ form_widget(form.designationacte,{'attr':{'class':'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.categories) }}
+                    {{ form_errors(form.categories) }}
+                    {{ form_widget(form.categories,{'attr':{'class':'form-control'}}) }}
+                </div>
+                {{ form_widget(form.save,{'attr':{'class':'btn btn-success waves-effects'}}) }}
+                {{ form_rest(form) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

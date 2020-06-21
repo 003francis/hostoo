@@ -1,0 +1,96 @@
+{% extends "hostooSanteBundle::blank.html.twig" %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuadmin.html.twig' %}
+{% endblock %}
+{% block title %}Liste des Conventions{% endblock %}
+
+{% block body %}
+
+{% if liste == null %}
+<div class="alert alert-dismissible alert-danger"><i class="fa fa-battery-empty"></i> <strong>Pas de Convention Definie</strong></div>
+{% else %}
+<div class="card-box">
+<table class="table table-striped">
+    <caption><h1>Liste des conventions</h1></caption>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Convention</th>
+        <th>Entreprise</th>
+
+        <th>Nombre des formules</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for conv in liste %}
+       <tr>
+           <td>{{ conv.id }}</td>
+           <td>{{ conv.nomconvention }}</td>
+           <td>{{ conv.proprietaire|length }}</td>
+           <td>
+               {% if conv.formule == null %}
+               0
+               {% else %}
+               {{ conv.formule|length }}
+           {% endif %}
+           </td>
+           <td>
+               {% if conv.tarif|length == 0 %}
+                   <a class="btn btn-sm btn-info waves-effect" href="{{ path('ajouter_des_prix',{'convention':conv.id}) }}"><i class="fa fa-plus"></i> Prix </a>
+               {% else %}
+               <a class="btn btn-sm btn-default waves-effect" href="{{ path('modifier_des_prix',{'convention':conv.id}) }}"><i class="fa fa-edit"></i> Prix </a>
+               {% endif %}
+           </td>
+
+       </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+</div>
+{% endif %}
+    {% if proprios == null %}
+        <div class="alert alert-dismissible alert-danger"><i class="fa fa-battery-empty"></i> <strong>Pas de Convention Definie</strong></div>
+    {% else %}
+        <div class="card-box">
+            <table class="table table-striped">
+                <caption><h1>Les Souscrits</h1></caption>
+                <thead>
+                <tr>
+                    <th>Proprietaire</th>
+                    <th>Telephone</th>
+                    <th>E-mail</th>
+                    <th>Adresse</th>
+                    <th>Nombre des patients</th>
+                    <th>Etat</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for conv in proprios %}
+                    <tr>
+                        <td>{{ conv.nom }}</td>
+                        <td>{{ conv.telephone }}</td>
+                        <td>{{ conv.email }}</td>
+                        <td>{{ conv.adresse }}</td>
+                        <td>&nbsp;</td>
+                        <td>{% if conv.etat %}<a href="{{ path('switch_entreprise',{'id':conv.id }) }}" class="btn btn-success"> Activée</a> {% else %}<a href="{{ path('switch_entreprise',{'id':conv.id }) }}" class="btn btn-danger">Désactivée</a>{% endif %}</td>
+                        <td>
+                            <a class="btn btn-sm btn-danger waves-effect" href="{{ path('hostoo_gestion_prop',{'id':conv.id}) }}"><i class="fa fa-eyes"></i> voir </a>
+
+                                <a class="btn btn-sm btn-info waves-effect" href="{{ path('ajouter_des_prix',{'convention':conv.id}) }}"><i class="fa fa-plus"></i> Prix </a>
+
+                                <a class="btn btn-sm btn-default waves-effect" href="{{ path('modifier_des_prix',{'convention':conv.id}) }}"><i class="fa fa-edit"></i> Prix </a>
+
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}

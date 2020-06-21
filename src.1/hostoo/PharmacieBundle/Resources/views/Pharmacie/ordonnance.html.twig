@@ -1,0 +1,32 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuphar.html.twig' %}
+{% endblock %}
+{% block body %}
+<div class="card-box">
+    <h3 class="text-center">ORDONNANCE MEDICALE</h3>
+
+    <ul class="list-unstyled list-group">
+        <li>Prescription  : {% if ordonnance.medecin %}Dr. {{ ordonnance.medecin.nom~" "~ordonnance.medecin.postnom~" "~ordonnance.medecin.prenom|upper }} {% endif %}</li>
+        <li>Patient(e) : {{ ordonnance.episode.patient.nom~" "~ordonnance.episode.patient.postnom~" "~ordonnance.episode.patient.prenom }}</li>
+        <li>Type : {% if ordonnance.episode.patient.societe.id != 15 %}Conventionné(e){% else %}Privé(e){% endif %}</li>
+    </ul>
+    <table class="table table-striped">
+        <tr>
+            <th>Désignation</th>
+            <th>Posologie</th>
+            <th>Quantité</th>
+        </tr>
+        {% for pos in ordonnance.posologie %}
+        <tr>
+            <td>{{ pos.produit }}</td>
+            <td>{{ pos.posologie }}</td>
+            <td>{{ pos.qte }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% if ordonnance.livre==0 %}
+    <a href="{{ path('hp_livreproduits',{'id':ordonnance.id}) }}">Livrer</a>
+    {% endif %}
+</div>
+{% endblock %}

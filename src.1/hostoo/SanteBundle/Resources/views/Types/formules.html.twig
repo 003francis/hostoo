@@ -1,0 +1,31 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}{% endblock %}
+{% block options %}
+    <a href="{{ path('hostoo_sante_editionformule') }}" class="btn btn-default"><i class="fa fa-check"></i> Edition Multiple des Formules </a>
+    {% endblock %}
+{% block menu %}
+    {% include 'hostooUserBundle:menus:menuadmin.html.twig' %}
+{% endblock %}
+{% block body %}
+    {% set nb_formules=tcs|length %}
+    <div class="col-lg-6 col-md-12">
+    <div class="card-box">
+    <form action="{{ path('hostoo_sante_addformule') }}" method="post">
+        {{ form_label(form.nom,'Nom de la formule') }}
+        {{ form_errors(form.nom) }}
+        {{ form_widget(form.nom,{'attr':{'class':'form-control'}}) }}
+<input type="submit" value="enregistrer" class="btn btn-success">
+        {{ form_rest(form) }}
+    </form>
+</div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div class="card-box">
+        <ul class="list-unstyled list-group">
+            {% for formule in tcs %}
+                <li class="list-group-item">{{ formule.nom }}<span class="badge badge-info">{{ formule.patients|length }}</span> </li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+{% endblock %}

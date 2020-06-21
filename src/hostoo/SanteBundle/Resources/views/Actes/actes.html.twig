@@ -1,0 +1,70 @@
+<div class="row" id="actes">
+    <h4>Les actes</h4>
+    <!-- panel-->
+    <div class="panel col-md-4">
+        {% set i=0 %}
+
+        {% for cat in categories %}
+            {% set i=i+1 %}
+            <!-- panel heading-->
+
+            <div class="panel-heading">
+                <a class="accordion-toggle" href="#acte{{ i }}" data-toggle="collapse">{{ cat.nom }}</a>
+            </div>
+            <!-- panel heading end-->
+            <!-- panel collapse-->
+            <ul class="list-group">
+                <div id="acte{{ i }}" {% if i==1 %}class="panel-collapse collapse in" {% else %}class="panel-collapse collapse"{% endif %}>
+                    <div class="panel-body">
+
+                        {% for acte in actes %}
+
+                            {% if cat.nom == acte.categories.nom %}
+
+                                <li class="list-group-item">
+                                    <div>{{acte.designationacte }}
+                                        {% if app.session.get('actes')[acte.id] is not defined %}
+                                            <div class="pull-right">
+                                                <form action="{{ path('hostoo_med_ajoutercte',{'id':acte.id}) }}" method="post">
+                                                    <input type="checkbox" value="1" name="qte" onchange="this.form.submit()">
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <a href="{{ path('hostoo_med_suppcte',{'id':acte.id }) }}" ><span class="fa fa-check"></span></a>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}</div></div></ul>
+        {% endfor %}</div>
+
+    <div class=" col-md-offset-4 col-md-4">
+        <table class="table table-striped">
+            <tr>
+                <th>Libelle</th>
+                <th>Prix</th>
+            </tr>
+            {% if (tabacte is not null or tabacte is defined) %}
+                {% set som = 0 %}
+                {% for tacte in tabacte %}
+                    <tr>
+                        <td>{{ tacte.designationacte }}</td>
+                        {% if episode.patient.typeclient.nom == 'privé' %}
+                            <td>{{ tacte.prive }}</td>{% set som=som+tacte.prive %}
+                        {% elseif episode.patient.typeclient.nom == 'conventionné' %}
+                            <td>{{ tacte.conventionne }}</td>{% set som=som+tacte.conventionne %}
+                        {% else %}
+                            <td>{{ tacte.gardejourferie }}</td>{% set som=som+tacte.gardejourferie %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}{% endif %}
+            <tr>
+                <td>TOTAL</td><td>{{ som }} USD</td>
+
+            </tr>
+            <tr>
+                <td></td><td><a href="{{ path('hostoo_sante_factureactes',{'id':id,'somtot':som}) }}">Enregistrer</a> </td>
+            </tr>
+        </table>
+    </div>
+    </div>

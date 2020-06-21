@@ -1,0 +1,346 @@
+{% extends 'hostooSanteBundle::blank.html.twig' %}
+{% block titrepage %}Tableau de Bord{% endblock %}
+{% block menu %}
+    {% include 'hostooSanteBundle:menus:menudoc.html.twig' %}
+{% endblock %}
+{% block body %}
+    {% if is_granted('ROLE_DG') %}
+  <div class="row">
+
+
+      <div class="col-md-6">
+          <h4 class="text-center">Situation Financière</h4>
+          <div class="col-lg-6 col-md-6">
+              <a href="#">
+                  <div class="card-box widget-user">
+                      <div class="text-center">
+                          <h3 class="text-custom" data-plugin="counterup">{{ cusd.usd }} USD</h3>
+                          <h5>recette du jour</h5>
+                      </div>
+                  </div>
+              </a>
+          </div>
+          <div class="col-lg-6 col-md-6">
+              <a href="#">
+                  <div class="card-box widget-user">
+                      <div class="text-center">
+                          <h3 class="text-custom" data-plugin="counterup">{{ ccdf.cdf }} CDF</h3>
+                          <h5>recette du jour</h5>
+                      </div>
+                  </div>
+              </a>
+          </div>
+
+          <div class="col-lg-6 col-md-6">
+              <a href="{{ path('hostoo_sante_listepatients') }}">
+                  <div class="card-box widget-user">
+                      <div class="text-center">
+                          <h3 class="text-custom" data-plugin="counterup">{{ caisse.montantusd }} USD</h3>
+                          <h5>recette  du mois</h5>
+                      </div>
+                  </div>
+              </a>
+          </div>
+          <div class="col-lg-6 col-md-6">
+          <a href="#">
+              <div class="card-box widget-user">
+                  <div class="text-center">
+                      <h3 class="text-custom" data-plugin="counterup">{{ caisse.montantcdf }} CDF</h3>
+                      <h5>recette du mois</h5>
+                  </div>
+              </div>
+          </a>
+      </div>
+          <div class="col-md-12">
+
+              <div class="col-md-12">
+
+                  <h4 class="text-center  text-danger"> Les Dépenses </h4>
+
+
+                  <div class="col-lg-6 col-md-6">
+
+                      <a href="#">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set depusd = 0 %}
+                                  {% for dep in depenses %}
+                                      {% if (dep.datebs|date('Y-m') == ""|date('Y-m')) and dep.devise == "USD" %}
+                                          {% set depusd = depusd + dep.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h3 class="text-custom" data-plugin="counterup">{{ depusd }} USD</h3>
+                                  <h5>dépenses du mois</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                      <a href="{{ path('hostoo_sante_listepatients') }}">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set depcdf = 0 %}
+                                  {% for dep in depenses %}
+                                      {% if (dep.datebs|date('Y-m') == ""|date('Y-m')) and dep.devise == "CDF" %}
+                                          {% set depcdf = depcdf + dep.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h3 class="text-custom" data-plugin="counterup">{{ depcdf }} CDF</h3>
+                                  <h5>dépenses du mois</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+              </div>
+              <div class="col-md-12">
+
+
+                  <h4 class="text-center"> La Banque</h4>
+                  <div class="col-lg-6 col-md-6">
+                      <a href="#">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set sombank= 0 %}
+                                  {% for bnak in banks %}
+                                      {% if (bnak.dateops|date('Y-m') == ""|date('Y-m')) and bnak.devise == 1 and mouvement == 1 %}
+                                          {% set sombank = sombank + bnak.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h2 class="text-custom" data-plugin="counterup">{{ sombank }} USD</h2>
+                                  <h5>Dêpot USD</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                      <a href="{{ path('hostoo_sante_listepatients') }}">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set sombank= 0 %}
+                                  {% for bnak in banks %}
+                                      {% if (bnak.dateops|date('Y-m') == ""|date('Y-m')) and bnak.devise == 0 and mouvement == 1 %}
+                                          {% set sombank = sombank + bank.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h2 class="text-custom" data-plugin="counterup">{{ sombank }} CDF</h2>
+                                  <h5>Dêpot</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                      <a href="{{ path('hostoo_sante_listepatients') }}">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set sombank= 0 %}
+                                  {% for bnak in banks %}
+                                      {% if (bnak.dateops|date('Y-m') == ""|date('Y-m')) and bnak.devise == 1 and mouvement == 0 %}
+                                          {% set sombank = sombank + bnak.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h2 class="text-custom" data-plugin="counterup">{{ sombank }} USD</h2>
+                                  <h5>Retrait</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                      <a href="{{ path('hostoo_sante_listepatients') }}">
+                          <div class="card-box widget-user">
+                              <div class="text-center">
+                                  {% set sombank= 0 %}
+                                  {% for bnak in banks %}
+                                      {% if (bnak.dateops|date('Y-m') == ""|date('Y-m')) and bnak.devise == 0 and mouvement == 0 %}
+                                          {% set sombank = sombank + bank.montant %}
+                                      {% endif %}
+                                  {% endfor %}
+                                  <h2 class="text-custom" data-plugin="counterup">{{ sombank }} CDF</h2>
+                                  <h5>Retrait</h5>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+
+
+
+
+
+              </div>
+          </div>
+          <div class="col-md-12">
+
+      <div class="col-md-12">
+
+          <h4 class="text-center  text-danger"> Patients</h4>
+      <div class="col-lg-6 col-md-6">
+          <a href="{{ path('hostoo_sante_listepatients') }}">
+              <div class="card-box widget-user">
+                  <div class="text-center">
+                      <h2 class="text-custom" data-plugin="counterup">{{ patients|length }}</h2>
+                      <h5>Patients</h5>
+                  </div>
+              </div>
+          </a>
+      </div>
+
+      <div class="col-lg-6 col-md-6">
+
+          <a href="{{ path('hostoo_sante_listepatients') }}">
+              <div class="card-box widget-user">
+                  <div class="text-center">
+                      <h2 class="text-custom" data-plugin="counterup">{{ freqs|length }}</h2>
+                      <h5>Fréquentations</h5>
+                  </div>
+              </div>
+          </a>
+      </div>
+      </div>
+      </div>
+  </div>
+      <div class="col-md-6">
+         <div class="card-box">
+          <h3>Productions par services</h3>
+          <table class="table table-striped">
+              <thead>
+              <tr>
+                  <th>Nom de service</th>
+                  <th>Nbre actes</th>
+                  <th>Montant</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for pr in proservs %}
+              <tr>
+                  <td>{{ pr.nom }}</td>
+                  <td>{{ pr.actes }}</td>
+                  <td>{{ pr.montant }}</td>
+              </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+         </div>
+          <div class="card-box">
+          <h3>Prestations des medecins</h3>
+          <table class="table table-striped">
+              <thead>
+              <tr>
+                  <th>Nom medecin</th>
+                  <th>Patients reçus</th>
+                  <th>Montant</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for med in medecins %}
+                <tr>
+                <td>{{ med.nom~" "~med.postnom~" "~med.prenom }}</td>
+                    <td>{{ med.mesconsultations }}</td>
+                    <td>{{ med.monmontant }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+          </div>
+          <div class="card-box">
+
+          <h3>Production des actes</h3>
+          <table class="table table-striped">
+              <thead>
+              <tr>
+                  <th>Désignation</th>
+                  <th>Nbre de fois </th>
+                  <th>Montant</th>
+              </tr>
+              </thead>
+              <tbody>
+                {% for pr in proactes %}
+              <tr>
+                  <td>{{ pr.ac }}</td>
+                  <td>{{ pr.nbr }}</td>
+                  <td>{{ pr.montant }}</td>
+              </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+      </div>
+      </div>
+  </div>
+
+    {% endif %}
+    <div class="row">
+        {% if liste != null %}
+        <div class="col-lg-3 col-md-6 col-xs-12">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h2>{{ liste|length }}</h2>
+                <div class="row">
+                   <span class="pull-right ">RDV</span>
+                </div>
+            </div>
+        </div>
+
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h2>{{ nbreRDV }}</h2>
+                    <div class="row">
+                        <span class="pull-right "><i class="zmdi zmdi-nature-people"></i>En Attente</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            <div class="panel panel-success">
+                {{ liste.patientsrecus }}
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12">
+            <div class="panel panel-success">
+                {{ liste|length }}
+            </div>
+        </div>
+            {% else %}
+            <h3 class="alert alert-danger text-center">Aucune Activité aujourd'hui !</h3>
+            {% endif %}
+    </div>
+    <div class="row">
+        {% if rdvs != null %}
+            <h3 class="text-custom">Toutes les activités</h3>
+            <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h2>{{ rdvs|length }}</h2>
+                        <div class="row">
+                            <span class="pull-right ">RDVs</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h2>{{ nbr }}</h2>
+                        <div class="row">
+                            <span class="pull-right "><i class="zmdi zmdi-nature-people"></i>Patients</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="panel panel-success">
+
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-12">
+                <div class="panel panel-success">
+
+                </div>
+            </div>
+        {% else %}
+            <h3>Aucune Activité aujourd'hui !</h3>
+        {% endif %}
+    </div>
+{% endblock %}

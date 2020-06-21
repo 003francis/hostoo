@@ -1,0 +1,57 @@
+<?php
+
+namespace hostoo\SanteBundle\Controller;
+
+use hostoo\SanteBundle\Entity\ResultatsImg;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+class ImagerieController extends Controller
+{
+    public function IndexAction()
+    {
+        $em=$this->getDoctrine()->getManager();
+        $ordonnances=$em->getRepository('hostooSanteBundle:OrdonnanceImg')->findAll();
+        return $this->render('hostooSanteBundle:Imagerie:index.html.twig', array('ordos'=>$ordonnances));
+    }
+
+    public function ajouterResultatAction(Request $request,$id)
+    {
+        $session = $request->getSession();
+
+        if (!$session->has('resultati')) $session->set('resultati', array());
+        $resultat = $session->get('resultati');
+
+        if (array_key_exists($id, $resultat)) {
+            if ($request->get('myresultat') != null) $resultat[$id] = $request->get('myresultat');
+            $this->get('session')->getFlashBag()->add('success', 'Acte existe deja');
+        } else {
+            if ($request->get('myresultat') != null)
+                $resultat[$id] = $request->get('myresultat');
+            else
+                $resultat[$id] = 1;
+
+            $this->get('session')->getFlashBag()->add('success', 'Acte medical ajouté avec succès');
+        }
+
+        $session->set('resultati', $resultat);
+        return $this->redirectToRoute('hostoo_img_dash');
+    }
+
+    public function validerResultatAction(Request $request, $id)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $ordonnance=$em->getRepository('hostooSanteBundle:OrdonnanceImg')->find($id);
+        $resultat= new ResultatsImg();
+        $resultat->setDateresultat(new \DateTime());
+        $resultat->setOrdonnance($ordonnance);
+        $resultat->setResultat($request->getSession()->get('resultati'));
+        $ordonnance->setResultat($resultat);
+        $em->persist($resultat);
+        $em->persist($ordonnance);
+        $em->flush();
+        $request->getSession()->remove('resultati');
+        return $this->redirectToRoute('hostoo_img_dash');
+    }
+
+}

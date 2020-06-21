@@ -1,0 +1,36 @@
+
+{% if patients == null %}
+    <h2>Pas de liste</h2>
+    {% else %}
+        <table class="table table-striped" id="patients">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Postnom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Sexe</th>
+                <th>Type de patient</th>
+                <th>Societé</th>
+                <th>Formule</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+{% for patient in patients %}
+            <tr>
+                <td>{{ patient.nom }}</td>
+                <td>{{ patient.postnom }}</td>
+                <td>{{ patient.prenom }}</td>
+                <td>{{ patient.datenaissance|date('d-m-Y') }}</td>
+                <td>{% if patient.sexe == true %}M{% else %}F{% endif %}</td>
+                <td>{{ patient.societe.convention.nomconvention }}</td>
+                <td>{{ patient.societe.nom }}</td>
+                <td>{% if patient.formule.nom is defined %}{{ patient.formule.nom }}{% endif %}</td>
+                <td><a href="{{ path('hostoo_sante_voirpatient',{'id':patient.id}) }}" class="btn btn-info" > <i class="fa fa-eye"></i> Details du patient</a>
+                </td>
+            </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
